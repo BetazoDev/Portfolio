@@ -15,7 +15,8 @@
     "description": "WordPress Web Developer con experiencia práctica construyendo sitios web personalizados desde cero. Fuerte enfoque en UX/UI, diseños responsivos y optimización de rendimiento.",
     "viewWork": "Ver Trabajo",
     "contactMe": "Contáctame",
-    "cv": "CV"
+    "cv": "CV",
+    "cvFile": "/Humberto Alonso Lopez CV 2026.pdf"
   },
   "projects": {
     "selectedWork": "Trabajos Seleccionados",

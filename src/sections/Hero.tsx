@@ -86,7 +86,7 @@ export const Hero = () => {
               {t('hero.contactMe')}
             </a>
             <a
-              href="/docs/Humberto Alonso Lopez CV 2026.pdf"
+              href={t('hero.cvFile') as string}
               download
               className="px-8 py-4 bg-[var(--text-primary)]/5 border border-[var(--border-color)] text-[var(--text-primary)]/90 text-[11px] font-mono uppercase tracking-[0.3em] hover:bg-[var(--text-primary)]/10 hover:border-accent/40 hover:text-[var(--text-primary)]/100 transition-all duration-300 flex items-center gap-2"
             >
