@@ -67,7 +67,7 @@ export const CustomCursor = () => {
       />
       {/* Trailing ring */}
       <motion.div
-        className="pointer-events-none fixed z-[9998] hidden lg:block rounded-full border border-white/25"
+        className="pointer-events-none fixed z-[9998] hidden lg:block rounded-full border border-accent/40"
         style={{
           left: trailX,
           top: trailY,
@@ -77,7 +77,7 @@ export const CustomCursor = () => {
         animate={{
           width: isHovering ? 64 : 26,
           height: isHovering ? 64 : 26,
-          opacity: isHovering ? 0.5 : 0.2,
+          opacity: isHovering ? 0.8 : 0.4,
         }}
         transition={{ type: 'spring', damping: 30, stiffness: 150 }}
       />

@@ -4,16 +4,45 @@
 @theme {
   --font-sans: "Space Grotesk", "Inter", sans-serif;
   --font-mono: "Space Mono", "Courier New", monospace;
+  --color-accent: var(--accent-base);
+  --color-accent-dark: #7e22ce;
+  --color-accent-light: #c084fc;
 }
 
 @layer base {
+  :root {
+    --bg-primary: #050505;
+    --text-primary: #f0f0f0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --accent-base: #a855f7;
+  }
+
+  :root.light {
+    --bg-primary: #f8f8f8;
+    --text-primary: #111111;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --accent-base: #7e22ce;
+  }
+
+  .text-neon {
+    color: var(--color-accent);
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+
+  .border-neon {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+  }
+
   html {
     scroll-behavior: smooth;
     cursor: none;
   }
 
   body {
-    @apply bg-[#050505] text-white antialiased font-sans overflow-x-hidden;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    @apply antialiased font-sans overflow-x-hidden transition-colors duration-300;
   }
 
   a, button, input, textarea {

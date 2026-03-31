@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "work": "Experiencia",
+    "contacts": "Contacto"
+  },
+  "hero": {
+    "words": [
+      "Ingeniería en ",
+      "gestión y desarrollo",
+      "de software"
+    ],
+    "available": "Portafolio 2026 — Disponible para trabajar",
+    "description": "WordPress Web Developer con experiencia práctica construyendo sitios web personalizados desde cero. Fuerte enfoque en UX/UI, diseños responsivos y optimización de rendimiento.",
+    "viewWork": "Ver Trabajo",
+    "contactMe": "Contáctame",
+    "cv": "CV"
+  },
+  "projects": {
+    "selectedWork": "Trabajos Seleccionados",
+    "title": "Proyectos Destacados",
+    "works": "Trabajos",
+    "scroll": "[ Desliza para navegar ]",
+    "viewProject": "Ver Proyecto",
+    "noImage": "Sin Imagen",
+    "swipe": "Desliza para navegar →"
+  },
+  "about": {
+    "subtitle": "Sobre Mí",
+    "title": "Arsenal Técnico",
+    "description": "Me especializo en arquitecturas escalables, cerrando la brecha entre el diseño en Figma y una ejecución técnica robusta. Optimizo la eficiencia reduciendo procesos manuales mediante automatización (n8n), integraciones de API y despliegues modernos utilizando entornos basados en Docker (Dokploy, Nixpacks).",
+    "developer": "Desarrollador",
+    "skills": {
+      "frontend": "Ingeniería Frontend",
+      "design": "Diseño Visual",
+      "backend": "Sistemas Backend",
+      "devops": "Infraestructura y DevOps"
+    }
+  },
+  "work": {
+    "title": "Experiencia Profesional",
+    "timeline": "Cronología Laboral",
+    "timeframe": "Periodo",
+    "company": "Empresa",
+    "role": "Rol e Impacto"
+  },
+  "contact": {
+    "subtitle": "Contacto",
+    "description": "Actualmente disponible para oportunidades freelance selectas y colaboraciones a tiempo completo. Construyamos algo excepcional juntos.",
+    "emailLink": "Correo",
+    "phoneLink": "Teléfono",
+    "form": {
+      "name": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "message": "Cuéntame sobre tu proyecto...",
+      "send": "Enviar Mensaje"
+    }
+  }
+}

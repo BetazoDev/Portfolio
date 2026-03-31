@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-
-const words = ['Software', 'Development', '& Management Enginnering'];
+import { useAppContext } from '../context/AppContext';
+import { SectionHeader } from '../components/ui/SectionHeader';
 
 const lineVariant = {
   hidden: { y: '110%' },
@@ -24,26 +24,24 @@ const fadeUp = {
 };
 
 export const Hero = () => {
+  const { t } = useAppContext();
+  const words = t('hero.words') as string[];
+
   return (
     <section
       id="hero"
-      className="min-h-[92vh] flex flex-col justify-center py-28 border-b border-white/10"
+      className="min-h-[92vh] flex flex-col justify-center py-28 border-b border-[var(--border-color)]"
     >
-      {/* Label */}
-      <motion.div
+      <SectionHeader 
+        subtitle={t('hero.available')} 
+        className="mb-12"
         initial={{ opacity: 0, x: -16 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.05 }}
-        className="mb-12 flex items-center gap-4"
-      >
-        <span className="w-8 h-[1px] bg-white/20" />
-        <span className="text-[10px] font-mono uppercase tracking-[0.45em] text-white/30">
-          Portfolio 2026 — Available for work
-        </span>
-      </motion.div>
+      />
 
       {/* Staggered title — word by word, dark theme */}
-      <h1 className="text-[clamp(2.5rem,6.5vw,7.5rem)] font-sans font-bold leading-[0.88] tracking-tight text-white mb-16 overflow-hidden">
+      <h1 className="text-[clamp(2.5rem,6.5vw,7.5rem)] font-sans font-bold leading-[0.88] tracking-tight text-[var(--text-primary)] mb-16 overflow-hidden">
         {words.map((word, i) => (
           <span key={i} className="block overflow-hidden" style={{ paddingBottom: '0.07em' }}>
             <motion.span
@@ -69,33 +67,31 @@ export const Hero = () => {
           animate="show"
           className="space-y-8"
         >
-          <p className="text-base md:text-lg font-sans text-white/45 max-w-md leading-relaxed">
-            Software Developer & WordPress Developer with hands-on experience building
-            custom websites from scratch. Strong focus on UX/UI, responsive layouts,
-            and performance optimization.
+          <p className="text-base md:text-lg font-sans text-[var(--text-primary)]/80 max-w-md leading-relaxed">
+            {t('hero.description')}
           </p>
 
           <div className="flex flex-wrap gap-4">
             <a
               href="#projects"
-              className="group relative px-8 py-4 bg-white text-black text-[11px] font-mono uppercase tracking-[0.3em] overflow-hidden transition-all duration-300"
+              className="group relative px-8 py-4 bg-accent text-white text-[11px] font-mono uppercase tracking-[0.3em] overflow-hidden transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.2)]"
             >
-              <span className="relative z-10 group-hover:text-white transition-colors duration-300">View Work</span>
-              <div className="absolute inset-0 bg-black scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-400 z-0" />
+              <span className="relative z-10 group-hover:text-accent transition-colors duration-300">{t('hero.viewWork')}</span>
+              <div className="absolute inset-0 bg-white scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-400 z-0" />
             </a>
             <a
               href="#contact"
-              className="px-8 py-4 border border-white/20 text-white/70 text-[11px] font-mono uppercase tracking-[0.3em] hover:border-white hover:text-white transition-all duration-300"
+              className="px-8 py-4 border border-[var(--border-color)] text-[var(--text-primary)]/90 text-[11px] font-mono uppercase tracking-[0.3em] hover:border-accent hover:text-accent transition-all duration-300"
             >
-              Contact Me
+              {t('hero.contactMe')}
             </a>
             <a
               href="/docs/Humberto Alonso Lopez CV 2026.pdf"
               download
-              className="px-8 py-4 bg-white/5 border border-white/10 text-white/70 text-[11px] font-mono uppercase tracking-[0.3em] hover:bg-white/10 hover:border-white/20 hover:text-white transition-all duration-300 flex items-center gap-2"
+              className="px-8 py-4 bg-[var(--text-primary)]/5 border border-[var(--border-color)] text-[var(--text-primary)]/90 text-[11px] font-mono uppercase tracking-[0.3em] hover:bg-[var(--text-primary)]/10 hover:border-accent/40 hover:text-[var(--text-primary)]/100 transition-all duration-300 flex items-center gap-2"
             >
-              CV
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {t('hero.cv')}
+              <svg className="w-3 h-3 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             </a>
@@ -120,9 +116,9 @@ export const Hero = () => {
               href={s.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-white/25 hover:text-white border border-white/10 hover:border-white/50 px-5 py-2.5 transition-all duration-300 group"
+              className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[var(--text-primary)]/60 hover:text-[var(--text-primary)] border border-[var(--border-color)] hover:border-accent/50 px-5 py-2.5 transition-all duration-300 group"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-white/15 group-hover:bg-white transition-colors duration-300" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent/40 group-hover:bg-accent transition-colors duration-300" />
               {s.label}
             </a>
           ))}

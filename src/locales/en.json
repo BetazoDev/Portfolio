@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "about": "About",
+    "projects": "Projects",
+    "work": "Work",
+    "contacts": "Contact"
+  },
+  "hero": {
+    "words": ["Software", "Development", "& Management Engineering"],
+    "available": "Portfolio 2026 — Available for work",
+    "description": "Software Developer & WordPress Developer with hands-on experience building custom websites from scratch. Strong focus on UX/UI, responsive layouts, and performance optimization.",
+    "viewWork": "View Work",
+    "contactMe": "Contact Me",
+    "cv": "CV"
+  },
+  "projects": {
+    "selectedWork": "Selected Work",
+    "title": "Featured Projects",
+    "works": "Works",
+    "scroll": "[ Scroll to Navigate ]",
+    "viewProject": "View Project",
+    "noImage": "No Image",
+    "swipe": "Swipe to navigate →"
+  },
+  "about": {
+    "subtitle": "About Me",
+    "title": "Technical Arsenal",
+    "description": "I specialize in end-to-end web deployment, bridging the gap between Figma designs and robust technical execution. My workflow leverages process automation (n8n), API integrations, and modern Docker-based environments (Dokploy, Nixpacks) to drive scalability and efficiency.",
+    "developer": "Developer",
+    "skills": {
+      "frontend": "Frontend Engineering",
+      "design": "Visual Design",
+      "backend": "Backend Systems",
+      "devops": "Infrastructure & DevOps"
+    }
+  },
+  "work": {
+    "title": "Professional Experience",
+    "timeline": "Work Timeline",
+    "timeframe": "Timeframe",
+    "company": "Company",
+    "role": "Role & Impact"
+  },
+  "contact": {
+    "subtitle": "Get in touch",
+    "description": "Currently available for select freelance opportunities and full-time collaborations. Let's build something exceptional together.",
+    "emailLink": "Email",
+    "phoneLink": "Phone",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "message": "Tell me about your project...",
+      "send": "Send Message"
+    }
+  }
+}
