@@ -10,7 +10,7 @@ export const Work = () => {
       years: '2025 - Present',
       company: 'Reputation Defense Network',
       role: language === 'es' ? 'Diseñador Web y Desarrollador WordPress' : 'Web Designer & WordPress Developer',
-      description: language === 'es' 
+      description: language === 'es'
         ? 'Lideré el desarrollo integral de sitios WordPress de alto rendimiento partiendo de prototipos en Figma. Resolví cuellos de botella optimizando los tiempos de carga y la estabilidad general, e impulsé la escalabilidad del equipo mediante la implementación de procesos estructurados y componentes reutilizables.'
         : 'Led end-to-end development of high-performance WordPress sites from Figma prototypes. Solved performance bottlenecks by optimizing load speeds and stability, and drove workflow scalability through the implementation of structured processes and reusable components.',
     },
@@ -18,7 +18,7 @@ export const Work = () => {
       id: 2,
       years: '2023 - 2024',
       company: 'Agency4RealEstate',
-      role: language === 'es' ? 'Desarrollador Front-End de WordPress' : 'WordPress Front-End Developer',
+      role: language === 'es' ? 'Desarrollador Front-End de WordPress' : 'WordPress Developer',
       description: language === 'es'
         ? 'Arquitecté plataformas inmobiliarias y personalicé tiendas orgánicas en WooCommerce. Resolví fricciones críticas de UX optimizando los Core Web Vitals y simplificando los flujos de configuración, resultando en sitios considerablemente más rápidos, seguros y con mayor conversión de leads.'
         : 'Architected real estate platforms and customized complex WooCommerce stores. Solved major UX friction by optimizing Core Web Vitals and streamlining configuration pipelines, resulting in significantly faster, highly secure sites with improved lead conversion.',
@@ -27,7 +27,7 @@ export const Work = () => {
       id: 3,
       years: '2022 - 2023',
       company: 'Bloom / DUDE Agency',
-      role: language === 'es' ? 'Desarrollador Web' : 'Web Developer',
+      role: language === 'es' ? 'Desarrollador Web' : 'WordPress Developer',
       description: language === 'es'
         ? 'Ingeniería de soluciones web responsivas a través de múltiples CMS como WordPress, Duda y HubSpot. Aceleré la entrega de proyectos al resolver bugs recurrentes del ecosistema, asegurando una conversión pixel-perfect del diseño y reduciendo los tiempos de soporte técnico de clientes internacionales.'
         : 'Engineered responsive web solutions across CMS platforms including WordPress, Duda, and HubSpot. Accelerated project delivery by resolving recurrent core bugs, ensuring pixel-perfect design translation and significantly reducing technical support cycles for international clients.',
@@ -80,7 +80,7 @@ export const Work = () => {
 
             {/* Row Layout */}
             <div className="grid md:grid-cols-12 py-8 lg:py-12 gap-y-4 gap-x-6 hover:bg-[var(--text-primary)]/[0.02] transition-colors duration-500 min-h-[140px] items-center">
-              
+
               {/* Year */}
               <motion.div
                 variants={{
@@ -100,9 +100,9 @@ export const Work = () => {
                 }}
                 className="col-span-4 lg:col-span-4 pl-4 md:pl-0"
               >
-                 <span className="text-xl md:text-3xl font-sans font-medium text-[var(--text-primary)] group-hover:pl-2 transition-all duration-300">
-                    {row.company}
-                 </span>
+                <span className="text-xl md:text-3xl font-sans font-medium text-[var(--text-primary)] group-hover:pl-2 transition-all duration-300">
+                  {row.company}
+                </span>
               </motion.div>
 
               {/* Role */}
@@ -113,12 +113,12 @@ export const Work = () => {
                 }}
                 className="col-span-5 lg:col-span-6 pl-4 md:pl-0"
               >
-                 <span className="text-sm md:text-base font-sans leading-relaxed text-[var(--text-primary)]/90 block max-w-lg mb-2">
-                    {row.role}
-                 </span>
-                  <p className="text-xs md:text-sm font-sans text-[var(--text-primary)]/70 leading-relaxed max-w-xl">
-                    {row.description}
-                  </p>
+                <span className="text-sm md:text-base font-sans leading-relaxed text-[var(--text-primary)]/90 block max-w-lg mb-2">
+                  {row.role}
+                </span>
+                <p className="text-xs md:text-sm font-sans text-[var(--text-primary)]/70 leading-relaxed max-w-xl">
+                  {row.description}
+                </p>
               </motion.div>
             </div>
           </motion.div>
