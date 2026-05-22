@@ -21,7 +21,7 @@ export const Contact = () => {
     };
 
     try {
-      const response = await fetch('https://n8n.diabolicalservices.tech/webhook-test/12af5a5a-794c-496f-8ad3-7b66ef4e6c97', {
+      const response = await fetch('https://n8n.diabolicalservices.tech/webhook/12af5a5a-794c-496f-8ad3-7b66ef4e6c97', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
