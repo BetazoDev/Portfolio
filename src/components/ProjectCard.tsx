@@ -9,8 +9,9 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project, index }: ProjectCardProps) => {
-  const { t, language } = useAppContext();
+  const { t, language, theme } = useAppContext();
   const description = project.description[language] || project.description['en'];
+  const displayImage = typeof project.image === 'object' ? project.image[theme] : project.image;
 
   return (
     <motion.div
@@ -19,9 +20,9 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
     >
       {/* Card Content - Background Image Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 group-hover:opacity-20 transition-opacity duration-500">
-        {project.image ? (
+        {displayImage ? (
           <img
-            src={project.image}
+            src={displayImage}
             alt={project.title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
