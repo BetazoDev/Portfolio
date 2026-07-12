@@ -66,10 +66,10 @@ export const About = () => {
           transition={{ duration: 0.8 }}
           className="lg:col-span-5 relative w-full aspect-[3/4] border border-[var(--text-primary)]/15 bg-[var(--bg-primary)] overflow-hidden group"
         >
-          <img 
-            src="/me.png" 
-            alt="Humberto Alonso" 
-            className="absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-700 w-full h-full object-cover" 
+          <img
+            src="https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/humberto-alonso-profile-picture.webp"
+            alt="Humberto Alonso"
+            className="absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-700 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-[var(--text-primary)]/5 opacity-50 mix-blend-overlay pointer-events-none" />
           <div className="absolute inset-0 ring-1 ring-inset ring-[var(--text-primary)]/10 pointer-events-none" />

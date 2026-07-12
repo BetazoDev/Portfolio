@@ -4,6 +4,23 @@ export const projectsData: Project[] = [
   {
     id: '01',
     number: '01',
+    title: 'RETRATO',
+    year: '2026',
+    description: {
+      es: 'Revista digital independiente de fotografía y cultura visual. Plataforma headless desarrollada con Next.js y WordPress.',
+      en: 'Independent digital publication for photography and visual culture. Headless platform built with Next.js and WordPress.',
+    },
+    stack: ['Next.js', 'WordPress', 'GraphQL', 'TailwindCSS'],
+    link: 'https://retrato.halonso.digital/',
+    github: '',
+    image: {
+      light: '/retrato_logo_light_580x720.png',
+      dark: '/retrato_logo_dark_580x720.png',
+    },
+  },
+  {
+    id: '02',
+    number: '02',
     title: 'Powersthenics',
     year: '2026',
     description: {
@@ -16,8 +33,8 @@ export const projectsData: Project[] = [
     image: '/powersthenics_logo_580x720.png',
   },
   {
-    id: '02',
-    number: '02',
+    id: '03',
+    number: '03',
     title: 'X3 Padel Club',
     year: '2026',
     description: {
@@ -33,8 +50,8 @@ export const projectsData: Project[] = [
     },
   },
   {
-    id: '03',
-    number: '03',
+    id: '04',
+    number: '04',
     title: 'Monkey Trip',
     year: '2026',
     description: {
@@ -47,8 +64,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '04',
-    number: '04',
+    id: '05',
+    number: '05',
     title: 'Diabolical Landing Page',
     year: '2026',
     description: {
@@ -64,8 +81,8 @@ export const projectsData: Project[] = [
     },
   },
   {
-    id: '05',
-    number: '05',
+    id: '06',
+    number: '06',
     title: 'Mynd',
     year: '2026',
     description: {
@@ -78,8 +95,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '06',
-    number: '06',
+    id: '07',
+    number: '07',
     title: 'DIABOLICAL MEDIA MANAGER',
     year: '2026',
     description: {
@@ -95,8 +112,8 @@ export const projectsData: Project[] = [
     },
   },
   {
-    id: '07',
-    number: '07',
+    id: '08',
+    number: '08',
     title: 'Project Manager System',
     year: '2024',
     description: {
@@ -109,8 +126,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/gemini-generated-image-a95usua95usua95u-1.png',
   },
   {
-    id: '08',
-    number: '08',
+    id: '09',
+    number: '09',
     title: 'NailFlow',
     year: '2025',
     description: {
@@ -123,8 +140,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/gemini-generated-image-v8v6blv8v6blv8v6.png',
   },
   {
-    id: '09',
-    number: '09',
+    id: '10',
+    number: '10',
     title: 'ERP Diabolical',
     year: '2024',
     description: {
@@ -140,8 +157,8 @@ export const projectsData: Project[] = [
     },
   },
   {
-    id: '10',
-    number: '10',
+    id: '11',
+    number: '11',
     title: 'TopLendr',
     year: '2024',
     description: {
@@ -154,8 +171,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '11',
-    number: '11',
+    id: '12',
+    number: '12',
     title: 'Real Authority Media',
     year: '2024',
     description: {
@@ -168,8 +185,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '12',
-    number: '12',
+    id: '13',
+    number: '13',
     title: 'Alan Stalcup Scholarship',
     year: '2024',
     description: {
@@ -182,8 +199,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '13',
-    number: '13',
+    id: '14',
+    number: '14',
     title: 'Arouna Toure',
     year: '2024',
     description: {
@@ -196,8 +213,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '14',
-    number: '14',
+    id: '15',
+    number: '15',
     title: 'Lipschitz Strategies',
     year: '2024',
     description: {
@@ -210,8 +227,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '15',
-    number: '15',
+    id: '16',
+    number: '16',
     title: 'Prasenjit Bhaumik',
     year: '2024',
     description: {
@@ -224,8 +241,8 @@ export const projectsData: Project[] = [
     image: 'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/abstract-digital-grid-black-background-53876-97647.avif',
   },
   {
-    id: '16',
-    number: '16',
+    id: '17',
+    number: '17',
     title: 'Noam Lamdan',
     year: '2024',
     description: {
