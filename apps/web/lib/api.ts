@@ -17,6 +17,7 @@ export type PublicProject = {
   categories: { category: { id: string; name: string; slug: string } }[];
   media: { id: string; type: string; title: string | null; caption: string | null; media: { publicUrl: string | null; altText: string | null } }[];
   links: { id: string; label: string; url: string; type: string }[];
+  sections: { id: string; type: string; title: string | null; content: unknown; sortOrder: number }[];
 };
 
 export async function getProjects(): Promise<PublicProject[]> {
