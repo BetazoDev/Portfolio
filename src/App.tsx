@@ -9,8 +9,10 @@ import { Work } from './sections/Work';
 import { Contact } from './sections/Contact';
 
 import { AppProvider } from './context/AppContext';
+import { AdminApp } from './admin/AdminApp';
 
 function App() {
+  if (window.location.pathname.startsWith('/admin')) return <AdminApp />;
   return (
     <AppProvider>
       <div className="noise relative min-h-screen bg-[var(--bg-primary)] overflow-x-hidden transition-colors duration-300">

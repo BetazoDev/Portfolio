@@ -1,8 +1,9 @@
-import { useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { projectsData } from '../data/projects';
 import { ProjectCard } from '../components/ProjectCard';
 import { SectionHeader } from '../components/ui/SectionHeader';
+import { fetchPublishedProjects } from '../lib/cms';
 
 export const Projects = () => {
   const { t } = useAppContext();
@@ -10,9 +11,14 @@ export const Projects = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [projects, setProjects] = useState(projectsData);
+
+  useEffect(() => {
+    void fetchPublishedProjects().then((cmsProjects) => { if (cmsProjects?.length) setProjects(cmsProjects); });
+  }, []);
 
   // Duplicating projects for infinite horizontal scroll effect
-  const duplicatedProjects = [...projectsData, ...projectsData, ...projectsData];
+  const duplicatedProjects = [...projects, ...projects, ...projects];
 
   const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -47,7 +53,7 @@ export const Projects = () => {
         </h2>
         <div className="hidden md:flex flex-col items-end gap-2">
           <p className="text-[10px] font-mono text-[var(--text-primary)]/60 uppercase tracking-widest">
-            {projectsData.length} {t('projects.works')}
+            {projects.length} {t('projects.works')}
           </p>
           <p className="text-[9px] font-mono text-accent uppercase tracking-[0.2em] animate-pulse">
             {t('projects.scroll')}
