@@ -14,6 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const themeScript = `try{var t=localStorage.getItem('theme');document.documentElement.classList.add(t==='light'?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
+  const themeScript = `try{var t=localStorage.getItem('theme');var l=localStorage.getItem('language');document.documentElement.classList.add(t==='light'?'light':'dark');document.documentElement.dataset.language=l==='es'?'es':'en';document.documentElement.lang=l==='es'?'es':'en'}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.language='en'}`;
   return <html lang="es" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head><body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>{children}</body></html>;
 }

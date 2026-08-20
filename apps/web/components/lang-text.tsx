@@ -1,0 +1,1 @@
+export function LangText({ en, es, block = false }: { en: React.ReactNode; es: React.ReactNode; block?: boolean }) { const tag = block ? 'block' : ''; return <><span className={`lang-en ${tag}`}>{en}</span><span className={`lang-es ${tag}`}>{es}</span></>; }
