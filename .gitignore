@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+apps/web/.next/
+apps/web/node_modules/
