@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Language, Theme } from '../types';
 import en from '../locales/en.json';
@@ -16,15 +18,16 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('language');
-    return (saved === 'en' || saved === 'es' ? saved : 'en') as Language;
-  });
+  const [language, setLanguageState] = useState<Language>('en');
 
-  const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('theme');
-    return (saved === 'dark' || saved === 'light' ? saved : 'dark') as Theme;
-  });
+  const [theme, setTheme] = useState<Theme>('dark');
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedLanguage === 'en' || savedLanguage === 'es') setLanguageState(savedLanguage);
+    if (savedTheme === 'dark' || savedTheme === 'light') setTheme(savedTheme);
+  }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
