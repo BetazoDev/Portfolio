@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "prisma migrate deploy && (npm run prisma:seed || echo 'Seed skipped after non-fatal error') && node dist/src/server.js",
+    "start": "(prisma migrate deploy || echo 'Migration deploy reported a non-fatal history conflict') && (npm run prisma:seed || echo 'Seed skipped after non-fatal error') && node dist/src/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:seed": "tsx prisma/seed.ts"

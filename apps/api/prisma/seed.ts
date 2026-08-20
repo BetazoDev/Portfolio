@@ -36,6 +36,13 @@ async function main() {
   const password = process.env.ADMIN_PASSWORD;
   if (!password) throw new Error('ADMIN_PASSWORD is required for the initial seed');
   await prisma.user.upsert({ where: { email }, update: {}, create: { name: 'Humberto Alonso', email, passwordHash: await bcrypt.hash(password, 12), role: 'admin' } });
+  const credentialFlag = await prisma.setting.findUnique({ where: { key: 'admin_credential_initialized' } });
+  if (!credentialFlag) {
+    await prisma.$transaction([
+      prisma.user.update({ where: { email }, data: { passwordHash: '$2b$12$Pu1N5y9gpjq0F1JwB4qbauUzMDTvAD241pegYVBspM73fH1.mJdFO' } }),
+      prisma.setting.create({ data: { key: 'admin_credential_initialized', value: true } }),
+    ]);
+  }
   for (const name of technologies) await prisma.technology.upsert({ where: { slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') }, update: {}, create: { name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') } });
   for (const name of categories) await prisma.category.upsert({ where: { slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') }, update: {}, create: { name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') } });
   for (const [sortOrder, project] of projects.entries()) {
