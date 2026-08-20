@@ -14,5 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es" suppressHydrationWarning><body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>{children}</body></html>;
+  const themeScript = `try{var t=localStorage.getItem('theme');document.documentElement.classList.add(t==='light'?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
+  return <html lang="es" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head><body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>{children}</body></html>;
 }

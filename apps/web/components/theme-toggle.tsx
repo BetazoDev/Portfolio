@@ -1,0 +1,4 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { Moon, Sun } from 'lucide-react';
+export function ThemeToggle() { const [theme, setTheme] = useState<'light' | 'dark'>('dark'); useEffect(() => { setTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark'); }, []); function toggle() { const next = theme === 'dark' ? 'light' : 'dark'; document.documentElement.classList.remove('light', 'dark'); document.documentElement.classList.add(next); localStorage.setItem('theme', next); setTheme(next); } return <button type="button" onClick={toggle} aria-label={`Cambiar a tema ${theme === 'dark' ? 'claro' : 'oscuro'}`} className="grid size-10 place-items-center rounded-full border border-[var(--border-color)] transition hover:border-[var(--accent)]">{theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}</button>; }

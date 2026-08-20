@@ -12,12 +12,23 @@ export type PublicProject = {
   result: string | null;
   role: string | null;
   year: number | null;
+  clientName: string | null;
+  industry: string | null;
+  projectType: string | null;
+  architectureSummary: string | null;
+  frontendStack: string | null;
+  backendStack: string | null;
+  databaseStack: string | null;
+  automationStack: string | null;
+  aiStack: string | null;
+  deploymentStack: string | null;
+  featured: boolean;
   seoTitle: string | null;
   seoDescription: string | null;
   technologies: { technology: { id: string; name: string; slug: string } }[];
   categories: { category: { id: string; name: string; slug: string } }[];
   media: { id: string; type: string; title: string | null; caption: string | null; media: { publicUrl: string | null; altText: string | null } }[];
-  links: { id: string; label: string; url: string; type: string }[];
+  links: { id: string; label: string; url: string; type: string; isPublic?: boolean }[];
   sections: { id: string; type: string; title: string | null; content: unknown; sortOrder: number }[];
 };
 

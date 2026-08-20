@@ -10,19 +10,7 @@
 }
 
 @layer base {
-  :root {
-    --bg-primary: #050505;
-    --text-primary: #f0f0f0;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --accent-base: #a855f7;
-  }
-
-  :root.light {
-    --bg-primary: #f8f8f8;
-    --text-primary: #111111;
-    --border-color: rgba(0, 0, 0, 0.1);
-    --accent-base: #7e22ce;
-  }
+  :root { --accent-base: #7057ff; }
 
   .text-neon {
     color: var(--color-accent);
@@ -83,7 +71,7 @@
   width: 2px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+    background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
   background: #333;
