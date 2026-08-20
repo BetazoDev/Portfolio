@@ -28,6 +28,17 @@ enum MediaType {
   video
 }
 
+enum SectionType {
+  text
+  image
+  gallery
+  metrics
+  quote
+  architecture
+  workflow
+  video
+}
+
 model User {
   id           String         @id @default(cuid())
   name         String
@@ -87,6 +98,7 @@ model Project {
   categories        ProjectCategory[]
   media             ProjectMedia[]
   links             ProjectLink[]
+  sections          ProjectSection[]
   createdAt         DateTime          @default(now()) @map("created_at")
   updatedAt         DateTime          @updatedAt @map("updated_at")
   @@index([status, featured, sortOrder])
@@ -180,4 +192,26 @@ model ProjectLink {
   sortOrder Int @default(0) @map("sort_order")
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   @@map("project_links")
+}
+
+model ProjectSection {
+  id        String      @id @default(cuid())
+  projectId String      @map("project_id")
+  type      SectionType @default(text)
+  title     String?
+  content   Json
+  sortOrder Int         @default(0) @map("sort_order")
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  @@index([projectId, sortOrder])
+  @@map("project_sections")
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("settings")
 }

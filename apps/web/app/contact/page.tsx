@@ -1,0 +1,2 @@
+import { SiteShell } from '@/components/site-shell';
+export default function ContactPage() { return <SiteShell><main className="mx-auto flex min-h-[75vh] max-w-[1600px] flex-col justify-center px-6 py-20 md:px-12"><p className="font-mono text-[10px] uppercase tracking-[.3em] text-accent">Contacto</p><h1 className="my-12 max-w-6xl text-6xl font-bold uppercase leading-[.9] tracking-[-.05em] md:text-9xl">Construyamos algo útil.</h1><a className="w-fit border-b border-current text-2xl" href="mailto:hello@halonso.digital">hello@halonso.digital ↗</a></main></SiteShell>; }

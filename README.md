@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# Portfolio CMS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portafolio personal de Humberto Alonso migrado a una plataforma CMS propia. La interfaz pública conserva el diseño, tipografías, contenido, animaciones y assets del portafolio React original; la arquitectura final utiliza Next.js, Express, PostgreSQL, Prisma y Supabase Storage.
 
-Currently, two official plugins are available:
+## Estructura
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `apps/web`: Next.js App Router, sitio público, casos de estudio, SEO y panel privado.
+- `apps/api`: API REST Express, Prisma, autenticación JWT y conexión con Supabase Storage.
+- `src`: frontend Vite anterior, conservado temporalmente como referencia y rollback.
+- `migration-audit.md`: decisiones de conservación y migración.
 
-## React Compiler
+## Desarrollo local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Copiar `apps/api/.env.example` a `apps/api/.env` y completar credenciales.
+2. Copiar `apps/web/.env.example` a `apps/web/.env.local`.
+3. Ejecutar `npm install` en `apps/api` y `apps/web`.
+4. En API: `npm run prisma:migrate`, `npm run prisma:seed`, `npm run dev`.
+5. En web: `npm run dev`.
 
-## Expanding the ESLint configuration
+Web: `http://localhost:3000`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+API: `http://localhost:4000`
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Admin: `http://localhost:3000/admin/login`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Producción
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Dokploy usa `BetazoDev/Portfolio`, rama `main`:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Frontend: build path `/apps/web`, Dockerfile, puerto 3000.
+- Backend: build path `/apps/api`, Dockerfile, puerto 4000.
+- PostgreSQL: servicio `pdatabase` del proyecto `portfolio`.
+- Storage: compose `supabase` del proyecto `portfolio`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+El backend ejecuta `prisma migrate deploy` antes de iniciar y realiza un seed idempotente. Nunca utiliza `db push --accept-data-loss` en producción.

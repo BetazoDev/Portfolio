@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 apps/web/.next/
 apps/web/node_modules/
+apps/web/.env.local
+apps/api/.env

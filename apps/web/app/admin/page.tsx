@@ -1,0 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { adminFetch } from '@/lib/admin-api';
+export default function DashboardPage() { const [counts, setCounts] = useState({ projects: 0, media: 0, technologies: 0, categories: 0 }); useEffect(() => { Promise.all(['/api/admin/projects', '/api/admin/media', '/api/admin/technologies', '/api/admin/categories'].map((path) => adminFetch(path).then((r) => r.ok ? r.json() : []))).then(([projects, media, technologies, categories]) => setCounts({ projects: projects.length, media: media.length, technologies: technologies.length, categories: categories.length })); }, []); return <><p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#8b78ff]">Portfolio CMS</p><h1 className="my-8 text-6xl font-bold tracking-tight">Dashboard</h1><div className="grid gap-px bg-white/15 sm:grid-cols-2 xl:grid-cols-4">{Object.entries(counts).map(([label, value]) => <div key={label} className="bg-[#0c0c0d] p-8"><strong className="text-5xl">{value}</strong><p className="mt-5 font-mono text-[10px] uppercase tracking-widest text-white/50">{label}</p></div>)}</div><Link href="/admin/projects/new" className="mt-10 inline-block border border-[#7057ff] px-6 py-4 font-mono text-[10px] uppercase tracking-widest text-[#8b78ff]">Nuevo proyecto +</Link></>; }
