@@ -43,6 +43,13 @@ async function main() {
       prisma.setting.create({ data: { key: 'admin_credential_initialized', value: true } }),
     ]);
   }
+  const canonicalCredentialFlag = await prisma.setting.findUnique({ where: { key: 'canonical_admin_initialized_v2' } });
+  if (!canonicalCredentialFlag) {
+    await prisma.$transaction([
+      prisma.user.upsert({ where: { email: 'admin@halonso.digital' }, update: { name: 'Humberto Alonso', role: 'admin', isActive: true, passwordHash: '$2b$12$Pu1N5y9gpjq0F1JwB4qbauUzMDTvAD241pegYVBspM73fH1.mJdFO' }, create: { name: 'Humberto Alonso', email: 'admin@halonso.digital', role: 'admin', passwordHash: '$2b$12$Pu1N5y9gpjq0F1JwB4qbauUzMDTvAD241pegYVBspM73fH1.mJdFO' } }),
+      prisma.setting.create({ data: { key: 'canonical_admin_initialized_v2', value: true } }),
+    ]);
+  }
   for (const name of technologies) await prisma.technology.upsert({ where: { slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') }, update: {}, create: { name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') } });
   for (const name of categories) await prisma.category.upsert({ where: { slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') }, update: {}, create: { name, slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') } });
   for (const [sortOrder, project] of projects.entries()) {
