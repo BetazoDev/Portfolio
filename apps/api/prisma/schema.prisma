@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  editor
+}
+
+enum ProjectStatus {
+  draft
+  published
+  archived
+}
+
+enum MediaType {
+  cover
+  thumbnail
+  gallery
+  workflow
+  architecture
+  screenshot
+  video
+}
+
+model User {
+  id           String         @id @default(cuid())
+  name         String
+  email        String         @unique
+  passwordHash String         @map("password_hash")
+  role         UserRole       @default(admin)
+  isActive     Boolean        @default(true) @map("is_active")
+  refreshTokens RefreshToken[]
+  media        Media[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  tokenHash String   @map("token_hash")
+  expiresAt DateTime @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  userAgent String? @map("user_agent")
+  ipAddress String? @map("ip_address")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Project {
+  id                String            @id @default(cuid())
+  title             String
+  slug              String            @unique
+  subtitle          String?
+  shortSummary      String?           @map("short_summary")
+  clientName        String?           @map("client_name")
+  industry          String?
+  projectType       String?           @map("project_type")
+  role              String?
+  year              Int?
+  status            ProjectStatus     @default(draft)
+  featured          Boolean           @default(false)
+  sortOrder         Int               @default(0) @map("sort_order")
+  problem           String?
+  solution          String?
+  result            String?
+  architectureSummary String?         @map("architecture_summary")
+  frontendStack     String?           @map("frontend_stack")
+  backendStack      String?           @map("backend_stack")
+  databaseStack     String?           @map("database_stack")
+  automationStack   String?           @map("automation_stack")
+  aiStack           String?           @map("ai_stack")
+  deploymentStack   String?           @map("deployment_stack")
+  seoTitle          String?           @map("seo_title")
+  seoDescription    String?           @map("seo_description")
+  publishedAt       DateTime?         @map("published_at")
+  technologies      ProjectTechnology[]
+  categories        ProjectCategory[]
+  media             ProjectMedia[]
+  links             ProjectLink[]
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+  @@index([status, featured, sortOrder])
+  @@map("projects")
+}
+
+model Technology {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  category String?
+  iconUrl String? @map("icon_url")
+  color String?
+  projects ProjectTechnology[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("technologies")
+}
+
+model ProjectTechnology {
+  projectId String @map("project_id")
+  technologyId String @map("technology_id")
+  sortOrder Int @default(0) @map("sort_order")
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  @@id([projectId, technologyId])
+  @@map("project_technologies")
+}
+
+model Category {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  description String?
+  projects ProjectCategory[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("categories")
+}
+
+model ProjectCategory {
+  projectId String @map("project_id")
+  categoryId String @map("category_id")
+  sortOrder Int @default(0) @map("sort_order")
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  @@id([projectId, categoryId])
+  @@map("project_categories")
+}
+
+model Media {
+  id String @id @default(cuid())
+  filename String
+  originalFilename String @map("original_filename")
+  storageBucket String @map("storage_bucket")
+  storagePath String @map("storage_path")
+  publicUrl String? @map("public_url")
+  altText String? @map("alt_text")
+  caption String?
+  mimeType String @map("mime_type")
+  sizeBytes Int @map("size_bytes")
+  uploadedBy String @map("uploaded_by")
+  user User @relation(fields: [uploadedBy], references: [id])
+  projects ProjectMedia[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("media")
+}
+
+model ProjectMedia {
+  id String @id @default(cuid())
+  projectId String @map("project_id")
+  mediaId String @map("media_id")
+  type MediaType @default(gallery)
+  title String?
+  caption String?
+  sortOrder Int @default(0) @map("sort_order")
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  @@unique([projectId, mediaId])
+  @@map("project_media")
+}
+
+model ProjectLink {
+  id String @id @default(cuid())
+  projectId String @map("project_id")
+  label String
+  url String
+  type String
+  isPublic Boolean @default(true) @map("is_public")
+  sortOrder Int @default(0) @map("sort_order")
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map("project_links")
+}
