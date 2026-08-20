@@ -9,6 +9,8 @@ import jwt from 'jsonwebtoken';
 import crypto from 'node:crypto';
 import { PrismaClient, ProjectStatus } from '@prisma/client';
 import { z } from 'zod';
+import multer from 'multer';
+import { createClient } from '@supabase/supabase-js';
 
 const prisma = new PrismaClient();
 const app = express();
@@ -17,6 +19,8 @@ const accessSecret = process.env.JWT_ACCESS_SECRET ?? 'development-access-secret
 const refreshSecret = process.env.JWT_REFRESH_SECRET ?? 'development-refresh-secret';
 const corsOrigin = process.env.CORS_ORIGIN ?? 'http://localhost:3000';
 const refreshCookie = 'portfolio_refresh';
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 }, fileFilter: (_req, file, callback) => callback(null, ['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.mimetype)) });
+const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY) : null;
 const tokenHash = (token: string) => crypto.createHash('sha256').update(token).digest('hex');
 const signAccess = (user: { id: string; email: string; role: string }) => jwt.sign({ sub: user.id, email: user.email, role: user.role }, accessSecret, { expiresIn: '15m' as any });
 const signRefresh = (userId: string) => jwt.sign({ sub: userId, type: 'refresh' }, refreshSecret, { expiresIn: (process.env.REFRESH_TOKEN_EXPIRES_IN ?? '30d') as any });
@@ -67,8 +71,20 @@ app.get('/api/admin/projects', requireAuth, async (_req, res) => res.json(await 
 app.post('/api/admin/projects', requireAuth, async (req, res) => { const data = z.object({ title: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), shortSummary: z.string().optional(), status: z.nativeEnum(ProjectStatus).optional() }).parse(req.body); const project = await prisma.project.create({ data }); res.status(201).json(project); });
 app.patch('/api/admin/projects/:id', requireAuth, async (req, res) => { const data = z.object({ title: z.string().min(1).optional(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(), shortSummary: z.string().optional(), status: z.nativeEnum(ProjectStatus).optional(), featured: z.boolean().optional() }).parse(req.body); const project = await prisma.project.update({ where: { id: String(req.params.id) }, data: { ...data, publishedAt: data.status === 'published' ? new Date() : undefined } }); res.json(project); });
 app.delete('/api/admin/projects/:id', requireAuth, async (req, res) => { await prisma.project.delete({ where: { id: String(req.params.id) } }); res.status(204).send(); });
+app.patch('/api/admin/projects/:id/publish', requireAuth, async (req, res) => { const project = await prisma.project.update({ where: { id: String(req.params.id) }, data: { status: ProjectStatus.published, publishedAt: new Date() } }); res.json(project); });
+app.patch('/api/admin/projects/:id/archive', requireAuth, async (req, res) => { const project = await prisma.project.update({ where: { id: String(req.params.id) }, data: { status: ProjectStatus.archived } }); res.json(project); });
 app.get('/api/technologies', async (_req, res) => res.json(await prisma.technology.findMany({ orderBy: { name: 'asc' } })));
 app.get('/api/categories', async (_req, res) => res.json(await prisma.category.findMany({ orderBy: { name: 'asc' } })));
+app.get('/api/admin/technologies', requireAuth, async (_req, res) => res.json(await prisma.technology.findMany({ orderBy: { name: 'asc' } })));
+app.post('/api/admin/technologies', requireAuth, async (req, res) => { const data = z.object({ name: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), category: z.string().optional() }).parse(req.body); res.status(201).json(await prisma.technology.create({ data })); });
+app.patch('/api/admin/technologies/:id', requireAuth, async (req, res) => { const data = z.object({ name: z.string().min(1).optional(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(), category: z.string().optional() }).parse(req.body); res.json(await prisma.technology.update({ where: { id: String(req.params.id) }, data })); });
+app.delete('/api/admin/technologies/:id', requireAuth, async (req, res) => { await prisma.technology.delete({ where: { id: String(req.params.id) } }); res.status(204).send(); });
+app.get('/api/admin/categories', requireAuth, async (_req, res) => res.json(await prisma.category.findMany({ orderBy: { name: 'asc' } })));
+app.post('/api/admin/categories', requireAuth, async (req, res) => { const data = z.object({ name: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), description: z.string().optional() }).parse(req.body); res.status(201).json(await prisma.category.create({ data })); });
+app.patch('/api/admin/categories/:id', requireAuth, async (req, res) => { const data = z.object({ name: z.string().min(1).optional(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(), description: z.string().optional() }).parse(req.body); res.json(await prisma.category.update({ where: { id: String(req.params.id) }, data })); });
+app.delete('/api/admin/categories/:id', requireAuth, async (req, res) => { await prisma.category.delete({ where: { id: String(req.params.id) } }); res.status(204).send(); });
+app.get('/api/admin/media', requireAuth, async (_req, res) => res.json(await prisma.media.findMany({ orderBy: { createdAt: 'desc' } })));
+app.post('/api/admin/media/upload', requireAuth, upload.single('file'), async (req: AuthRequest, res) => { if (!req.file || !supabase) return res.status(503).json({ error: 'Storage is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.' }); const bucket = process.env.SUPABASE_BUCKET ?? 'portfolio-media'; const filename = `${Date.now()}-${crypto.randomUUID()}-${req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, '-')}`; const { error } = await supabase.storage.from(bucket).upload(filename, req.file.buffer, { contentType: req.file.mimetype, upsert: false }); if (error) return res.status(502).json({ error: error.message }); const { data: url } = supabase.storage.from(bucket).getPublicUrl(filename); const media = await prisma.media.create({ data: { filename, originalFilename: req.file.originalname, storageBucket: bucket, storagePath: filename, publicUrl: url.publicUrl, mimeType: req.file.mimetype, sizeBytes: req.file.size, uploadedBy: req.userId! } }); res.status(201).json(media); });
 
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => { console.error(err); res.status(500).json({ error: 'Internal server error' }); });
 app.listen(port, '0.0.0.0', () => console.log(`Portfolio API listening on ${port}`));
