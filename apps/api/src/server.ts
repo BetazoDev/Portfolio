@@ -22,6 +22,7 @@ const corsOrigin = process.env.CORS_ORIGIN ?? 'http://localhost:3000';
 const refreshCookie = 'portfolio_refresh';
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 }, fileFilter: (_req, file, callback) => callback(null, ['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.mimetype)) });
 const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY) : null;
+const storageBucket = process.env.SUPABASE_BUCKET ?? 'portfolio-media';
 const tokenHash = (token: string) => crypto.createHash('sha256').update(token).digest('hex');
 const signAccess = (user: { id: string; email: string; role: string }) => jwt.sign({ sub: user.id, email: user.email, role: user.role }, accessSecret, { expiresIn: '15m' as any });
 const signRefresh = (userId: string) => jwt.sign({ sub: userId, type: 'refresh' }, refreshSecret, { expiresIn: (process.env.REFRESH_TOKEN_EXPIRES_IN ?? '30d') as any });
@@ -31,6 +32,7 @@ app.use(cors({ origin: corsOrigin.split(',').map((value) => value.trim()), crede
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
 app.get('/health', async (_req, res) => { await prisma.$queryRaw`SELECT 1`; res.json({ ok: true, service: 'portfolio-api' }); });
+app.get('/health/storage', async (_req, res) => { if (!supabase) return res.status(503).json({ ok: false, storage: 'not-configured' }); const { data, error } = await supabase.storage.listBuckets(); if (error) return res.status(502).json({ ok: false, storage: 'unreachable', error: error.message }); const bucket = process.env.SUPABASE_BUCKET ?? 'portfolio-media'; res.json({ ok: data.some((item) => item.name === bucket), storage: 'connected', bucket, bucketExists: data.some((item) => item.name === bucket) }); });
 
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: true, legacyHeaders: false });
 const loginSchema = z.object({ email: z.string().email(), password: z.string().min(8) });
@@ -110,4 +112,5 @@ app.get('/api/admin/settings', requireAuth, async (_req, res) => res.json(await 
 app.put('/api/admin/settings/:key', requireAuth, async (req, res) => { const value = z.object({ value: z.unknown() }).parse(req.body).value; res.json(await prisma.setting.upsert({ where: { key: String(req.params.key) }, update: { value: value as any }, create: { key: String(req.params.key), value: value as any } })); });
 
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => { console.error(err); if (err instanceof z.ZodError) return res.status(400).json({ error: 'Validation failed', issues: err.issues }); const code = typeof err === 'object' && err && 'code' in err ? String((err as { code: unknown }).code) : ''; if (code === 'P2002') return res.status(409).json({ error: 'A record with that unique value already exists' }); if (code === 'P2025') return res.status(404).json({ error: 'Record not found' }); res.status(500).json({ error: 'Internal server error' }); });
-app.listen(port, '0.0.0.0', () => console.log(`Portfolio API listening on ${port}`));
+async function ensureStorageBucket() { if (!supabase) return; const { data, error } = await supabase.storage.listBuckets(); if (error) { console.error('Supabase Storage connection failed:', error.message); return; } if (!data.some((item) => item.name === storageBucket)) { const created = await supabase.storage.createBucket(storageBucket, { public: true, fileSizeLimit: 10 * 1024 * 1024, allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] }); if (created.error) console.error('Supabase bucket creation failed:', created.error.message); } }
+app.listen(port, '0.0.0.0', () => { console.log(`Portfolio API listening on ${port}`); void ensureStorageBucket(); });
