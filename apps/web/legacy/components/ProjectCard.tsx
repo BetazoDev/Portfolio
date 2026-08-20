@@ -27,15 +27,8 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
         ) : (
-          <div className="w-full h-full border border-[var(--border-color)]/20 flex flex-col items-center justify-center p-8">
-            <div className="w-full h-full border border-[var(--border-color)] grid grid-cols-4 grid-rows-4 gap-2 p-2 opacity-30">
-              {[...Array(16)].map((_, i) => (
-                <div key={i} className="bg-[var(--text-primary)]/5" />
-              ))}
-            </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--text-primary)]/10 font-mono text-[40px] md:text-[60px] font-bold select-none uppercase tracking-tighter">
-              {t('projects.noImage')}
-            </div>
+          <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_72%_34%,var(--accent),transparent_2%,transparent_12%,var(--border-color)_12.2%,transparent_12.5%)] opacity-30">
+            {[18, 28, 40, 54, 70].map((size) => <span key={size} className="absolute left-[72%] top-[34%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--border-color)]" style={{ width: `${size}%`, aspectRatio: '1' }} />)}
           </div>
         )}
       </div>

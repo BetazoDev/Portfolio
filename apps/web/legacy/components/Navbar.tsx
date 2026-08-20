@@ -5,10 +5,11 @@ export const Navbar = () => {
   const { language, setLanguage, t } = useAppContext();
 
   const navLinks = [
-    { label: t('nav.about'), href: '#about' },
-    { label: t('nav.projects'), href: '#projects' },
-    { label: t('nav.work'), href: '#work' },
-    { label: t('nav.contacts'), href: '#contact' },
+    { label: language === 'en' ? 'Home' : 'Inicio', href: '/' },
+    { label: language === 'en' ? 'Solutions' : 'Soluciones', href: '/solutions' },
+    { label: language === 'en' ? 'Projects' : 'Proyectos', href: '/projects' },
+    { label: language === 'en' ? 'About' : 'Sobre mí', href: '/#about' },
+    { label: language === 'en' ? 'Contact' : 'Contacto', href: '/#contact' },
   ];
 
   return (
@@ -30,7 +31,7 @@ export const Navbar = () => {
 
       <div className="flex items-center gap-8">
         {/* Links — right */}
-        <nav className="hidden md:flex items-center gap-10">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
           {navLinks.map((link, i) => (
             <motion.a
               key={link.label}
@@ -47,7 +48,7 @@ export const Navbar = () => {
         </nav>
 
         {/* Language Switcher */}
-        <div className="flex items-center gap-3 border-l border-[var(--border-color)] pl-8">
+        <div className="flex items-center gap-2 border-l border-[var(--border-color)] pl-4 xl:pl-6">
           {(['en', 'es'] as const).map((lang) => (
             <button
               key={lang}

@@ -1,4 +1,5 @@
-import { SiteShell } from '@/components/site-shell'; import { ProjectGrid } from '@/components/project-grid'; import { getProjects } from '@/lib/api';
-export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Case Studies', description: 'Casos de estudio de plataformas, automatización, CMS y productos digitales.' };
-export default async function CaseStudiesPage() { const projects = await getProjects(); const studies = projects.filter((project) => project.problem || project.solution || project.result); return <SiteShell><main className="mx-auto max-w-[1600px] px-6 py-20 md:px-12"><p className="eyebrow">Context · Decisions · Results</p><h1 className="display-title my-12">Case studies</h1><p className="mb-20 max-w-3xl text-xl leading-relaxed muted">Proyectos explicados como soluciones: el problema, las decisiones de arquitectura, el proceso y los resultados obtenidos.</p><ProjectGrid projects={studies.length ? studies : projects} /></main></SiteShell>; }
+import { redirect } from 'next/navigation';
+
+export default function CaseStudiesPage() {
+  redirect('/projects');
+}

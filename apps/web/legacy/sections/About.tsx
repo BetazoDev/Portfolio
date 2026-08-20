@@ -82,6 +82,7 @@ export const About = () => {
             </span>
           </div>
         </motion.div>
+
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import type { Project } from '../types';
+import { projectsData } from '../data/projects';
 
 const API_URL = '';
 
@@ -20,20 +21,23 @@ export async function fetchPublishedProjects(): Promise<Project[] | null> {
     const response = await fetch(`${API_URL}/api/projects`, { signal: AbortSignal.timeout(5000) });
     if (!response.ok) return null;
     const projects = (await response.json()) as CmsProject[];
-    return projects.map((project, index) => ({
+    return projects.map((project, index) => {
+      const original = projectsData.find((item) => item.title.toLowerCase() === project.title.toLowerCase());
+      return ({
       id: project.id,
       number: String(index + 1).padStart(2, '0'),
       title: project.title.toUpperCase(),
       year: String(project.year ?? 2026),
-      description: {
+      description: original?.description ?? {
         en: project.shortSummary ?? project.subtitle ?? '',
         es: project.shortSummary ?? project.subtitle ?? '',
       },
-      stack: project.technologies?.map(({ technology }) => technology.name) ?? [],
+      stack: project.technologies?.length ? project.technologies.map(({ technology }) => technology.name) : (original?.stack ?? []),
       link: `/projects/${project.slug}`,
       github: '',
       image: project.media?.find(({ type, media }) => (type === 'thumbnail' || type === 'cover') && media.publicUrl)?.media.publicUrl ?? undefined,
-    }));
+    });
+    });
   } catch {
     return null;
   }

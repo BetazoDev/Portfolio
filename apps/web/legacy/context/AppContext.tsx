@@ -32,6 +32,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
+    document.documentElement.dataset.language = lang;
+    document.documentElement.lang = lang;
   };
 
   const toggleTheme = () => {
@@ -42,10 +44,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     const root = window.document.documentElement;
+    root.dataset.language = language;
+    root.lang = language;
+  }, [language]);
+
+  useEffect(() => {
+    const root = window.document.documentElement;
     if (theme === 'light') {
       root.classList.add('light');
+      root.classList.remove('dark');
     } else {
       root.classList.remove('light');
+      root.classList.add('dark');
     }
   }, [theme]);
 

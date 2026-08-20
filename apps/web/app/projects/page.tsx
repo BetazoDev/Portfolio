@@ -1,8 +1,3 @@
-import type { Metadata } from 'next';
-import { SiteShell } from '@/components/site-shell';
-import { ProjectGrid } from '@/components/project-grid';
-import { getProjects } from '@/lib/api';
-export const dynamic = 'force-dynamic';
-
-export const metadata: Metadata = { title: 'Proyectos', description: 'Casos de estudio y plataformas desarrolladas por Humberto Alonso.' };
-export default async function ProjectsPage() { const projects = await getProjects(); return <SiteShell><main className="mx-auto max-w-[1600px] px-6 py-20 md:px-12"><p className="eyebrow">Portfolio / Selected work</p><h1 className="display-title my-12">Projects</h1><p className="mb-16 max-w-3xl text-xl muted">Plataformas, productos, automatizaciones y experiencias digitales. Filtra por categoría o tecnología.</p><ProjectGrid projects={projects} filters /></main></SiteShell>; }
+import type { Metadata } from 'next'; import { SiteShell } from '@/components/site-shell'; import { ProjectGrid } from '@/components/project-grid'; import { LangText } from '@/components/lang-text'; import { getProjects } from '@/lib/api';
+export const dynamic='force-dynamic'; export const metadata:Metadata={title:'Projects',description:'Case studies and platforms developed by Humberto Alonso.'};
+export default async function ProjectsPage(){const projects=await getProjects();return <SiteShell><main className="py-24"><p className="font-mono text-[10px] uppercase tracking-[.3em] text-[var(--accent)]">Portfolio / Selected work</p><h1 className="my-12 text-6xl font-bold tracking-tight md:text-8xl"><LangText en="Projects" es="Proyectos"/></h1><p className="mb-16 max-w-3xl text-lg leading-relaxed opacity-65"><LangText en="Platforms, products, automations and digital experiences. Filter by category or technology." es="Plataformas, productos, automatizaciones y experiencias digitales. Filtra por categoría o tecnología."/></p><ProjectGrid projects={projects} filters/></main></SiteShell>;}

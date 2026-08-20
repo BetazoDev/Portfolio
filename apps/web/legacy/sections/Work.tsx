@@ -39,7 +39,7 @@ export const Work = () => {
       <div className="flex items-center gap-4 mb-20">
         <span className="w-8 h-[1px] bg-accent" />
         <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-accent font-medium">
-          {t('work.subtitle')}
+          {language === 'en' ? 'Experience' : 'Experiencia'}
         </span>
       </div>
 
