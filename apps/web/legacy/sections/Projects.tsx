@@ -77,7 +77,7 @@ export const Projects = () => {
             <ProjectCard 
               key={`${project.id}-${index}`} 
               project={project} 
-              index={index} 
+              index={index % projects.length}
             />
           ))}
         </div>

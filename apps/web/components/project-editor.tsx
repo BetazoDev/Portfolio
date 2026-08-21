@@ -11,6 +11,7 @@ type Project = Record<string, unknown> & {
   slug: string;
   status: string;
   featured: boolean;
+  showOnHomepage: boolean;
   sortOrder: number;
   technologies?: { technology: Taxonomy }[];
   categories?: { category: Taxonomy }[];
@@ -56,6 +57,7 @@ export function ProjectEditor({ id }: { id?: string }) {
             slug: "",
             status: "draft",
             featured: false,
+            showOnHomepage: true,
             sortOrder: 0,
             technologies: [],
             categories: [],
@@ -277,6 +279,14 @@ export function ProjectEditor({ id }: { id?: string }) {
                 onChange={(e) => update("featured", e.target.checked)}
               />{" "}
               Featured project
+            </label>
+            <label className="flex items-center gap-3 border-b border-white/15 py-5 text-sm text-white/60">
+              <input
+                type="checkbox"
+                checked={project.showOnHomepage}
+                onChange={(e) => update("showOnHomepage", e.target.checked)}
+              />{" "}
+              Visible en el portafolio
             </label>
             <Field
               label="Orden"

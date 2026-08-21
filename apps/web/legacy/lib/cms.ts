@@ -18,7 +18,7 @@ type CmsProject = {
 
 export async function fetchPublishedProjects(): Promise<Project[] | null> {
   try {
-    const response = await fetch(`${API_URL}/api/projects`, { signal: AbortSignal.timeout(5000) });
+    const response = await fetch(`${API_URL}/api/projects/home`, { signal: AbortSignal.timeout(5000) });
     if (!response.ok) return null;
     const projects = (await response.json()) as CmsProject[];
     return projects.map((project, index) => {
