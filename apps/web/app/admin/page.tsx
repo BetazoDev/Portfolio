@@ -36,15 +36,14 @@ export default function DashboardPage() {
             Content control.
           </h1>
           <p className="mt-4 max-w-xl text-sm text-white/45">
-            Administra proyectos, casos de estudio y medios desde una sola
-            estructura editorial.
+            Manage projects, case studies, and media from a single editorial structure.
           </p>
         </div>
         <Link
           href="/admin/projects/new"
           className="border border-[#8b78ff] bg-[#8b78ff]/10 px-7 py-5 font-mono text-[10px] uppercase tracking-[.2em] text-[#b6a8ff] transition hover:bg-[#7057ff] hover:text-white"
         >
-          Nuevo proyecto +
+          New project +
         </Link>
       </header>
       <section className="mt-10 grid gap-px bg-white/10 sm:grid-cols-2 xl:grid-cols-4">

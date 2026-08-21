@@ -94,6 +94,17 @@ model Project {
   deploymentStack   String?           @map("deployment_stack")
   seoTitle          String?           @map("seo_title")
   seoDescription    String?           @map("seo_description")
+  
+  titleEn           String?           @map("title_en")
+  subtitleEn        String?           @map("subtitle_en")
+  shortSummaryEn    String?           @map("short_summary_en")
+  problemEn         String?           @map("problem_en")
+  solutionEn        String?           @map("solution_en")
+  resultEn          String?           @map("result_en")
+  architectureSummaryEn String?       @map("architecture_summary_en")
+  seoTitleEn        String?           @map("seo_title_en")
+  seoDescriptionEn  String?           @map("seo_description_en")
+  
   publishedAt       DateTime?         @map("published_at")
   technologies      ProjectTechnology[]
   categories        ProjectCategory[]

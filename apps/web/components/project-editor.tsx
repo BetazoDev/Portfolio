@@ -8,6 +8,7 @@ type Taxonomy = { id: string; name: string };
 type Project = Record<string, unknown> & {
   id: string;
   title: string;
+  titleEn?: string;
   slug: string;
   status: string;
   featured: boolean;
@@ -18,19 +19,19 @@ type Project = Record<string, unknown> & {
 };
 const groups = {
   Content: [
-    ["subtitle", "Subtítulo", 2],
-    ["shortSummary", "Resumen", 4],
-    ["problem", "Problema", 5],
-    ["solution", "Solución", 5],
-    ["result", "Resultados", 5],
+    ["subtitle", "Subtitle", 2],
+    ["shortSummary", "Summary", 4],
+    ["problem", "Problem", 5],
+    ["solution", "Solution", 5],
+    ["result", "Results", 5],
   ],
   Architecture: [
-    ["architectureSummary", "Resumen de arquitectura", 6],
+    ["architectureSummary", "Architecture Summary", 6],
     ["frontendStack", "Frontend", 2],
     ["backendStack", "Backend", 2],
-    ["databaseStack", "Base de datos", 2],
-    ["automationStack", "Automatización", 2],
-    ["aiStack", "Inteligencia artificial", 2],
+    ["databaseStack", "Database", 2],
+    ["automationStack", "Automation", 2],
+    ["aiStack", "Artificial Intelligence", 2],
     ["deploymentStack", "Deployment", 2],
   ],
   SEO: [
@@ -45,6 +46,7 @@ export function ProjectEditor({ id }: { id?: string }) {
   const [cats, setCats] = useState<Taxonomy[]>([]);
   const [message, setMessage] = useState("");
   const [tab, setTab] = useState("Basic Info");
+  const [editorLang, setEditorLang] = useState<"es" | "en">("es");
   useEffect(() => {
     Promise.all([
       adminFetch("/api/admin/technologies").then((r) => r.json()),
@@ -68,12 +70,12 @@ export function ProjectEditor({ id }: { id?: string }) {
       setProject(c);
     });
   }, [id]);
-  if (!project) return <p>Cargando editor…</p>;
+  if (!project) return <p>Loading editor…</p>;
   const update = (key: string, value: unknown) =>
     setProject((current) => ({ ...current!, [key]: value }));
   async function save(event: FormEvent) {
     event.preventDefault();
-    setMessage("Guardando…");
+    setMessage("Saving…");
     if (!id) {
       const response = await adminFetch("/api/admin/projects", {
         method: "POST",
@@ -84,7 +86,7 @@ export function ProjectEditor({ id }: { id?: string }) {
           status: "draft",
         }),
       });
-      if (!response.ok) return setMessage("No se pudo crear. Revisa el slug.");
+      if (!response.ok) return setMessage("Failed to create. Check the slug.");
       const created = await response.json();
       router.replace(`/admin/projects/${created.id}`);
       return;
@@ -102,7 +104,7 @@ export function ProjectEditor({ id }: { id?: string }) {
       method: "PUT",
       body: JSON.stringify(payload),
     });
-    setMessage(response.ok ? "Cambios guardados." : "No se pudo guardar.");
+    setMessage(response.ok ? "Changes saved." : "Failed to save.");
   }
   const toggleTax = (kind: "technologies" | "categories", item: Taxonomy) => {
     const current = project![kind] as {
@@ -134,10 +136,10 @@ export function ProjectEditor({ id }: { id?: string }) {
             {id ? "Edit project" : "New project"}
           </p>
           <input
-            value={project.title}
+            value={editorLang === 'es' ? project.title : (project.titleEn ?? '')}
             onChange={(e) => {
-              update("title", e.target.value);
-              if (!id)
+              update(editorLang === 'es' ? "title" : "titleEn", e.target.value);
+              if (!id && editorLang === 'es')
                 update(
                   "slug",
                   e.target.value
@@ -166,6 +168,12 @@ export function ProjectEditor({ id }: { id?: string }) {
           </button>
         </div>
       </header>
+      
+      <div className="mt-8 flex gap-4 font-mono text-[10px] uppercase tracking-widest">
+        <button type="button" onClick={() => setEditorLang("es")} className={`border-b-2 pb-1 transition-colors ${editorLang === 'es' ? 'border-[#8b78ff] text-[#b6a8ff]' : 'border-transparent text-white/40 hover:text-white'}`}>ES (Default)</button>
+        <button type="button" onClick={() => setEditorLang("en")} className={`border-b-2 pb-1 transition-colors ${editorLang === 'en' ? 'border-[#8b78ff] text-[#b6a8ff]' : 'border-transparent text-white/40 hover:text-white'}`}>EN (Translation)</button>
+      </div>
+
       <nav className="my-10 flex gap-2 overflow-x-auto border-b border-white/10 pb-3">
         {tabs.map((value) => (
           <button
@@ -180,8 +188,8 @@ export function ProjectEditor({ id }: { id?: string }) {
       </nav>
       <section className="border-y border-white/10 py-8">
         <div className="mb-9 flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
-          <div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-[#8b78ff]">{tab}</p><h2 className="mt-3 text-2xl font-semibold">{tab === 'Basic Info' ? 'Identidad del proyecto' : tab === 'Content' ? 'Narrativa y resultados' : tab === 'Architecture' ? 'Sistema técnico' : tab === 'Taxonomies' ? 'Clasificación' : tab === 'Media & Case Study' ? 'Contenido visual y enlaces' : tab === 'SEO' ? 'Posicionamiento' : 'Estado de publicación'}</h2></div>
-          <p className="max-w-md text-xs leading-5 text-white/40">Completa la información que alimentará la presentación pública del proyecto.</p>
+          <div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-[#8b78ff]">{tab}</p><h2 className="mt-3 text-2xl font-semibold">{tab === 'Basic Info' ? 'Project Identity' : tab === 'Content' ? 'Narrative & Results' : tab === 'Architecture' ? 'Technical System' : tab === 'Taxonomies' ? 'Classification' : tab === 'Media & Case Study' ? 'Visual Content & Links' : tab === 'SEO' ? 'Search Engine Optimization' : 'Publishing Status'}</h2></div>
+          <p className="max-w-md text-xs leading-5 text-white/40">Fill in the information that will populate the public presentation of the project.</p>
         </div>
         {tab === "Basic Info" && (
           <div className="grid gap-6 md:grid-cols-2">
@@ -191,28 +199,28 @@ export function ProjectEditor({ id }: { id?: string }) {
               change={(v) => update("slug", v)}
             />
             <Field
-              label="Año"
+              label="Year"
               value={project.year}
               type="number"
               change={(v) => update("year", v)}
             />
             <Field
-              label="Cliente"
+              label="Client"
               value={project.clientName}
               change={(v) => update("clientName", v)}
             />
             <Field
-              label="Industria"
+              label="Industry"
               value={project.industry}
               change={(v) => update("industry", v)}
             />
             <Field
-              label="Tipo de proyecto"
+              label="Project Type"
               value={project.projectType}
               change={(v) => update("projectType", v)}
             />
             <Field
-              label="Rol"
+              label="Role"
               value={project.role}
               change={(v) => update("role", v)}
             />
@@ -220,21 +228,24 @@ export function ProjectEditor({ id }: { id?: string }) {
         )}
         {(tab === "Content" || tab === "Architecture" || tab === "SEO") && (
           <div className="grid gap-6 md:grid-cols-2">
-            {groups[tab].map(([key, label, rows]) => (
-              <Text
-                key={key}
-                label={label}
-                rows={rows}
-                value={project[key]}
-                change={(v) => update(key, v)}
-              />
-            ))}
+            {groups[tab].map(([key, label, rows]) => {
+              const fieldKey = editorLang === 'es' || !['subtitle', 'shortSummary', 'problem', 'solution', 'result', 'architectureSummary', 'seoTitle', 'seoDescription'].includes(key as string) ? key : `${key}En`;
+              return (
+                <Text
+                  key={fieldKey}
+                  label={label}
+                  rows={rows as number}
+                  value={project[fieldKey as string]}
+                  change={(v) => update(fieldKey as string, v)}
+                />
+              );
+            })}
           </div>
         )}
         {tab === "Taxonomies" && (
           <div className="grid gap-8 xl:grid-cols-2">
             <Tax
-              label="Tecnologías"
+              label="Technologies"
               items={tech}
               selected={(project.technologies ?? []).map(
                 (x) => x.technology.id,
@@ -242,7 +253,7 @@ export function ProjectEditor({ id }: { id?: string }) {
               toggle={(item) => toggleTax("technologies", item)}
             />
             <Tax
-              label="Categorías"
+              label="Categories"
               items={cats}
               selected={(project.categories ?? []).map((x) => x.category.id)}
               toggle={(item) => toggleTax("categories", item)}
@@ -254,14 +265,13 @@ export function ProjectEditor({ id }: { id?: string }) {
             <ProjectRelations projectId={id} />
           ) : (
             <p className="text-white/50">
-              Guarda primero el proyecto para asociar imágenes, enlaces y
-              secciones.
+              Save the project first to associate images, links, and sections.
             </p>
           ))}
         {tab === "Publishing" && (
           <div className="grid gap-8 md:grid-cols-2">
             <label className="text-xs text-white/50">
-              Estado
+              Status
               <select
                 value={project.status}
                 onChange={(e) => update("status", e.target.value)}
@@ -286,10 +296,10 @@ export function ProjectEditor({ id }: { id?: string }) {
                 checked={project.showOnHomepage}
                 onChange={(e) => update("showOnHomepage", e.target.checked)}
               />{" "}
-              Visible en el portafolio
+              Visible in portfolio
             </label>
             <Field
-              label="Orden"
+              label="Sort Order"
               value={project.sortOrder}
               type="number"
               change={(v) => update("sortOrder", v)}

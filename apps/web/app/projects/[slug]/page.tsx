@@ -50,7 +50,7 @@ export default async function ProjectPage({ params }: Props) {
           <p className="eyebrow">
             Case study · {project.projectType ?? "Digital product"}
           </p>
-          <h1 className="my-10 max-w-[1400px] text-6xl font-bold uppercase leading-[.9] tracking-tight md:text-8xl lg:text-9xl">
+          <h1 className="my-10 max-w-[1400px] text-6xl font-bold leading-[.9] tracking-tight md:text-8xl lg:text-9xl">
             {project.title}
           </h1>
           <p className="max-w-4xl text-xl leading-relaxed muted md:text-3xl">
