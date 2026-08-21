@@ -49,16 +49,14 @@ export const CustomCursor = () => {
 
   return (
     <>
-      {/* Main cursor — solid accent dot with soft glow */}
+      {/* Main cursor — white dot with mix-blend-difference */}
       <motion.div
-        className="custom-cursor pointer-events-none fixed z-[9999] rounded-full"
+        className="pointer-events-none fixed z-[9999] mix-blend-difference hidden lg:block rounded-full bg-white"
         style={{
           left: cursorXSpring,
           top: cursorYSpring,
-          translateX: '-50%',
-          translateY: '-50%',
-          backgroundColor: 'var(--accent, #8b78ff)',
-          boxShadow: '0 0 10px var(--accent, #8b78ff)',
+          x: '-50%',
+          y: '-50%',
         }}
         animate={{
           width: isHovering ? 44 : 8,
