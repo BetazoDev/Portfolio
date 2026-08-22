@@ -107,40 +107,8 @@ app.get('/api/admin/categories', requireAuth, async (_req, res) => res.json(awai
 app.post('/api/admin/categories', requireAuth, async (req, res) => { const data = z.object({ name: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), description: z.string().optional() }).parse(req.body); res.status(201).json(await prisma.category.create({ data })); });
 app.patch('/api/admin/categories/:id', requireAuth, async (req, res) => { const data = z.object({ name: z.string().min(1).optional(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(), description: z.string().optional() }).parse(req.body); res.json(await prisma.category.update({ where: { id: String(req.params.id) }, data })); });
 app.delete('/api/admin/categories/:id', requireAuth, async (req, res) => { await prisma.category.delete({ where: { id: String(req.params.id) } }); res.status(204).send(); });
-app.get('/api/media/file/:filename', async (req, res) => {
-  if (!supabase) return res.status(503).send('Storage is not configured');
-  const bucket = process.env.SUPABASE_BUCKET ?? 'portfolio-media';
-  const { data, error } = await supabase.storage.from(bucket).download(req.params.filename);
-  if (error || !data) return res.status(404).send('Media not found');
-  const arrayBuffer = await data.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  res.setHeader('Content-Type', data.type || 'image/jpeg');
-  res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-  res.send(buffer);
-});
 app.get('/api/admin/media', requireAuth, async (_req, res) => res.json(await prisma.media.findMany({ orderBy: { createdAt: 'desc' } })));
-app.post('/api/admin/media/upload', uploadLimiter, requireAuth, upload.single('file'), async (req: AuthRequest, res) => {
-  if (!req.file || !supabase) return res.status(503).json({ error: 'Storage is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.' });
-  const bucket = process.env.SUPABASE_BUCKET ?? 'portfolio-media';
-  const filename = `${Date.now()}-${crypto.randomUUID()}-${req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
-  const { error } = await supabase.storage.from(bucket).upload(filename, req.file.buffer, { contentType: req.file.mimetype, upsert: false });
-  if (error) return res.status(502).json({ error: error.message });
-  const publicApiUrl = process.env.PUBLIC_API_URL ?? 'https://back.halonso.digital';
-  const publicUrl = `${publicApiUrl}/api/media/file/${filename}`;
-  const media = await prisma.media.create({
-    data: {
-      filename,
-      originalFilename: req.file.originalname,
-      storageBucket: bucket,
-      storagePath: filename,
-      publicUrl,
-      mimeType: req.file.mimetype,
-      sizeBytes: req.file.size,
-      uploadedBy: req.userId!
-    }
-  });
-  res.status(201).json(media);
-});
+app.post('/api/admin/media/upload', uploadLimiter, requireAuth, upload.single('file'), async (req: AuthRequest, res) => { if (!req.file || !supabase) return res.status(503).json({ error: 'Storage is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.' }); const bucket = process.env.SUPABASE_BUCKET ?? 'portfolio-media'; const filename = `${Date.now()}-${crypto.randomUUID()}-${req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, '-')}`; const { error } = await supabase.storage.from(bucket).upload(filename, req.file.buffer, { contentType: req.file.mimetype, upsert: false }); if (error) return res.status(502).json({ error: error.message }); const { data: url } = supabase.storage.from(bucket).getPublicUrl(filename); const media = await prisma.media.create({ data: { filename, originalFilename: req.file.originalname, storageBucket: bucket, storagePath: filename, publicUrl: url.publicUrl, mimeType: req.file.mimetype, sizeBytes: req.file.size, uploadedBy: req.userId! } }); res.status(201).json(media); });
 app.patch('/api/admin/media/:id', requireAuth, async (req, res) => { const data = z.object({ originalFilename: z.string().min(1).optional(), altText: z.string().nullable().optional(), caption: z.string().nullable().optional() }).parse(req.body); res.json(await prisma.media.update({ where: { id: String(req.params.id) }, data })); });
 app.delete('/api/admin/media/:id', requireAuth, async (req, res) => { const media = await prisma.media.findUnique({ where: { id: String(req.params.id) } }); if (!media) return res.status(404).json({ error: 'Media not found' }); if (supabase) await supabase.storage.from(media.storageBucket).remove([media.storagePath]); await prisma.media.delete({ where: { id: media.id } }); res.status(204).send(); });
 app.post('/api/admin/projects/:id/media', requireAuth, async (req, res) => { const data = z.object({ mediaId: z.string(), type: z.nativeEnum(MediaType), title: z.string().optional(), caption: z.string().optional(), sortOrder: z.number().int().default(0) }).parse(req.body); res.status(201).json(await prisma.projectMedia.create({ data: { ...data, projectId: String(req.params.id) } })); });

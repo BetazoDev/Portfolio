@@ -173,12 +173,12 @@ export default function MediaPage() {
 
   return (
     <>
-      <header className="border-b border-white/10 pb-10">
+      <header className="border-b border-white/10 pb-8 md:pb-10">
         <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
           Galería de Medios
         </p>
-        <h1 className="mt-5 text-5xl font-bold md:text-7xl">Medios</h1>
-        <p className="mt-4 max-w-xl text-sm text-white/45">
+        <h1 className="mt-4 text-4xl font-bold sm:text-5xl md:text-7xl">Medios</h1>
+        <p className="mt-3 max-w-xl text-xs text-white/45 sm:text-sm">
           Haz clic en cualquier imagen para verla en grande y editar sus metadatos al estilo WordPress.
         </p>
       </header>
@@ -186,27 +186,29 @@ export default function MediaPage() {
       {/* Upload Box */}
       <form
         onSubmit={upload}
-        className="my-10 grid gap-5 border-y border-dashed border-white/20 py-8 md:grid-cols-[1fr_auto] md:items-center"
+        className="my-8 grid gap-4 border-y border-dashed border-white/20 py-6 md:my-10 md:grid-cols-[1fr_auto] md:items-center md:py-8"
       >
-        <label className="flex min-h-28 cursor-pointer items-center gap-5 border border-white/10 px-6 transition hover:border-[#a855f7]">
-          <ImagePlus className="text-[#a855f7]" />
-          <span>
-            <strong className="block text-sm">Seleccionar imagen</strong>
-            <span className="mt-1 block font-mono text-[9px] uppercase tracking-widest text-white/35">
-              JPEG, PNG, WEBP, o AVIF · máx 10 MB
-            </span>
-          </span>
+        <label className="flex min-h-24 cursor-pointer flex-col gap-4 border border-white/10 p-5 transition hover:border-[#a855f7] sm:flex-row sm:items-center sm:px-6">
+          <div className="flex items-center gap-3">
+            <ImagePlus className="shrink-0 text-[#a855f7]" size={24} />
+            <div>
+              <strong className="block text-sm">Seleccionar imagen</strong>
+              <span className="mt-0.5 block font-mono text-[9px] uppercase tracking-widest text-white/35">
+                JPEG, PNG, WEBP, o AVIF · máx 10 MB
+              </span>
+            </div>
+          </div>
           <input
             name="file"
             type="file"
             accept="image/jpeg,image/png,image/webp,image/avif"
             required
-            className="ml-auto max-w-64 text-xs"
+            className="w-full text-xs sm:ml-auto sm:w-auto sm:max-w-64"
           />
         </label>
         <button
           disabled={uploading}
-          className="border border-[#a855f7] bg-[#a855f7]/10 px-7 py-5 font-mono text-[10px] uppercase tracking-[.2em] text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white disabled:opacity-40"
+          className="w-full border border-[#a855f7] bg-[#a855f7]/10 px-7 py-4 font-mono text-[10px] uppercase tracking-[.2em] text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white disabled:opacity-40 md:w-auto md:py-5"
         >
           {uploading ? "Subiendo…" : "Subir archivo ↗"}
         </button>
@@ -218,7 +220,7 @@ export default function MediaPage() {
       </form>
 
       {/* Grid of Media Items */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((item, index) => (
           <article
             key={item.id}
@@ -259,21 +261,21 @@ export default function MediaPage() {
 
       {/* WordPress Style Modal / Lightbox */}
       {selectedMedia && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-sm md:p-6">
-          <div className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[#121214] shadow-2xl lg:h-[85vh] lg:flex-row">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-2 sm:p-4 backdrop-blur-sm md:p-6">
+          <div className="relative flex max-h-[95vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[#121214] shadow-2xl lg:h-[85vh] lg:flex-row">
             
             {/* Navigation Arrows */}
             <button
               onClick={handlePrev}
               title="Anterior (flecha izquierda)"
-              className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[#a855f7] hover:text-white"
+              className="hidden sm:flex absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[#a855f7] hover:text-white"
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={handleNext}
               title="Siguiente (flecha derecha)"
-              className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[#a855f7] hover:text-white lg:right-[420px]"
+              className="hidden sm:flex absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[#a855f7] hover:text-white lg:right-[420px]"
             >
               <ChevronRight size={20} />
             </button>
@@ -282,25 +284,25 @@ export default function MediaPage() {
             <button
               onClick={() => setSelectedId(null)}
               title="Cerrar (Esc)"
-              className="absolute right-4 top-4 z-20 rounded-full border border-white/20 bg-black/60 p-2 text-white/70 transition hover:bg-red-500 hover:text-white"
+              className="absolute right-3 top-3 z-30 rounded-full border border-white/20 bg-black/70 p-2 text-white/70 transition hover:bg-red-500 hover:text-white"
             >
               <X size={18} />
             </button>
 
             {/* Left Panel: Preview Area */}
-            <div className="flex flex-1 flex-col items-center justify-center overflow-auto bg-[#0a0a0b] p-6 lg:p-10">
+            <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center overflow-auto bg-[#0a0a0b] p-4 sm:p-6 lg:p-10">
               <div className="flex h-full w-full items-center justify-center">
                 {selectedMedia.publicUrl ? (
                   <img
                     src={selectedMedia.publicUrl}
                     alt={selectedMedia.altText ?? selectedMedia.originalFilename}
-                    className="max-h-[60vh] max-w-full object-contain rounded shadow-lg"
+                    className="max-h-[45vh] lg:max-h-[60vh] max-w-full object-contain rounded shadow-lg"
                   />
                 ) : (
                   <div className="text-sm text-white/40">Sin vista previa disponible</div>
                 )}
               </div>
-              <div className="mt-4 flex items-center gap-4 font-mono text-[10px] uppercase text-white/40">
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-2 font-mono text-[9px] uppercase text-white/40 sm:text-[10px]">
                 <span>{selectedMedia.originalFilename}</span>
                 <span>•</span>
                 <span>{selectedMedia.mimeType}</span>
@@ -310,12 +312,12 @@ export default function MediaPage() {
             </div>
 
             {/* Right Panel: WordPress Attachment Details Sidebar */}
-            <aside className="w-full overflow-y-auto border-t border-white/10 bg-[#161619] p-6 lg:w-[400px] lg:border-l lg:border-t-0">
+            <aside className="w-full overflow-y-auto border-t border-white/10 bg-[#161619] p-4 sm:p-6 lg:w-[400px] lg:border-l lg:border-t-0">
               <div className="border-b border-white/10 pb-4">
                 <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
                   Detalles del elemento
                 </p>
-                <h2 className="mt-1 truncate text-lg font-bold text-white">
+                <h2 className="mt-1 truncate text-base font-bold text-white sm:text-lg">
                   {selectedMedia.originalFilename}
                 </h2>
                 <p className="mt-1 font-mono text-[9px] text-white/35">
@@ -324,7 +326,7 @@ export default function MediaPage() {
               </div>
 
               {/* Editable Metadata Form */}
-              <form onSubmit={saveMetadata} className="mt-6 grid gap-5">
+              <form onSubmit={saveMetadata} className="mt-5 grid gap-4 sm:mt-6 sm:gap-5">
                 <label className="block text-xs font-medium text-white/60">
                   Nombre del archivo
                   <div className="mt-2 flex items-center border-b border-white/20 focus-within:border-[#a855f7]">
@@ -381,7 +383,7 @@ export default function MediaPage() {
               </form>
 
               {/* Copy URL section */}
-              <div className="mt-8 border-t border-white/10 pt-6">
+              <div className="mt-6 border-t border-white/10 pt-5 sm:mt-8 sm:pt-6">
                 <p className="font-mono text-[9px] uppercase tracking-widest text-white/40">
                   Enlace directo (URL)
                 </p>
@@ -404,7 +406,7 @@ export default function MediaPage() {
               </div>
 
               {/* Quick Links & Delete Action */}
-              <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6">
+              <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5 sm:mt-8 sm:pt-6">
                 {selectedMedia.publicUrl && (
                   <a
                     href={selectedMedia.publicUrl}
