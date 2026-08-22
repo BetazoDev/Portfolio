@@ -24,8 +24,18 @@ const fadeUp = {
 };
 
 export const Hero = () => {
-  const { t } = useAppContext();
+  const { t, settings } = useAppContext();
   const words = t('hero.words') as string[];
+
+  const cvUrl = settings.resume_url || (t('hero.cvFile') as string);
+
+  // Dynamic social links from settings
+  const socialLinks = [
+    { label: 'GitHub', href: settings.github_url || 'https://github.com/BetazoDev' },
+    { label: 'LinkedIn', href: settings.linkedin_url || 'https://www.linkedin.com/in/halonso-l/' },
+    { label: 'Figma', href: settings.figma_url || 'https://www.figma.com/design/NDIMf0eqCo8oi6oHCSODHf/Portfolio?node-id=602-4' },
+    ...(settings.upwork_url ? [{ label: 'Upwork', href: settings.upwork_url }] : []),
+  ].filter((s) => Boolean(s.href));
 
   return (
     <section
@@ -40,7 +50,7 @@ export const Hero = () => {
         transition={{ duration: 0.6, delay: 0.05 }}
       />
 
-      {/* Staggered title — word by word, dark theme */}
+      {/* Staggered title */}
       <h1 className="text-[clamp(2.5rem,6.5vw,7.5rem)] font-sans font-bold leading-[0.88] tracking-tight text-[var(--text-primary)] mb-16 overflow-hidden">
         {words.map((word, i) => (
           <span key={i} className="block overflow-hidden" style={{ paddingBottom: '0.07em' }}>
@@ -86,8 +96,10 @@ export const Hero = () => {
               {t('hero.contactMe')}
             </a>
             <a
-              href={t('hero.cvFile') as string}
+              href={cvUrl}
               download
+              target="_blank"
+              rel="noreferrer"
               className="px-8 py-4 bg-[var(--text-primary)]/5 border border-[var(--border-color)] text-[var(--text-primary)]/90 text-[11px] font-mono uppercase tracking-[0.3em] hover:bg-[var(--text-primary)]/10 hover:border-accent/40 hover:text-[var(--text-primary)]/100 transition-all duration-300 flex items-center gap-2"
             >
               {t('hero.cv')}
@@ -98,7 +110,7 @@ export const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Social links */}
+        {/* Dynamic Social links (includes Upwork!) */}
         <motion.div
           custom={1}
           variants={fadeUp}
@@ -106,11 +118,7 @@ export const Hero = () => {
           animate="show"
           className="flex flex-wrap gap-3 md:justify-end"
         >
-          {[
-            { label: 'Github', href: 'https://github.com/BetazoDev' },
-            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/halonso-l/' },
-            { label: 'Figma', href: 'https://www.figma.com/design/NDIMf0eqCo8oi6oHCSODHf/Portfolio?node-id=602-4' },
-          ].map((s) => (
+          {socialLinks.map((s) => (
             <a
               key={s.label}
               href={s.href}

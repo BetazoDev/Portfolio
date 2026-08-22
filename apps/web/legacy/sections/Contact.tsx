@@ -4,9 +4,13 @@ import { useAppContext } from '../context/AppContext';
 import { SectionHeader } from '../components/ui/SectionHeader';
 
 export const Contact = () => {
-  const { t, language } = useAppContext();
+  const { t, language, settings } = useAppContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const email = settings.contact_email || 'alonso.humberto0401@gmail.com';
+  const phone = settings.contact_phone || '+52 (449) 124 5952';
+  const telHref = `tel:${phone.replace(/[^0-9+]/g, '')}`;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,7 +41,7 @@ export const Contact = () => {
         setSubmitStatus('error');
         setTimeout(() => setSubmitStatus('idle'), 3000);
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 3000);
     } finally {
@@ -80,7 +84,7 @@ export const Contact = () => {
 
           <div className="space-y-4 pt-4">
             <a
-              href="mailto:alonso.humberto0401@gmail.com"
+              href={`mailto:${email}`}
               className="group flex items-center gap-5 border border-[var(--border-color)] p-5 hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] transition-all duration-300"
             >
               <div className="w-10 h-10 border border-[var(--border-color)] group-hover:border-[var(--bg-primary)]/30 flex items-center justify-center shrink-0 transition-colors duration-300">
@@ -91,13 +95,13 @@ export const Contact = () => {
               <div>
                 <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-accent group-hover:text-[var(--bg-primary)]/60 block mb-0.5 transition-colors duration-300">{t('contact.emailLink')}</span>
                 <p className="text-sm font-sans text-[var(--text-primary)]/90 group-hover:text-[var(--bg-primary)] transition-colors duration-300">
-                  alonso.humberto0401@gmail.com
+                  {email}
                 </p>
               </div>
             </a>
 
             <a
-              href="tel:+524491245952"
+              href={telHref}
               className="group flex items-center gap-5 border border-[var(--border-color)] p-5 hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] transition-all duration-300"
             >
               <div className="w-10 h-10 border border-[var(--border-color)] group-hover:border-[var(--bg-primary)]/30 flex items-center justify-center shrink-0 transition-colors duration-300">
@@ -108,7 +112,7 @@ export const Contact = () => {
               <div>
                 <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-accent group-hover:text-[var(--bg-primary)]/60 block mb-0.5 transition-colors duration-300">{t('contact.phoneLink')}</span>
                 <p className="text-sm font-sans text-[var(--text-primary)]/90 group-hover:text-[var(--bg-primary)] transition-colors duration-300">
-                  +52 (449) 124 5952
+                  {phone}
                 </p>
               </div>
             </a>

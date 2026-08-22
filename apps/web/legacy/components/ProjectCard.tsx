@@ -10,7 +10,7 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ project, index }: ProjectCardProps) => {
   const { t, language, theme } = useAppContext();
-  const description = project.description[language] || project.description['en'];
+  const description = (project.description as Record<string, string>)[language] || project.description.en;
   const displayImage = typeof project.image === 'object' ? project.image[theme] : project.image;
 
   return (

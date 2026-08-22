@@ -97,7 +97,55 @@ app.patch('/api/admin/projects/:id', requireAuth, async (req, res) => { const da
 app.delete('/api/admin/projects/:id', requireAuth, async (req, res) => { await prisma.project.delete({ where: { id: String(req.params.id) } }); res.status(204).send(); });
 app.patch('/api/admin/projects/:id/publish', requireAuth, async (req, res) => { const project = await prisma.project.update({ where: { id: String(req.params.id) }, data: { status: ProjectStatus.published, publishedAt: new Date() } }); res.json(project); });
 app.patch('/api/admin/projects/:id/archive', requireAuth, async (req, res) => { const project = await prisma.project.update({ where: { id: String(req.params.id) }, data: { status: ProjectStatus.archived } }); res.json(project); });
-app.put('/api/admin/projects/:id/details', requireAuth, async (req, res) => { const data = z.object({ title: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), subtitle: z.string().nullable().optional(), shortSummary: z.string().nullable().optional(), clientName: z.string().nullable().optional(), industry: z.string().nullable().optional(), projectType: z.string().nullable().optional(), role: z.string().nullable().optional(), year: z.number().int().min(1990).max(2100).nullable().optional(), status: z.nativeEnum(ProjectStatus), featured: z.boolean(), showOnHomepage: z.boolean(), sortOrder: z.number().int(), problem: z.string().nullable().optional(), solution: z.string().nullable().optional(), result: z.string().nullable().optional(), architectureSummary: z.string().nullable().optional(), frontendStack: z.string().nullable().optional(), backendStack: z.string().nullable().optional(), databaseStack: z.string().nullable().optional(), automationStack: z.string().nullable().optional(), aiStack: z.string().nullable().optional(), deploymentStack: z.string().nullable().optional(), seoTitle: z.string().max(70).nullable().optional(), seoDescription: z.string().max(170).nullable().optional(), titleEn: z.string().nullable().optional(), subtitleEn: z.string().nullable().optional(), shortSummaryEn: z.string().nullable().optional(), problemEn: z.string().nullable().optional(), solutionEn: z.string().nullable().optional(), resultEn: z.string().nullable().optional(), architectureSummaryEn: z.string().nullable().optional(), seoTitleEn: z.string().max(70).nullable().optional(), seoDescriptionEn: z.string().max(170).nullable().optional(), technologyIds: z.array(z.string()), categoryIds: z.array(z.string()) }).parse(req.body); const { technologyIds, categoryIds, ...projectData } = data; const project = await prisma.$transaction(async (tx) => { await tx.projectTechnology.deleteMany({ where: { projectId: String(req.params.id) } }); await tx.projectCategory.deleteMany({ where: { projectId: String(req.params.id) } }); await tx.project.update({ where: { id: String(req.params.id) }, data: { ...projectData, publishedAt: projectData.status === 'published' ? new Date() : undefined, technologies: { create: technologyIds.map((technologyId, sortOrder) => ({ technologyId, sortOrder })) }, categories: { create: categoryIds.map((categoryId, sortOrder) => ({ categoryId, sortOrder })) } } }); return tx.project.findUniqueOrThrow({ where: { id: String(req.params.id) }, include: projectInclude }); }); res.json(project); });
+app.put('/api/admin/projects/:id/details', requireAuth, async (req, res) => { const data = z.object({ title: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), subtitle: z.string().nullable().optional(), shortSummary: z.string().nullable().optional(), clientName: z.string().nullable().optional(), industry: z.string().nullable().optional(), projectType: z.string().nullable().optional(), role: z.string().nullable().optional(), year: z.number().int().min(1990).max(2100).nullable().optional(), status: z.nativeEnum(ProjectStatus), featured: z.boolean(), showOnHomepage: z.boolean(), sortOrder: z.number().int(), problem: z.string().nullable().optional(), solution: z.string().nullable().optional(), result: z.string().nullable().optional(), architectureSummary: z.string().nullable().optional(), frontendStack: z.string().nullable().optional(), backendStack: z.string().nullable().optional(), databaseStack: z.string().nullable().optional(), automationStack: z.string().nullable().optional(), aiStack: z.string().nullable().optional(), deploymentStack: z.string().nullable().optional(), seoTitle: z.string().max(70).nullable().optional(), seoDescription: z.string().max(170).nullable().optional(), titleEn: z.string().nullable().optional(), subtitleEn: z.string().nullable().optional(), shortSummaryEn: z.string().nullable().optional(), problemEn: z.string().nullable().optional(), solutionEn: z.string().nullable().optional(), resultEn: z.string().nullable().optional(), architectureSummaryEn: z.string().nullable().optional(), seoTitleEn: z.string().max(70).nullable().optional(), seoDescriptionEn: z.string().max(170).nullable().optional(), translations: z.unknown().optional(), technologyIds: z.array(z.string()), categoryIds: z.array(z.string()) }).parse(req.body); const { technologyIds, categoryIds, ...projectData } = data; const project = await prisma.$transaction(async (tx) => { await tx.projectTechnology.deleteMany({ where: { projectId: String(req.params.id) } }); await tx.projectCategory.deleteMany({ where: { projectId: String(req.params.id) } }); await tx.project.update({ where: { id: String(req.params.id) }, data: { ...projectData, translations: (projectData.translations as any) ?? {}, publishedAt: projectData.status === 'published' ? new Date() : undefined, technologies: { create: technologyIds.map((technologyId, sortOrder) => ({ technologyId, sortOrder })) }, categories: { create: categoryIds.map((categoryId, sortOrder) => ({ categoryId, sortOrder })) } } }); return tx.project.findUniqueOrThrow({ where: { id: String(req.params.id) }, include: projectInclude }); }); res.json(project); });
+
+app.get('/api/languages', async (_req, res) => {
+  const languagesSetting = await prisma.setting.findUnique({ where: { key: 'site_languages' } });
+  const defaultSetting = await prisma.setting.findUnique({ where: { key: 'default_language' } });
+  const defaultLanguages = [
+    { code: 'en', name: 'English', isDefault: true, isEnabled: true },
+    { code: 'es', name: 'Spanish', isDefault: false, isEnabled: true }
+  ];
+  const languages = (languagesSetting?.value as any) ?? defaultLanguages;
+  const defaultLanguage = (defaultSetting?.value as string) ?? 'en';
+  res.json({ languages, defaultLanguage });
+});
+
+app.put('/api/admin/languages', requireAuth, async (req, res) => {
+  const data = z.object({
+    languages: z.array(z.object({
+      code: z.string().min(2),
+      name: z.string().min(1),
+      isDefault: z.boolean(),
+      isEnabled: z.boolean()
+    })),
+    defaultLanguage: z.string().min(2)
+  }).parse(req.body);
+  await prisma.setting.upsert({ where: { key: 'site_languages' }, update: { value: data.languages as any }, create: { key: 'site_languages', value: data.languages as any } });
+  await prisma.setting.upsert({ where: { key: 'default_language' }, update: { value: data.defaultLanguage }, create: { key: 'default_language', value: data.defaultLanguage } });
+  res.status(204).send();
+});
+
+app.get('/api/experience', async (_req, res) => res.json(await prisma.workExperience.findMany({ orderBy: { sortOrder: 'asc' } })));
+app.get('/api/admin/experience', requireAuth, async (_req, res) => res.json(await prisma.workExperience.findMany({ orderBy: { sortOrder: 'asc' } })));
+app.post('/api/admin/experience', requireAuth, async (req, res) => {
+  const data = z.object({ company: z.string().min(1), timeframe: z.string().min(1), role: z.string().min(1), description: z.string().optional(), translations: z.unknown().optional(), sortOrder: z.number().int().default(0) }).parse(req.body);
+  res.status(201).json(await prisma.workExperience.create({ data: { ...data, translations: (data.translations as any) ?? {} } }));
+});
+app.put('/api/admin/experience/reorder', requireAuth, async (req, res) => {
+  const data = z.object({ items: z.array(z.object({ id: z.string(), sortOrder: z.number().int() })) }).parse(req.body);
+  await prisma.$transaction(data.items.map((i) => prisma.workExperience.update({ where: { id: i.id }, data: { sortOrder: i.sortOrder } })));
+  res.status(204).send();
+});
+app.patch('/api/admin/experience/:id', requireAuth, async (req, res) => {
+  const data = z.object({ company: z.string().min(1).optional(), timeframe: z.string().min(1).optional(), role: z.string().min(1).optional(), description: z.string().nullable().optional(), translations: z.unknown().optional(), sortOrder: z.number().int().optional() }).parse(req.body);
+  res.json(await prisma.workExperience.update({ where: { id: String(req.params.id) }, data: { ...data, translations: data.translations as any } }));
+});
+app.delete('/api/admin/experience/:id', requireAuth, async (req, res) => {
+  await prisma.workExperience.delete({ where: { id: String(req.params.id) } });
+  res.status(204).send();
+});
+
 app.get('/api/technologies', async (_req, res) => res.json(await prisma.technology.findMany({ orderBy: { name: 'asc' } })));
 app.get('/api/categories', async (_req, res) => res.json(await prisma.category.findMany({ orderBy: { name: 'asc' } })));
 app.get('/api/admin/technologies', requireAuth, async (_req, res) => res.json(await prisma.technology.findMany({ orderBy: { name: 'asc' } })));
@@ -124,6 +172,53 @@ app.get('/api/settings', async (_req, res) => res.json(await prisma.setting.find
 app.get('/api/admin/settings', requireAuth, async (_req, res) => res.json(await prisma.setting.findMany()));
 app.put('/api/admin/settings/:key', requireAuth, async (req, res) => { const value = z.object({ value: z.unknown() }).parse(req.body).value; res.json(await prisma.setting.upsert({ where: { key: String(req.params.key) }, update: { value: value as any }, create: { key: String(req.params.key), value: value as any } })); });
 
+async function ensureDefaultExperience() {
+  try {
+    const count = await prisma.workExperience.count();
+    if (count === 0) {
+      await prisma.workExperience.createMany({
+        data: [
+          {
+            company: 'Reputation Defense Network',
+            role: 'Web Designer & WordPress Developer',
+            timeframe: '2025 - Present',
+            description: 'Led end-to-end development of high-performance WordPress sites from Figma prototypes. Solved performance bottlenecks by optimizing load speeds and stability.',
+            sortOrder: 0,
+            translations: {
+              en: { role: 'Web Designer & WordPress Developer', timeframe: '2025 - Present', description: 'Led end-to-end development of high-performance WordPress sites from Figma prototypes. Solved performance bottlenecks by optimizing load speeds and stability.' },
+              es: { role: 'Diseñador Web & Desarrollador WordPress', timeframe: '2025 - Presente', description: 'Lideró el desarrollo integral de sitios WordPress de alto rendimiento desde prototipos en Figma.' }
+            }
+          },
+          {
+            company: 'Agency4RealEstate',
+            role: 'WordPress Developer',
+            timeframe: '2023 - 2024',
+            description: 'Architected real estate platforms and customized complex WooCommerce stores. Solved major UX friction by optimizing Core Web Vitals.',
+            sortOrder: 1,
+            translations: {
+              en: { role: 'WordPress Developer', timeframe: '2023 - 2024', description: 'Architected real estate platforms and customized complex WooCommerce stores.' },
+              es: { role: 'Desarrollador WordPress', timeframe: '2023 - 2024', description: 'Arquitectura de plataformas inmobiliarias y personalización de tiendas WooCommerce complejas.' }
+            }
+          },
+          {
+            company: 'Bloom / DUDE Agency',
+            role: 'WordPress Developer',
+            timeframe: '2022 - 2023',
+            description: 'Engineered responsive web solutions across CMS platforms including WordPress, Duda, and HubSpot. Accelerated project delivery by resolving core bugs.',
+            sortOrder: 2,
+            translations: {
+              en: { role: 'WordPress Developer', timeframe: '2022 - 2023', description: 'Engineered responsive web solutions across CMS platforms including WordPress, Duda, and HubSpot.' },
+              es: { role: 'Desarrollador WordPress', timeframe: '2022 - 2023', description: 'Desarrollo de soluciones web responsivas en plataformas CMS como WordPress, Duda y HubSpot.' }
+            }
+          }
+        ]
+      });
+    }
+  } catch (e) {
+    console.error('Failed to seed default experience:', e);
+  }
+}
+
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => { console.error(err); if (err instanceof z.ZodError) return res.status(400).json({ error: 'Validation failed', issues: err.issues }); const code = typeof err === 'object' && err && 'code' in err ? String((err as { code: unknown }).code) : ''; if (code === 'P2002') return res.status(409).json({ error: 'A record with that unique value already exists' }); if (code === 'P2025') return res.status(404).json({ error: 'Record not found' }); res.status(500).json({ error: 'Internal server error' }); });
 async function ensureStorageBucket() {
   if (!supabase) return;
@@ -147,4 +242,4 @@ async function fixMediaUrls() {
     console.error('Failed to migrate media URLs:', e);
   }
 }
-app.listen(port, '0.0.0.0', () => { console.log(`Portfolio API listening on ${port}`); void ensureStorageBucket(); void fixMediaUrls(); });
+app.listen(port, '0.0.0.0', () => { console.log(`Portfolio API listening on ${port}`); void ensureStorageBucket(); void fixMediaUrls(); void ensureDefaultExperience(); });

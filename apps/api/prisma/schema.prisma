@@ -104,6 +104,7 @@ model Project {
   architectureSummaryEn String?       @map("architecture_summary_en")
   seoTitleEn        String?           @map("seo_title_en")
   seoDescriptionEn  String?           @map("seo_description_en")
+  translations      Json?             @default("{}")
   
   publishedAt       DateTime?         @map("published_at")
   technologies      ProjectTechnology[]
@@ -115,6 +116,20 @@ model Project {
   updatedAt         DateTime          @updatedAt @map("updated_at")
   @@index([status, showOnHomepage, featured, sortOrder])
   @@map("projects")
+}
+
+model WorkExperience {
+  id           String   @id @default(cuid())
+  company      String
+  timeframe    String
+  role         String
+  description  String?
+  translations Json?    @default("{}")
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  @@index([sortOrder])
+  @@map("work_experiences")
 }
 
 model Technology {

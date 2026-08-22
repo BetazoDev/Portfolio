@@ -6,6 +6,8 @@ import { adminFetch, clearToken } from "@/lib/admin-api";
 import { ProjectRelations } from "@/components/project-relations";
 
 type Taxonomy = { id: string; name: string };
+type LanguageItem = { code: string; name: string; isDefault: boolean; isEnabled: boolean };
+
 type Project = Record<string, unknown> & {
   id: string;
   title: string;
@@ -16,6 +18,7 @@ type Project = Record<string, unknown> & {
   showOnHomepage: boolean;
   sortOrder: number;
   year?: number | string | null;
+  translations?: Record<string, Record<string, string>>;
   technologies?: { technology: Taxonomy }[];
   categories?: { category: Taxonomy }[];
 };
@@ -46,15 +49,17 @@ const groups = {
 export function ProjectEditor({ id }: { id?: string }) {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
+  const [languages, setLanguages] = useState<LanguageItem[]>([]);
   const [tech, setTech] = useState<Taxonomy[]>([]);
   const [cats, setCats] = useState<Taxonomy[]>([]);
   const [message, setMessage] = useState<{ type: "success" | "error" | "info"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState("Basic Info");
-  const [editorLang, setEditorLang] = useState<"es" | "en">("es");
+  const [editorLang, setEditorLang] = useState<string>("en");
 
   useEffect(() => {
     Promise.all([
+      adminFetch("/api/languages").then((r) => r.json()),
       adminFetch("/api/admin/technologies").then((r) => r.json()),
       adminFetch("/api/admin/categories").then((r) => r.json()),
       id
@@ -69,8 +74,12 @@ export function ProjectEditor({ id }: { id?: string }) {
             sortOrder: 0,
             technologies: [],
             categories: [],
+            translations: {},
           }),
-    ]).then(([a, b, c]) => {
+    ]).then(([langData, a, b, c]) => {
+      const enabledLangs = (langData.languages ?? []).filter((l: LanguageItem) => l.isEnabled);
+      setLanguages(enabledLangs.length ? enabledLangs : [{ code: "en", name: "English", isDefault: true, isEnabled: true }, { code: "es", name: "Spanish", isDefault: false, isEnabled: true }]);
+      if (langData.defaultLanguage) setEditorLang(langData.defaultLanguage);
       setTech(a);
       setCats(b);
       setProject(c);
@@ -81,6 +90,44 @@ export function ProjectEditor({ id }: { id?: string }) {
 
   const update = (key: string, value: unknown) =>
     setProject((current) => ({ ...current!, [key]: value }));
+
+  const updateTranslation = (field: string, value: string) => {
+    setProject((current) => {
+      if (!current) return current;
+      const currTrans = current.translations ?? {};
+      const langTrans = currTrans[editorLang] ?? {};
+      const updatedTrans = {
+        ...currTrans,
+        [editorLang]: { ...langTrans, [field]: value },
+      };
+
+      // Also sync top-level flat fields for primary languages (en/es)
+      const isEnglish = editorLang === "en";
+      const isSpanish = editorLang === "es";
+
+      let extraFlat = {};
+      if (isSpanish) {
+        extraFlat = { [field]: value };
+      } else if (isEnglish) {
+        const enKey = `${field}En`;
+        extraFlat = { [enKey]: value, ...(field === "title" && !current.title ? { title: value } : {}) };
+      }
+
+      return {
+        ...current,
+        ...extraFlat,
+        translations: updatedTrans,
+      };
+    });
+  };
+
+  const getTranslatedValue = (field: string): string => {
+    const langTrans = project.translations?.[editorLang];
+    if (langTrans && langTrans[field] !== undefined) return langTrans[field];
+    if (editorLang === "en") return String(project[`${field}En`] ?? project[field] ?? "");
+    if (editorLang === "es") return String(project[field] ?? "");
+    return String(project[field] ?? "");
+  };
 
   const cleanValue = (val: unknown) => {
     if (val === "" || val === undefined) return null;
@@ -96,7 +143,7 @@ export function ProjectEditor({ id }: { id?: string }) {
       const response = await adminFetch("/api/admin/projects", {
         method: "POST",
         body: JSON.stringify({
-          title: project!.title,
+          title: project!.title || "Untitled Project",
           slug: project!.slug,
           shortSummary: project!.shortSummary || "",
           status: "draft",
@@ -112,7 +159,6 @@ export function ProjectEditor({ id }: { id?: string }) {
       return;
     }
 
-    // Clean payload for backend validation
     const payload = {
       title: project!.title || "Untitled Project",
       slug: project!.slug,
@@ -148,6 +194,7 @@ export function ProjectEditor({ id }: { id?: string }) {
       architectureSummaryEn: cleanValue(project!.architectureSummaryEn),
       seoTitleEn: cleanValue(project!.seoTitleEn),
       seoDescriptionEn: cleanValue(project!.seoDescriptionEn),
+      translations: project!.translations ?? {},
       technologyIds: (project!.technologies ?? []).map(({ technology }) => technology.id),
       categoryIds: (project!.categories ?? []).map(({ category }) => category.id),
     };
@@ -210,10 +257,10 @@ export function ProjectEditor({ id }: { id?: string }) {
             {id ? "Edit project" : "New project"}
           </p>
           <input
-            value={editorLang === "es" ? (project.title ?? "") : (project.titleEn ?? "")}
+            value={getTranslatedValue("title")}
             onChange={(e) => {
-              update(editorLang === "es" ? "title" : "titleEn", e.target.value);
-              if (!id && editorLang === "es")
+              updateTranslation("title", e.target.value);
+              if (!id && editorLang === "en")
                 update(
                   "slug",
                   e.target.value
@@ -267,29 +314,22 @@ export function ProjectEditor({ id }: { id?: string }) {
         </div>
       )}
 
-      <div className="mt-8 flex gap-4 font-mono text-[10px] uppercase tracking-widest">
-        <button
-          type="button"
-          onClick={() => setEditorLang("es")}
-          className={`border-b-2 pb-1 transition-colors ${
-            editorLang === "es"
-              ? "border-[#a855f7] text-[#c084fc]"
-              : "border-transparent text-white/40 hover:text-white"
-          }`}
-        >
-          ES (Default)
-        </button>
-        <button
-          type="button"
-          onClick={() => setEditorLang("en")}
-          className={`border-b-2 pb-1 transition-colors ${
-            editorLang === "en"
-              ? "border-[#a855f7] text-[#c084fc]"
-              : "border-transparent text-white/40 hover:text-white"
-          }`}
-        >
-          EN (Translation)
-        </button>
+      {/* Dynamic Language Translation Tabs */}
+      <div className="mt-8 flex flex-wrap gap-3 font-mono text-[10px] uppercase tracking-widest">
+        {languages.map((lang) => (
+          <button
+            key={lang.code}
+            type="button"
+            onClick={() => setEditorLang(lang.code)}
+            className={`border-b-2 pb-1 transition-colors ${
+              editorLang === lang.code
+                ? "border-[#a855f7] text-[#c084fc]"
+                : "border-transparent text-white/40 hover:text-white"
+            }`}
+          >
+            {lang.name} ({lang.code.toUpperCase()}) {lang.isDefault ? "DEFAULT" : ""}
+          </button>
+        ))}
       </div>
 
       <nav className="my-8 flex gap-2 overflow-x-auto border-b border-white/10 pb-3">
@@ -313,7 +353,7 @@ export function ProjectEditor({ id }: { id?: string }) {
         <div className="mb-9 flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
           <div>
             <p className="font-mono text-[9px] uppercase tracking-[.25em] text-[#a855f7]">
-              {tab}
+              {tab} · Editing in {languages.find((l) => l.code === editorLang)?.name ?? editorLang.toUpperCase()}
             </p>
             <h2 className="mt-3 text-2xl font-semibold">
               {tab === "Basic Info"
@@ -374,31 +414,15 @@ export function ProjectEditor({ id }: { id?: string }) {
 
         {(tab === "Content" || tab === "Architecture" || tab === "SEO") && (
           <div className="grid gap-6 md:grid-cols-2">
-            {groups[tab].map(([key, label, rows]) => {
-              const fieldKey =
-                editorLang === "es" ||
-                ![
-                  "subtitle",
-                  "shortSummary",
-                  "problem",
-                  "solution",
-                  "result",
-                  "architectureSummary",
-                  "seoTitle",
-                  "seoDescription",
-                ].includes(key as string)
-                  ? key
-                  : `${key}En`;
-              return (
-                <Text
-                  key={fieldKey}
-                  label={label}
-                  rows={rows as number}
-                  value={project[fieldKey as string]}
-                  change={(v) => update(fieldKey as string, v)}
-                />
-              );
-            })}
+            {groups[tab].map(([key, label, rows]) => (
+              <Text
+                key={key}
+                label={`${label} (${editorLang.toUpperCase()})`}
+                rows={rows as number}
+                value={getTranslatedValue(key)}
+                change={(v) => updateTranslation(key, v)}
+              />
+            ))}
           </div>
         )}
 

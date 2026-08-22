@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   BarChart3,
+  Briefcase,
   FolderKanban,
   Image,
   Layers3,
@@ -18,11 +19,12 @@ import { adminFetch, clearToken, getToken } from "@/lib/admin-api";
 
 const nav = [
   { label: "Dashboard", href: "/admin", icon: BarChart3 },
-  { label: "Proyectos", href: "/admin/projects", icon: FolderKanban },
-  { label: "Medios", href: "/admin/media", icon: Image },
-  { label: "Tecnologías", href: "/admin/technologies", icon: Layers3 },
-  { label: "Categorías", href: "/admin/categories", icon: Tags },
-  { label: "Ajustes", href: "/admin/settings", icon: Settings },
+  { label: "Projects", href: "/admin/projects", icon: FolderKanban },
+  { label: "Experience", href: "/admin/experience", icon: Briefcase },
+  { label: "Media", href: "/admin/media", icon: Image },
+  { label: "Technologies", href: "/admin/technologies", icon: Layers3 },
+  { label: "Categories", href: "/admin/categories", icon: Tags },
+  { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -49,7 +51,6 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     });
   }, [router, isLogin]);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
@@ -58,7 +59,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   if (!ready)
     return (
       <main className="grid min-h-screen place-items-center bg-[#101011] font-mono text-xs uppercase tracking-widest text-white">
-        Validando sesión…
+        Validating session…
       </main>
     );
 
@@ -121,7 +122,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
-          <div className="mt-6 border-t border-white/10 pt-4 flex items-center justify-between">
+          <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
             <div>
               <p className="text-xs font-medium">{user}</p>
               <p className="font-mono text-[8px] uppercase tracking-widest text-emerald-400">
@@ -132,14 +133,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-white/50 hover:text-white"
               onClick={handleLogout}
             >
-              <LogOut size={13} /> Salir
+              <LogOut size={13} /> Sign out
             </button>
           </div>
         </div>
       )}
 
       {/* Desktop Sidebar Navigation */}
-      <aside className="hidden lg:flex lg:flex-col border-r border-white/10 bg-[#151517] p-5 lg:sticky lg:top-0 lg:h-screen">
+      <aside className="hidden border-r border-white/10 bg-[#151517] p-5 lg:flex lg:sticky lg:top-0 lg:h-screen lg:flex-col">
         <div className="flex items-center gap-3 border-b border-white/10 pb-5">
           <div className="grid size-9 place-items-center border border-[#a855f7] bg-[#a855f7]/10 font-mono text-sm text-[#c084fc]">
             H
@@ -182,7 +183,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             className="mt-4 flex items-center gap-2 text-xs text-white/50 hover:text-white"
             onClick={handleLogout}
           >
-            <LogOut size={14} /> Cerrar sesión
+            <LogOut size={14} /> Sign out
           </button>
         </div>
       </aside>

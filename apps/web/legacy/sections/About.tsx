@@ -4,7 +4,11 @@ import { SectionHeader } from '../components/ui/SectionHeader';
 import { skillsData } from '../data/skills';
 
 export const About = () => {
-  const { t, language } = useAppContext();
+  const { t, language, settings } = useAppContext();
+
+  const photoUrl =
+    settings.about_photo_url ||
+    'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/humberto-alonso-profile-picture.webp';
 
   return (
     <section id="about" className="py-24 border-b border-[var(--border-color)]">
@@ -39,7 +43,7 @@ export const About = () => {
               >
                 <div className="mb-6 pb-4 border-b border-[var(--border-color)]">
                   <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent">
-                    {group.category[language]}
+                    {group.category[(language as 'en' | 'es') ?? 'en'] ?? group.category.en}
                   </span>
                 </div>
                 <ul className="space-y-4">
@@ -58,7 +62,7 @@ export const About = () => {
           </div>
         </div>
 
-        {/* Right: Vertical Photo Layer */}
+        {/* Right: Vertical Photo Layer (From Supabase CDN Setting) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -67,7 +71,7 @@ export const About = () => {
           className="lg:col-span-5 relative w-full aspect-[3/4] border border-[var(--text-primary)]/15 bg-[var(--bg-primary)] overflow-hidden group"
         >
           <img
-            src="https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/humberto-alonso-profile-picture.webp"
+            src={photoUrl}
             alt="Humberto Alonso"
             className="absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-700 w-full h-full object-cover"
           />
@@ -82,7 +86,6 @@ export const About = () => {
             </span>
           </div>
         </motion.div>
-
       </div>
     </section>
   );

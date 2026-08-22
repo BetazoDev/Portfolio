@@ -2,14 +2,14 @@ import { motion } from 'framer-motion';
 import { useAppContext } from '../context/AppContext';
 
 export const Navbar = () => {
-  const { language, setLanguage, t } = useAppContext();
+  const { language, availableLanguages, setLanguage } = useAppContext();
 
   const navLinks = [
-    { label: language === 'en' ? 'Home' : 'Inicio', href: '/' },
-    { label: language === 'en' ? 'Solutions' : 'Soluciones', href: '/solutions' },
-    { label: language === 'en' ? 'Projects' : 'Proyectos', href: '/projects' },
-    { label: language === 'en' ? 'About' : 'Sobre mí', href: '/#about' },
-    { label: language === 'en' ? 'Contact' : 'Contacto', href: '/#contact' },
+    { label: language === 'es' ? 'Inicio' : 'Home', href: '/' },
+    { label: language === 'es' ? 'Soluciones' : 'Solutions', href: '/solutions' },
+    { label: language === 'es' ? 'Proyectos' : 'Projects', href: '/projects' },
+    { label: language === 'es' ? 'Sobre mí' : 'About', href: '/#about' },
+    { label: language === 'es' ? 'Contacto' : 'Contact', href: '/#contact' },
   ];
 
   return (
@@ -20,7 +20,7 @@ export const Navbar = () => {
       className="py-7 flex items-center justify-between border-b border-[var(--border-color)]"
     >
       {/* Name — left */}
-      <a href="#" className="flex flex-col leading-tight group">
+      <a href="/" className="flex flex-col leading-tight group">
         <span className="text-[10px] font-mono uppercase tracking-[0.34em] text-accent group-hover:text-accent-light transition-colors duration-300">
           Humberto Guadalupe
         </span>
@@ -47,18 +47,19 @@ export const Navbar = () => {
           ))}
         </nav>
 
-        {/* Language Switcher */}
-        <div className="flex items-center gap-2 border-l border-[var(--border-color)] pl-4 xl:pl-6">
-          {(['en', 'es'] as const).map((lang) => (
+        {/* Dynamic Language Switcher */}
+        <div className="flex items-center gap-2.5 border-l border-[var(--border-color)] pl-4 xl:pl-6">
+          {availableLanguages.map((lang) => (
             <button
-              key={lang}
-              onClick={() => setLanguage(lang)}
-              className={`text-[10px] font-mono uppercase tracking-widest transition-all duration-300 ${language === lang
-                ? 'text-accent font-bold scale-110'
-                : 'text-[var(--text-primary)]/40 hover:text-[var(--text-primary)]'
-                }`}
+              key={lang.code}
+              onClick={() => setLanguage(lang.code)}
+              className={`text-[10px] font-mono uppercase tracking-widest transition-all duration-300 ${
+                language === lang.code
+                  ? 'text-accent font-bold scale-110'
+                  : 'text-[var(--text-primary)]/40 hover:text-[var(--text-primary)]'
+              }`}
             >
-              {lang}
+              {lang.code}
             </button>
           ))}
         </div>

@@ -34,6 +34,7 @@ const solutions = [
 
 export const Solutions = () => {
   const { language } = useAppContext();
+  const langKey = (language as 'en' | 'es') === 'es' ? 'es' : 'en';
   return (
     <section id="solutions" className="border-b border-[var(--border-color)] py-24">
       <SectionHeader subtitle={language === 'en' ? 'Capabilities' : 'Capacidades'} />
@@ -58,9 +59,9 @@ export const Solutions = () => {
             className="grid gap-6 border-b border-[var(--border-color)] py-10 md:grid-cols-12 md:items-start"
           >
             <span className="font-mono text-[10px] text-accent md:col-span-1">{solution.number}</span>
-            <h3 className="text-2xl font-sans font-bold uppercase tracking-tight md:col-span-5 md:text-4xl">{solution.title[language]}</h3>
+            <h3 className="text-2xl font-sans font-bold uppercase tracking-tight md:col-span-5 md:text-4xl">{solution.title[langKey]}</h3>
             <div className="md:col-span-6">
-              <p className="max-w-xl text-sm leading-7 text-[var(--text-primary)]/65">{solution.description[language]}</p>
+              <p className="max-w-xl text-sm leading-7 text-[var(--text-primary)]/65">{solution.description[langKey]}</p>
               <p className="mt-6 font-mono text-[9px] uppercase tracking-[.22em] text-[var(--text-primary)]/45">{solution.stack}</p>
             </div>
           </motion.article>
