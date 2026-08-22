@@ -124,5 +124,26 @@ app.get('/api/admin/settings', requireAuth, async (_req, res) => res.json(await 
 app.put('/api/admin/settings/:key', requireAuth, async (req, res) => { const value = z.object({ value: z.unknown() }).parse(req.body).value; res.json(await prisma.setting.upsert({ where: { key: String(req.params.key) }, update: { value: value as any }, create: { key: String(req.params.key), value: value as any } })); });
 
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => { console.error(err); if (err instanceof z.ZodError) return res.status(400).json({ error: 'Validation failed', issues: err.issues }); const code = typeof err === 'object' && err && 'code' in err ? String((err as { code: unknown }).code) : ''; if (code === 'P2002') return res.status(409).json({ error: 'A record with that unique value already exists' }); if (code === 'P2025') return res.status(404).json({ error: 'Record not found' }); res.status(500).json({ error: 'Internal server error' }); });
-async function ensureStorageBucket() { if (!supabase) return; const { data, error } = await supabase.storage.listBuckets(); if (error) { console.error('Supabase Storage connection failed:', error.message); return; } if (!data.some((item) => item.name === storageBucket)) { const created = await supabase.storage.createBucket(storageBucket, { public: true, fileSizeLimit: 10 * 1024 * 1024, allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] }); if (created.error) console.error('Supabase bucket creation failed:', created.error.message); } }
-app.listen(port, '0.0.0.0', () => { console.log(`Portfolio API listening on ${port}`); void ensureStorageBucket(); });
+async function ensureStorageBucket() {
+  if (!supabase) return;
+  const { data, error } = await supabase.storage.listBuckets();
+  if (error) { console.error('Supabase Storage connection failed:', error.message); return; }
+  if (!data.some((item) => item.name === storageBucket)) {
+    const created = await supabase.storage.createBucket(storageBucket, { public: true, fileSizeLimit: 10 * 1024 * 1024, allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] });
+    if (created.error) console.error('Supabase bucket creation failed:', created.error.message);
+  }
+}
+async function fixMediaUrls() {
+  try {
+    const targetUrl = process.env.SUPABASE_URL ?? 'https://supastorage.halonso.digital';
+    const oldPrefix = 'http://portfolio-supabase-e5f1bd-93-188-167-69.traefik.me';
+    if (targetUrl) {
+      await prisma.$executeRawUnsafe(
+        `UPDATE "media" SET "public_url" = REPLACE("public_url", '${oldPrefix}', '${targetUrl}') WHERE "public_url" LIKE '${oldPrefix}%';`
+      );
+    }
+  } catch (e) {
+    console.error('Failed to migrate media URLs:', e);
+  }
+}
+app.listen(port, '0.0.0.0', () => { console.log(`Portfolio API listening on ${port}`); void ensureStorageBucket(); void fixMediaUrls(); });
