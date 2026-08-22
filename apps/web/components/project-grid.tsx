@@ -1,5 +1,123 @@
 'use client';
-import { useMemo, useState } from 'react'; import Link from 'next/link'; import type { PublicProject } from '@/lib/api'; import { LangText } from './lang-text';
-export function ProjectGrid({ projects, filters=false }:{projects:PublicProject[];filters?:boolean}) { const [active,setActive]=useState('all'); const options=useMemo(()=>{const values=new Map<string,string>();projects.forEach(project=>{project.categories.forEach(({category})=>values.set(`c:${category.slug}`,category.name));project.technologies.forEach(({technology})=>values.set(`t:${technology.slug}`,technology.name));});return [...values.entries()].slice(0,14);},[projects]); const shown=active==='all'?projects:projects.filter(project=>active.startsWith('c:')?project.categories.some(({category})=>`c:${category.slug}`===active):project.technologies.some(({technology})=>`t:${technology.slug}`===active)); return <>{filters&&<div className="mb-12 flex gap-3 overflow-x-auto pb-2"><Filter active={active==='all'} click={()=>setActive('all')}><LangText en="All" es="Todos"/></Filter>{options.map(([key,label])=><Filter key={key} active={active===key} click={()=>setActive(key)}>{label}</Filter>)}</div>}<div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">{shown.map((project,index)=><ProjectCard key={project.id} project={project} index={index}/>)}</div>{!shown.length&&<p className="border border-[var(--border-color)] p-10 font-mono text-xs uppercase tracking-widest opacity-50"><LangText en="No projects found." es="No hay proyectos para este filtro."/></p>}</>; }
-function ProjectCard({project,index}:{project:PublicProject;index:number}) { const image=project.media.find(item=>item.type==='thumbnail'||item.type==='cover')?.media; return <Link href={`/projects/${project.slug}`} className="group relative h-[480px] overflow-hidden border border-[var(--border-color)] bg-[var(--bg-primary)]"><div className="absolute inset-0 opacity-40 transition duration-500 group-hover:opacity-20">{image?.publicUrl?<img src={image.publicUrl} alt={image.altText??project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110"/>:<div className="h-full w-full bg-[linear-gradient(135deg,transparent_45%,var(--border-color)_46%,transparent_47%)]"/>}</div><div className="relative z-10 flex h-full flex-col p-6 transition duration-500 group-hover:opacity-20 md:p-8"><div className="flex justify-between font-mono text-xs uppercase tracking-[.3em]"><span className="text-[var(--accent)]">{String(index+1).padStart(2,'0')}</span><span className="opacity-70">{project.year??'—'}</span></div><div className="mt-auto"><h2 className="text-3xl font-bold uppercase leading-tight tracking-tight">{project.title}</h2><p className="mt-4 line-clamp-3 text-xs leading-relaxed opacity-75">{project.shortSummary??project.subtitle}</p></div></div><div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[color:var(--bg-primary)]/90 p-8 text-center opacity-0 backdrop-blur-sm transition duration-500 group-hover:opacity-100"><div className="mb-10 flex flex-wrap justify-center gap-2">{project.technologies.slice(0,7).map(({technology})=><span key={technology.id} className="border border-[var(--accent)]/30 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[.2em] text-[var(--accent)]">{technology.name}</span>)}</div><span className="border border-[var(--accent)] bg-[color:var(--accent)]/10 px-8 py-4 font-mono text-[11px] uppercase tracking-[.3em] transition group-hover:bg-[var(--accent)] group-hover:text-white"><LangText en="View project →" es="Ver proyecto →"/></span></div></Link>; }
-function Filter({active,click,children}:{active:boolean;click:()=>void;children:React.ReactNode}) { return <button onClick={click} className={`shrink-0 border px-4 py-2 font-mono text-[9px] uppercase tracking-[.2em] ${active?'border-[var(--accent)] text-[var(--accent)]':'border-[var(--border-color)] opacity-60'}`}>{children}</button>; }
+import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import type { PublicProject } from '@/lib/api';
+import { getProjectField } from '@/lib/api';
+import { useAppContext } from '@/legacy/context/AppContext';
+import { LangText } from './lang-text';
+
+export function ProjectGrid({ projects, filters = false }: { projects: PublicProject[]; filters?: boolean }) {
+  const [active, setActive] = useState('all');
+  const options = useMemo(() => {
+    const values = new Map<string, string>();
+    projects.forEach((project) => {
+      project.categories.forEach(({ category }) => values.set(`c:${category.slug}`, category.name));
+      project.technologies.forEach(({ technology }) => values.set(`t:${technology.slug}`, technology.name));
+    });
+    return [...values.entries()].slice(0, 14);
+  }, [projects]);
+
+  const shown =
+    active === 'all'
+      ? projects
+      : projects.filter((project) =>
+          active.startsWith('c:')
+            ? project.categories.some(({ category }) => `c:${category.slug}` === active)
+            : project.technologies.some(({ technology }) => `t:${technology.slug}` === active),
+        );
+
+  return (
+    <>
+      {filters && (
+        <div className="mb-12 flex gap-3 overflow-x-auto pb-2">
+          <Filter active={active === 'all'} click={() => setActive('all')}>
+            <LangText en="All" es="Todos" />
+          </Filter>
+          {options.map(([key, label]) => (
+            <Filter key={key} active={active === key} click={() => setActive(key)}>
+              {label}
+            </Filter>
+          ))}
+        </div>
+      )}
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {shown.map((project, index) => (
+          <ProjectCard key={project.id} project={project} index={index} />
+        ))}
+      </div>
+      {!shown.length && (
+        <p className="border border-[var(--border-color)] p-10 font-mono text-xs uppercase tracking-widest opacity-50">
+          <LangText en="No projects found." es="No hay proyectos para este filtro." />
+        </p>
+      )}
+    </>
+  );
+}
+
+function ProjectCard({ project, index }: { project: PublicProject; index: number }) {
+  const { language } = useAppContext();
+  const image = project.media.find((item) => item.type === 'thumbnail' || item.type === 'cover')?.media;
+  const title = getProjectField(project, 'title', language) || project.title;
+  const summary =
+    getProjectField(project, 'shortSummary', language) ||
+    getProjectField(project, 'subtitle', language) ||
+    project.shortSummary ||
+    project.subtitle;
+
+  return (
+    <Link
+      href={`/projects/${project.slug}`}
+      className="group relative h-[480px] overflow-hidden border border-[var(--border-color)] bg-[var(--bg-primary)]"
+    >
+      <div className="absolute inset-0 opacity-40 transition duration-500 group-hover:opacity-20">
+        {image?.publicUrl ? (
+          <img
+            src={image.publicUrl}
+            alt={image.altText ?? title}
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+          />
+        ) : (
+          <div className="h-full w-full bg-[linear-gradient(135deg,transparent_45%,var(--border-color)_46%,transparent_47%)]" />
+        )}
+      </div>
+      <div className="relative z-10 flex h-full flex-col p-6 transition duration-500 group-hover:opacity-20 md:p-8">
+        <div className="flex justify-between font-mono text-xs uppercase tracking-[.3em]">
+          <span className="text-[var(--accent)]">{String(index + 1).padStart(2, '0')}</span>
+          <span className="opacity-70">{project.year ?? '—'}</span>
+        </div>
+        <div className="mt-auto">
+          <h2 className="text-3xl font-bold uppercase leading-tight tracking-tight">{title}</h2>
+          <p className="mt-4 line-clamp-3 text-xs leading-relaxed opacity-75">{summary}</p>
+        </div>
+      </div>
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[color:var(--bg-primary)]/90 p-8 text-center opacity-0 backdrop-blur-sm transition duration-500 group-hover:opacity-100">
+        <div className="mb-10 flex flex-wrap justify-center gap-2">
+          {project.technologies.slice(0, 7).map(({ technology }) => (
+            <span
+              key={technology.id}
+              className="border border-[var(--accent)]/30 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[.2em] text-[var(--accent)]"
+            >
+              {technology.name}
+            </span>
+          ))}
+        </div>
+        <span className="border border-[var(--accent)] bg-[color:var(--accent)]/10 px-8 py-4 font-mono text-[11px] uppercase tracking-[.3em] transition group-hover:bg-[var(--accent)] group-hover:text-white">
+          <LangText en="View project →" es="Ver proyecto →" />
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function Filter({ active, click, children }: { active: boolean; click: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={click}
+      className={`shrink-0 border px-4 py-2 font-mono text-[9px] uppercase tracking-[.2em] ${
+        active ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--border-color)] opacity-60'
+      }`}
+    >
+      {children}
+    </button>
+  );
+}

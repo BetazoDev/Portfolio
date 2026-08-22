@@ -23,29 +23,6 @@ type Project = Record<string, unknown> & {
   categories?: { category: Taxonomy }[];
 };
 
-const groups = {
-  Content: [
-    ["subtitle", "Subtitle", 2],
-    ["shortSummary", "Summary", 4],
-    ["problem", "Problem", 5],
-    ["solution", "Solution", 5],
-    ["result", "Results", 5],
-  ],
-  Architecture: [
-    ["architectureSummary", "Architecture Summary", 6],
-    ["frontendStack", "Frontend", 2],
-    ["backendStack", "Backend", 2],
-    ["databaseStack", "Database", 2],
-    ["automationStack", "Automation", 2],
-    ["aiStack", "Artificial Intelligence", 2],
-    ["deploymentStack", "Deployment", 2],
-  ],
-  SEO: [
-    ["seoTitle", "SEO title", 2],
-    ["seoDescription", "SEO description", 4],
-  ],
-} as const;
-
 export function ProjectEditor({ id }: { id?: string }) {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
@@ -78,7 +55,14 @@ export function ProjectEditor({ id }: { id?: string }) {
           }),
     ]).then(([langData, a, b, c]) => {
       const enabledLangs = (langData.languages ?? []).filter((l: LanguageItem) => l.isEnabled);
-      setLanguages(enabledLangs.length ? enabledLangs : [{ code: "en", name: "English", isDefault: true, isEnabled: true }, { code: "es", name: "Spanish", isDefault: false, isEnabled: true }]);
+      setLanguages(
+        enabledLangs.length
+          ? enabledLangs
+          : [
+              { code: "en", name: "English", isDefault: true, isEnabled: true },
+              { code: "es", name: "Spanish", isDefault: false, isEnabled: true },
+            ],
+      );
       if (langData.defaultLanguage) setEditorLang(langData.defaultLanguage);
       setTech(a);
       setCats(b);
@@ -91,6 +75,21 @@ export function ProjectEditor({ id }: { id?: string }) {
   const update = (key: string, value: unknown) =>
     setProject((current) => ({ ...current!, [key]: value }));
 
+  const getTranslatedValue = (field: string): string => {
+    const langTrans = project.translations?.[editorLang];
+    if (langTrans && langTrans[field] !== undefined && langTrans[field] !== null) {
+      return langTrans[field];
+    }
+
+    if (editorLang === "en") {
+      const enVal = project[`${field}En` as keyof Project] ?? project[field as keyof Project];
+      return enVal !== undefined && enVal !== null ? String(enVal) : "";
+    }
+
+    const val = project[field as keyof Project];
+    return val !== undefined && val !== null ? String(val) : "";
+  };
+
   const updateTranslation = (field: string, value: string) => {
     setProject((current) => {
       if (!current) return current;
@@ -101,16 +100,16 @@ export function ProjectEditor({ id }: { id?: string }) {
         [editorLang]: { ...langTrans, [field]: value },
       };
 
-      // Also sync top-level flat fields for primary languages (en/es)
       const isEnglish = editorLang === "en";
       const isSpanish = editorLang === "es";
 
-      let extraFlat = {};
+      const extraFlat: Record<string, unknown> = {};
       if (isSpanish) {
-        extraFlat = { [field]: value };
+        extraFlat[field] = value;
       } else if (isEnglish) {
-        const enKey = `${field}En`;
-        extraFlat = { [enKey]: value, ...(field === "title" && !current.title ? { title: value } : {}) };
+        extraFlat[`${field}En`] = value;
+        if (field === "title" && !current.title) extraFlat.title = value;
+        if (field === "shortSummary" && !current.shortSummary) extraFlat.shortSummary = value;
       }
 
       return {
@@ -119,14 +118,6 @@ export function ProjectEditor({ id }: { id?: string }) {
         translations: updatedTrans,
       };
     });
-  };
-
-  const getTranslatedValue = (field: string): string => {
-    const langTrans = project.translations?.[editorLang];
-    if (langTrans && langTrans[field] !== undefined) return langTrans[field];
-    if (editorLang === "en") return String(project[`${field}En`] ?? project[field] ?? "");
-    if (editorLang === "es") return String(project[field] ?? "");
-    return String(project[field] ?? "");
   };
 
   const cleanValue = (val: unknown) => {
@@ -143,16 +134,19 @@ export function ProjectEditor({ id }: { id?: string }) {
       const response = await adminFetch("/api/admin/projects", {
         method: "POST",
         body: JSON.stringify({
-          title: project!.title || "Untitled Project",
+          title: getTranslatedValue("title") || project!.title || "Untitled Project",
           slug: project!.slug,
-          shortSummary: project!.shortSummary || "",
+          shortSummary: getTranslatedValue("shortSummary") || project!.shortSummary || "",
           status: "draft",
         }),
       });
       setSaving(false);
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        return setMessage({ type: "error", text: err.error || "Failed to create project. Check slug uniqueness." });
+        return setMessage({
+          type: "error",
+          text: err.error || "Failed to create project. Check slug uniqueness.",
+        });
       }
       const created = await response.json();
       router.replace(`/admin/projects/${created.id}`);
@@ -160,7 +154,7 @@ export function ProjectEditor({ id }: { id?: string }) {
     }
 
     const payload = {
-      title: project!.title || "Untitled Project",
+      title: cleanValue(project!.title) || getTranslatedValue("title") || "Untitled Project",
       slug: project!.slug,
       subtitle: cleanValue(project!.subtitle),
       shortSummary: cleanValue(project!.shortSummary),
@@ -215,8 +209,13 @@ export function ProjectEditor({ id }: { id?: string }) {
         router.replace("/admin/login");
       } else {
         const err = await response.json().catch(() => ({}));
-        const detailText = err.issues ? err.issues.map((i: { message: string }) => i.message).join(", ") : err.error;
-        setMessage({ type: "error", text: detailText || "Failed to save changes. Please check required fields." });
+        const detailText = err.issues
+          ? err.issues.map((i: { message: string }) => i.message).join(", ")
+          : err.error;
+        setMessage({
+          type: "error",
+          text: detailText || "Failed to save changes. Please check required fields.",
+        });
       }
     } catch {
       setMessage({ type: "error", text: "Connection error while saving." });
@@ -353,7 +352,8 @@ export function ProjectEditor({ id }: { id?: string }) {
         <div className="mb-9 flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
           <div>
             <p className="font-mono text-[9px] uppercase tracking-[.25em] text-[#a855f7]">
-              {tab} · Editing in {languages.find((l) => l.code === editorLang)?.name ?? editorLang.toUpperCase()}
+              {tab} · Editing in{" "}
+              {languages.find((l) => l.code === editorLang)?.name ?? editorLang.toUpperCase()}
             </p>
             <h2 className="mt-3 text-2xl font-semibold">
               {tab === "Basic Info"
@@ -372,57 +372,136 @@ export function ProjectEditor({ id }: { id?: string }) {
             </h2>
           </div>
           <p className="max-w-md text-xs leading-5 text-white/40">
-            Fill in the information that will populate the public presentation of the project.
+            Fill in the information for this language tab ({editorLang.toUpperCase()}).
           </p>
         </div>
 
         {tab === "Basic Info" && (
           <div className="grid gap-6 md:grid-cols-2">
             <Field
-              label="Slug"
+              label="Slug (Shared)"
               value={project.slug}
               change={(v) => update("slug", v)}
             />
             <Field
-              label="Year"
+              label="Year (Shared)"
               value={project.year}
               type="number"
               change={(v) => update("year", v)}
             />
             <Field
-              label="Client"
-              value={project.clientName}
-              change={(v) => update("clientName", v)}
+              label={`Client (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("clientName")}
+              change={(v) => updateTranslation("clientName", v)}
             />
             <Field
-              label="Industry"
-              value={project.industry}
-              change={(v) => update("industry", v)}
+              label={`Industry (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("industry")}
+              change={(v) => updateTranslation("industry", v)}
             />
             <Field
-              label="Project Type"
-              value={project.projectType}
-              change={(v) => update("projectType", v)}
+              label={`Project Type (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("projectType")}
+              change={(v) => updateTranslation("projectType", v)}
             />
             <Field
-              label="Role"
-              value={project.role}
-              change={(v) => update("role", v)}
+              label={`Role (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("role")}
+              change={(v) => updateTranslation("role", v)}
             />
           </div>
         )}
 
-        {(tab === "Content" || tab === "Architecture" || tab === "SEO") && (
+        {tab === "Content" && (
           <div className="grid gap-6 md:grid-cols-2">
-            {groups[tab].map(([key, label, rows]) => (
-              <Text
-                key={key}
-                label={`${label} (${editorLang.toUpperCase()})`}
-                rows={rows as number}
-                value={getTranslatedValue(key)}
-                change={(v) => updateTranslation(key, v)}
-              />
-            ))}
+            <Text
+              label={`Subtitle (${editorLang.toUpperCase()})`}
+              rows={2}
+              value={getTranslatedValue("subtitle")}
+              change={(v) => updateTranslation("subtitle", v)}
+            />
+            <Text
+              label={`Summary (${editorLang.toUpperCase()})`}
+              rows={4}
+              value={getTranslatedValue("shortSummary")}
+              change={(v) => updateTranslation("shortSummary", v)}
+            />
+            <Text
+              label={`Problem (${editorLang.toUpperCase()})`}
+              rows={5}
+              value={getTranslatedValue("problem")}
+              change={(v) => updateTranslation("problem", v)}
+            />
+            <Text
+              label={`Solution (${editorLang.toUpperCase()})`}
+              rows={5}
+              value={getTranslatedValue("solution")}
+              change={(v) => updateTranslation("solution", v)}
+            />
+            <Text
+              label={`Results (${editorLang.toUpperCase()})`}
+              rows={5}
+              value={getTranslatedValue("result")}
+              change={(v) => updateTranslation("result", v)}
+            />
+          </div>
+        )}
+
+        {tab === "Architecture" && (
+          <div className="grid gap-6 md:grid-cols-2">
+            <Text
+              label={`Architecture Summary (${editorLang.toUpperCase()})`}
+              rows={6}
+              value={getTranslatedValue("architectureSummary")}
+              change={(v) => updateTranslation("architectureSummary", v)}
+            />
+            <Field
+              label={`Frontend (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("frontendStack")}
+              change={(v) => updateTranslation("frontendStack", v)}
+            />
+            <Field
+              label={`Backend (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("backendStack")}
+              change={(v) => updateTranslation("backendStack", v)}
+            />
+            <Field
+              label={`Database (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("databaseStack")}
+              change={(v) => updateTranslation("databaseStack", v)}
+            />
+            <Field
+              label={`Automation (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("automationStack")}
+              change={(v) => updateTranslation("automationStack", v)}
+            />
+            <Field
+              label={`Artificial Intelligence (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("aiStack")}
+              change={(v) => updateTranslation("aiStack", v)}
+            />
+            <Field
+              label={`Deployment (${editorLang.toUpperCase()})`}
+              value={getTranslatedValue("deploymentStack")}
+              change={(v) => updateTranslation("deploymentStack", v)}
+            />
+          </div>
+        )}
+
+        {tab === "SEO" && (
+          <div className="grid gap-6 md:grid-cols-2">
+            <Text
+              label={`SEO Title (${editorLang.toUpperCase()})`}
+              rows={2}
+              value={getTranslatedValue("seoTitle")}
+              change={(v) => updateTranslation("seoTitle", v)}
+            />
+            <Text
+              label={`SEO Description (${editorLang.toUpperCase()})`}
+              rows={4}
+              value={getTranslatedValue("seoDescription")}
+              change={(v) => updateTranslation("seoDescription", v)}
+            />
           </div>
         )}
 
@@ -431,9 +510,7 @@ export function ProjectEditor({ id }: { id?: string }) {
             <Tax
               label="Technologies"
               items={tech}
-              selected={(project.technologies ?? []).map(
-                (x) => x.technology.id,
-              )}
+              selected={(project.technologies ?? []).map((x) => x.technology.id)}
               toggle={(item) => toggleTax("technologies", item)}
             />
             <Tax
@@ -533,9 +610,7 @@ function Text({
   change: (v: string) => void;
 }) {
   return (
-    <label
-      className={`text-xs text-white/50 ${rows >= 5 ? "md:col-span-2" : ""}`}
-    >
+    <label className={`text-xs text-white/50 ${rows >= 5 ? "md:col-span-2" : ""}`}>
       {label}
       <textarea
         rows={rows}

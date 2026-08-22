@@ -34,12 +34,39 @@ export type PublicProject = {
   seoTitleEn?: string | null;
   seoDescription: string | null;
   seoDescriptionEn?: string | null;
+  translations?: Record<string, Record<string, string>> | null;
   technologies: { technology: { id: string; name: string; slug: string } }[];
   categories: { category: { id: string; name: string; slug: string } }[];
   media: { id: string; type: string; title: string | null; caption: string | null; media: { publicUrl: string | null; altText: string | null } }[];
   links: { id: string; label: string; url: string; type: string; isPublic?: boolean }[];
   sections: { id: string; type: string; title: string | null; content: unknown; sortOrder: number }[];
 };
+
+export function getProjectField(
+  project: PublicProject,
+  field: string,
+  lang: string,
+): string {
+  const trans = project.translations?.[lang];
+  if (trans && trans[field] !== undefined && trans[field] !== null && trans[field].trim() !== '') {
+    return trans[field];
+  }
+
+  if (lang === 'en') {
+    const enVal = (project as any)[`${field}En`];
+    if (enVal && String(enVal).trim() !== '') return String(enVal);
+  }
+
+  const baseVal = (project as any)[field];
+  if (baseVal && String(baseVal).trim() !== '') return String(baseVal);
+
+  if (lang !== 'en') {
+    const enVal = (project as any)[`${field}En`];
+    if (enVal && String(enVal).trim() !== '') return String(enVal);
+  }
+
+  return '';
+}
 
 export async function getProjects(): Promise<PublicProject[]> {
   const response = await fetch(`${API_URL}/api/projects`, { next: { revalidate: 60 } });
