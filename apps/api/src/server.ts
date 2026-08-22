@@ -97,7 +97,66 @@ app.patch('/api/admin/projects/:id', requireAuth, async (req, res) => { const da
 app.delete('/api/admin/projects/:id', requireAuth, async (req, res) => { await prisma.project.delete({ where: { id: String(req.params.id) } }); res.status(204).send(); });
 app.patch('/api/admin/projects/:id/publish', requireAuth, async (req, res) => { const project = await prisma.project.update({ where: { id: String(req.params.id) }, data: { status: ProjectStatus.published, publishedAt: new Date() } }); res.json(project); });
 app.patch('/api/admin/projects/:id/archive', requireAuth, async (req, res) => { const project = await prisma.project.update({ where: { id: String(req.params.id) }, data: { status: ProjectStatus.archived } }); res.json(project); });
-app.put('/api/admin/projects/:id/details', requireAuth, async (req, res) => { const data = z.object({ title: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), subtitle: z.string().nullable().optional(), shortSummary: z.string().nullable().optional(), clientName: z.string().nullable().optional(), industry: z.string().nullable().optional(), projectType: z.string().nullable().optional(), role: z.string().nullable().optional(), year: z.number().int().min(1990).max(2100).nullable().optional(), status: z.nativeEnum(ProjectStatus), featured: z.boolean(), showOnHomepage: z.boolean(), sortOrder: z.number().int(), problem: z.string().nullable().optional(), solution: z.string().nullable().optional(), result: z.string().nullable().optional(), architectureSummary: z.string().nullable().optional(), frontendStack: z.string().nullable().optional(), backendStack: z.string().nullable().optional(), databaseStack: z.string().nullable().optional(), automationStack: z.string().nullable().optional(), aiStack: z.string().nullable().optional(), deploymentStack: z.string().nullable().optional(), seoTitle: z.string().max(70).nullable().optional(), seoDescription: z.string().max(170).nullable().optional(), titleEn: z.string().nullable().optional(), subtitleEn: z.string().nullable().optional(), shortSummaryEn: z.string().nullable().optional(), problemEn: z.string().nullable().optional(), solutionEn: z.string().nullable().optional(), resultEn: z.string().nullable().optional(), architectureSummaryEn: z.string().nullable().optional(), seoTitleEn: z.string().max(70).nullable().optional(), seoDescriptionEn: z.string().max(170).nullable().optional(), technologyIds: z.array(z.string()), categoryIds: z.array(z.string()) }).parse(req.body); const { technologyIds, categoryIds, ...projectData } = data; const project = await prisma.$transaction(async (tx) => { await tx.projectTechnology.deleteMany({ where: { projectId: String(req.params.id) } }); await tx.projectCategory.deleteMany({ where: { projectId: String(req.params.id) } }); await tx.project.update({ where: { id: String(req.params.id) }, data: { ...projectData, publishedAt: projectData.status === 'published' ? new Date() : undefined, technologies: { create: technologyIds.map((technologyId, sortOrder) => ({ technologyId, sortOrder })) }, categories: { create: categoryIds.map((categoryId, sortOrder) => ({ categoryId, sortOrder })) } } }); return tx.project.findUniqueOrThrow({ where: { id: String(req.params.id) }, include: projectInclude }); }); res.json(project); });
+app.put('/api/admin/projects/:id/details', requireAuth, async (req, res) => {
+  const emptyToNull = z.preprocess((val) => (val === '' ? null : val), z.string().nullable().optional());
+  const emptyToNum = z.preprocess((val) => (val === '' || val === null || val === undefined ? null : Number(val)), z.number().int().nullable().optional());
+  
+  const data = z.object({
+    title: z.string().min(1),
+    slug: z.string().min(1),
+    subtitle: emptyToNull,
+    shortSummary: emptyToNull,
+    clientName: emptyToNull,
+    industry: emptyToNull,
+    projectType: emptyToNull,
+    role: emptyToNull,
+    year: emptyToNum,
+    status: z.nativeEnum(ProjectStatus).default(ProjectStatus.draft),
+    featured: z.boolean().default(false),
+    showOnHomepage: z.boolean().default(true),
+    sortOrder: z.coerce.number().int().default(0),
+    problem: emptyToNull,
+    solution: emptyToNull,
+    result: emptyToNull,
+    architectureSummary: emptyToNull,
+    frontendStack: emptyToNull,
+    backendStack: emptyToNull,
+    databaseStack: emptyToNull,
+    automationStack: emptyToNull,
+    aiStack: emptyToNull,
+    deploymentStack: emptyToNull,
+    seoTitle: emptyToNull,
+    seoDescription: emptyToNull,
+    titleEn: emptyToNull,
+    subtitleEn: emptyToNull,
+    shortSummaryEn: emptyToNull,
+    problemEn: emptyToNull,
+    solutionEn: emptyToNull,
+    resultEn: emptyToNull,
+    architectureSummaryEn: emptyToNull,
+    seoTitleEn: emptyToNull,
+    seoDescriptionEn: emptyToNull,
+    technologyIds: z.array(z.string()).default([]),
+    categoryIds: z.array(z.string()).default([])
+  }).parse(req.body);
+
+  const { technologyIds, categoryIds, ...projectData } = data;
+  const project = await prisma.$transaction(async (tx) => {
+    await tx.projectTechnology.deleteMany({ where: { projectId: String(req.params.id) } });
+    await tx.projectCategory.deleteMany({ where: { projectId: String(req.params.id) } });
+    await tx.project.update({
+      where: { id: String(req.params.id) },
+      data: {
+        ...projectData,
+        publishedAt: projectData.status === 'published' ? new Date() : undefined,
+        technologies: { create: technologyIds.map((technologyId, sortOrder) => ({ technologyId, sortOrder })) },
+        categories: { create: categoryIds.map((categoryId, sortOrder) => ({ categoryId, sortOrder })) }
+      }
+    });
+    return tx.project.findUniqueOrThrow({ where: { id: String(req.params.id) }, include: projectInclude });
+  });
+  res.json(project);
+});
 app.get('/api/technologies', async (_req, res) => res.json(await prisma.technology.findMany({ orderBy: { name: 'asc' } })));
 app.get('/api/categories', async (_req, res) => res.json(await prisma.category.findMany({ orderBy: { name: 'asc' } })));
 app.get('/api/admin/technologies', requireAuth, async (_req, res) => res.json(await prisma.technology.findMany({ orderBy: { name: 'asc' } })));
