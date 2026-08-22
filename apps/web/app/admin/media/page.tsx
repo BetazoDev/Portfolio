@@ -12,6 +12,7 @@ import {
   Save,
 } from "lucide-react";
 import { adminFetch } from "@/lib/admin-api";
+import { ConfirmModal } from "@/components/confirm-modal";
 
 type Media = {
   id: string;
@@ -125,10 +126,12 @@ export default function MediaPage() {
     }
   }
 
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
   async function remove(id: string) {
-    if (!confirm("¿Eliminar permanentemente este archivo de la galería?")) return;
     await adminFetch(`/api/admin/media/${id}`, { method: "DELETE" });
     if (selectedId === id) setSelectedId(null);
+    setDeleteTargetId(null);
     await load();
   }
 
@@ -419,7 +422,7 @@ export default function MediaPage() {
                 )}
                 <button
                   type="button"
-                  onClick={() => remove(selectedMedia.id)}
+                  onClick={() => setDeleteTargetId(selectedMedia.id)}
                   className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-red-400 hover:text-red-300"
                 >
                   <Trash2 size={13} /> Eliminar
@@ -429,6 +432,18 @@ export default function MediaPage() {
           </div>
         </div>
       )}
+
+      {/* Dark Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!deleteTargetId}
+        title="Eliminar archivo"
+        description="¿Estás seguro de que deseas eliminar permanentemente este archivo de la galería? Esta acción no se puede deshacer."
+        confirmLabel="Eliminar archivo"
+        cancelLabel="Cancelar"
+        isDanger={true}
+        onConfirm={() => deleteTargetId && remove(deleteTargetId)}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </>
   );
 }
