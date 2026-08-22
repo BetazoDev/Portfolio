@@ -53,7 +53,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-[#101011] text-[#f4f1ed] lg:grid lg:grid-cols-[260px_1fr]">
       <aside className="border-b border-white/10 bg-[#151517] p-5 lg:sticky lg:top-0 lg:min-h-screen lg:border-b-0 lg:border-r">
         <div className="flex items-center gap-3 border-b border-white/10 pb-5">
-          <div className="grid size-9 place-items-center border border-[#8b78ff] bg-[#8b78ff]/10 font-mono text-sm text-[#b6a8ff]">
+          <div className="grid size-9 place-items-center border border-[#a855f7] bg-[#a855f7]/10 font-mono text-sm text-[#c084fc]">
             H
           </div>
           <div>
@@ -73,7 +73,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 border-l px-3 py-3 text-sm transition ${active ? "border-[#8b78ff] bg-[#8b78ff]/5 text-white" : "border-transparent text-white/50 hover:border-white/20 hover:text-white"}`}
+                className={`flex items-center gap-3 border-l px-3 py-3 text-sm transition ${active ? "border-[#a855f7] bg-[#a855f7]/10 text-white" : "border-transparent text-white/50 hover:border-white/20 hover:text-white"}`}
               >
                 <Icon size={16} />
                 <span>{item.label}</span>

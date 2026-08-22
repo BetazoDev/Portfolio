@@ -66,12 +66,13 @@
   }
 }
 
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 2px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
+  background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
   background: #333;

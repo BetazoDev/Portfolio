@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
@@ -25,7 +27,7 @@ export const CustomCursor = () => {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
-        ['A', 'BUTTON', 'INPUT', 'TEXTAREA'].includes(target.tagName) ||
+        ['A', 'BUTTON', 'INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
         target.closest('a') ||
         target.closest('button') ||
         target.getAttribute('role') === 'button'

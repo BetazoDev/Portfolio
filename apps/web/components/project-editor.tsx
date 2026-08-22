@@ -132,7 +132,7 @@ export function ProjectEditor({ id }: { id?: string }) {
     <form onSubmit={save}>
       <header className="flex flex-wrap items-end justify-between gap-5">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#8b78ff]">
+          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
             {id ? "Edit project" : "New project"}
           </p>
           <input
@@ -163,15 +163,15 @@ export function ProjectEditor({ id }: { id?: string }) {
               Preview <ExternalLink size={14} />
             </a>
           )}
-          <button className="flex items-center gap-2 border border-[#8b78ff] bg-[#8b78ff]/10 px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-[#b6a8ff] transition hover:bg-[#7057ff] hover:text-white">
+          <button className="flex items-center gap-2 border border-[#a855f7] bg-[#a855f7]/10 px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white">
             <Save size={14} /> Save changes
           </button>
         </div>
       </header>
       
       <div className="mt-8 flex gap-4 font-mono text-[10px] uppercase tracking-widest">
-        <button type="button" onClick={() => setEditorLang("es")} className={`border-b-2 pb-1 transition-colors ${editorLang === 'es' ? 'border-[#8b78ff] text-[#b6a8ff]' : 'border-transparent text-white/40 hover:text-white'}`}>ES (Default)</button>
-        <button type="button" onClick={() => setEditorLang("en")} className={`border-b-2 pb-1 transition-colors ${editorLang === 'en' ? 'border-[#8b78ff] text-[#b6a8ff]' : 'border-transparent text-white/40 hover:text-white'}`}>EN (Translation)</button>
+        <button type="button" onClick={() => setEditorLang("es")} className={`border-b-2 pb-1 transition-colors ${editorLang === 'es' ? 'border-[#a855f7] text-[#c084fc]' : 'border-transparent text-white/40 hover:text-white'}`}>ES (Default)</button>
+        <button type="button" onClick={() => setEditorLang("en")} className={`border-b-2 pb-1 transition-colors ${editorLang === 'en' ? 'border-[#a855f7] text-[#c084fc]' : 'border-transparent text-white/40 hover:text-white'}`}>EN (Translation)</button>
       </div>
 
       <nav className="my-10 flex gap-2 overflow-x-auto border-b border-white/10 pb-3">
@@ -180,7 +180,7 @@ export function ProjectEditor({ id }: { id?: string }) {
             type="button"
             key={value}
             onClick={() => setTab(value)}
-            className={`shrink-0 border-b px-4 py-3 font-mono text-[9px] uppercase tracking-widest ${tab === value ? "border-[#8b78ff] text-[#b6a8ff]" : "border-transparent text-white/40 hover:text-white"}`}
+            className={`shrink-0 border-b px-4 py-3 font-mono text-[9px] uppercase tracking-widest ${tab === value ? "border-[#a855f7] text-[#c084fc]" : "border-transparent text-white/40 hover:text-white"}`}
           >
             {value}
           </button>
@@ -188,7 +188,7 @@ export function ProjectEditor({ id }: { id?: string }) {
       </nav>
       <section className="border-y border-white/10 py-8">
         <div className="mb-9 flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
-          <div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-[#8b78ff]">{tab}</p><h2 className="mt-3 text-2xl font-semibold">{tab === 'Basic Info' ? 'Project Identity' : tab === 'Content' ? 'Narrative & Results' : tab === 'Architecture' ? 'Technical System' : tab === 'Taxonomies' ? 'Classification' : tab === 'Media & Case Study' ? 'Visual Content & Links' : tab === 'SEO' ? 'Search Engine Optimization' : 'Publishing Status'}</h2></div>
+          <div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-[#a855f7]">{tab}</p><h2 className="mt-3 text-2xl font-semibold">{tab === 'Basic Info' ? 'Project Identity' : tab === 'Content' ? 'Narrative & Results' : tab === 'Architecture' ? 'Technical System' : tab === 'Taxonomies' ? 'Classification' : tab === 'Media & Case Study' ? 'Visual Content & Links' : tab === 'SEO' ? 'Search Engine Optimization' : 'Publishing Status'}</h2></div>
           <p className="max-w-md text-xs leading-5 text-white/40">Fill in the information that will populate the public presentation of the project.</p>
         </div>
         {tab === "Basic Info" && (
@@ -275,7 +275,7 @@ export function ProjectEditor({ id }: { id?: string }) {
               <select
                 value={project.status}
                 onChange={(e) => update("status", e.target.value)}
-                className="mt-3 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#8b78ff]"
+                className="mt-3 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#a855f7]"
               >
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
@@ -308,7 +308,7 @@ export function ProjectEditor({ id }: { id?: string }) {
         )}
       </section>
       {message && (
-        <p className="mt-5 font-mono text-xs text-[#8b78ff]">{message}</p>
+        <p className="mt-5 font-mono text-xs text-[#a855f7]">{message}</p>
       )}
     </form>
   );
@@ -331,7 +331,7 @@ function Field({
         type={type}
         value={String(value ?? "")}
         onChange={(e) => change(e.target.value)}
-        className="mt-2 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#8b78ff]"
+        className="mt-2 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#a855f7]"
       />
     </label>
   );
@@ -356,7 +356,7 @@ function Text({
         rows={rows}
         value={String(value ?? "")}
         onChange={(e) => change(e.target.value)}
-        className="mt-2 w-full resize-y border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#8b78ff]"
+        className="mt-2 w-full resize-y border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#a855f7]"
       />
     </label>
   );
@@ -381,7 +381,7 @@ function Tax({
             type="button"
             key={item.id}
             onClick={() => toggle(item)}
-            className={`border px-4 py-3 font-mono text-[9px] uppercase tracking-widest ${selected.includes(item.id) ? "border-[#8b78ff] bg-[#8b78ff]/10 text-[#b6a8ff]" : "border-white/10 text-white/50"}`}
+            className={`border px-4 py-3 font-mono text-[9px] uppercase tracking-widest ${selected.includes(item.id) ? "border-[#a855f7] bg-[#a855f7]/10 text-[#c084fc]" : "border-white/10 text-white/50"}`}
           >
             {item.name}
           </button>
