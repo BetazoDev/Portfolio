@@ -154,7 +154,7 @@ export default function ExperiencePage() {
     <>
       <header className="flex flex-wrap items-end justify-between gap-6 border-b border-white/10 pb-8">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
+          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[color:var(--accent)]">
             Career History
           </p>
           <h1 className="mt-4 text-4xl font-bold sm:text-6xl">Work Experience</h1>
@@ -172,7 +172,7 @@ export default function ExperiencePage() {
               translations: {},
             })
           }
-          className="flex items-center gap-2 border border-[#a855f7] bg-[#a855f7]/10 px-6 py-4 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] hover:bg-[#9333ea] hover:text-white"
+          className="flex items-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/10 px-6 py-4 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] hover:bg-[color:var(--accent-strong)] hover:text-white"
         >
           <Plus size={14} /> Add Experience +
         </button>
@@ -182,7 +182,7 @@ export default function ExperiencePage() {
       {editingItem && (
         <form
           onSubmit={handleSave}
-          className="my-8 rounded-xl border border-white/15 bg-[#121214] p-6 shadow-2xl"
+          className="my-8 rounded-xl border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-2xl"
         >
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <h2 className="text-lg font-bold text-white">
@@ -206,13 +206,13 @@ export default function ExperiencePage() {
                 value={editingItem.company ?? ""}
                 onChange={(e) => setEditingItem({ ...editingItem, company: e.target.value })}
                 placeholder="e.g. Reputation Defense Network"
-                className="mt-2 w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-[color:var(--accent)]"
               />
             </label>
 
             {/* Language Translation Tabs */}
             <div className="md:col-span-2">
-              <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-[#a855f7]">
+              <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent)]">
                 Content Language Translation
               </p>
               <div className="flex gap-2 border-b border-white/10 pb-2">
@@ -223,7 +223,7 @@ export default function ExperiencePage() {
                     onClick={() => setActiveLang(lang.code)}
                     className={`border-b-2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider ${
                       activeLang === lang.code
-                        ? "border-[#a855f7] text-[#c084fc]"
+                        ? "border-[color:var(--accent)] text-[color:var(--accent-light)]"
                         : "border-transparent text-white/40 hover:text-white"
                     }`}
                   >
@@ -248,7 +248,7 @@ export default function ExperiencePage() {
                         value={currentRole ?? ""}
                         onChange={(e) => updateTranslationField(lang.code, "role", e.target.value)}
                         placeholder="e.g. Web Designer & WordPress Developer"
-                        className="mt-2 w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-[#a855f7]"
+                        className="mt-2 w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-[color:var(--accent)]"
                       />
                     </label>
 
@@ -259,7 +259,7 @@ export default function ExperiencePage() {
                         value={currentTimeframe ?? ""}
                         onChange={(e) => updateTranslationField(lang.code, "timeframe", e.target.value)}
                         placeholder="e.g. 2025 - Present"
-                        className="mt-2 w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-[#a855f7]"
+                        className="mt-2 w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-[color:var(--accent)]"
                       />
                     </label>
 
@@ -270,7 +270,7 @@ export default function ExperiencePage() {
                         value={currentDesc ?? ""}
                         onChange={(e) => updateTranslationField(lang.code, "description", e.target.value)}
                         placeholder="Key responsibilities and achievements…"
-                        className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 text-xs text-white outline-none focus:border-[#a855f7]"
+                        className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 text-xs text-white outline-none focus:border-[color:var(--accent)]"
                       />
                     </label>
                   </div>
@@ -289,7 +289,7 @@ export default function ExperiencePage() {
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 border border-[#a855f7] bg-[#a855f7]/15 px-6 py-3 text-[#c084fc] hover:bg-[#9333ea] hover:text-white"
+              className="flex items-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/15 px-6 py-3 text-[color:var(--accent-light)] hover:bg-[color:var(--accent-strong)] hover:text-white"
             >
               <Save size={14} /> Save Experience
             </button>
@@ -298,7 +298,7 @@ export default function ExperiencePage() {
       )}
 
       {message && (
-        <p className="my-4 font-mono text-xs text-[#a855f7]">{message}</p>
+        <p className="my-4 font-mono text-xs text-[color:var(--accent)]">{message}</p>
       )}
 
       {/* Work Experience List */}
@@ -323,24 +323,24 @@ export default function ExperiencePage() {
               setDraggedIndex(null);
             }}
             onDragEnd={() => setDraggedIndex(null)}
-            className={`group relative flex flex-col justify-between gap-4 border border-white/10 bg-[#101011] p-5 transition sm:flex-row sm:items-center ${
-              draggedIndex === index ? "opacity-40 border-[#a855f7]" : "hover:border-[#a855f7]"
+            className={`group relative flex flex-col justify-between gap-4 border border-white/10 bg-[color:var(--admin-surface)] p-5 transition sm:flex-row sm:items-center ${
+              draggedIndex === index ? "opacity-40 border-[color:var(--accent)]" : "hover:border-[color:var(--accent)]"
             }`}
           >
             <div className="flex items-center gap-4">
               <span
                 title="Drag to reorder"
-                className="cursor-grab text-white/30 hover:text-[#c084fc] active:cursor-grabbing"
+                className="cursor-grab text-white/30 hover:text-[color:var(--accent-light)] active:cursor-grabbing"
               >
                 <GripVertical size={16} />
               </span>
-              <span className="font-mono text-xs font-bold text-[#c084fc]">
+              <span className="font-mono text-xs font-bold text-[color:var(--accent-light)]">
                 0{index + 1}
               </span>
               <div>
                 <div className="flex items-center gap-3">
                   <h3 className="text-base font-bold text-white">{item.company}</h3>
-                  <span className="font-mono text-[10px] text-[#a855f7]">
+                  <span className="font-mono text-[10px] text-[color:var(--accent)]">
                     {item.timeframe}
                   </span>
                 </div>
@@ -378,7 +378,7 @@ export default function ExperiencePage() {
               <button
                 type="button"
                 onClick={() => setEditingItem(item)}
-                className="border border-white/15 px-3 py-1.5 font-mono text-[10px] uppercase text-white/70 hover:border-[#a855f7] hover:text-white"
+                className="border border-white/15 px-3 py-1.5 font-mono text-[10px] uppercase text-white/70 hover:border-[color:var(--accent)] hover:text-white"
               >
                 Edit
               </button>

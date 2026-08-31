@@ -29,7 +29,7 @@ export default function DashboardPage() {
     <>
       <header className="grid gap-8 border-b border-white/10 pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
+          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[color:var(--accent)]">
             Portfolio CMS / Overview
           </p>
           <h1 className="mt-5 text-5xl font-bold tracking-tight md:text-7xl">
@@ -41,22 +41,22 @@ export default function DashboardPage() {
         </div>
         <Link
           href="/admin/projects/new"
-          className="border border-[#a855f7] bg-[#a855f7]/10 px-7 py-5 font-mono text-[10px] uppercase tracking-[.2em] text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white"
+          className="border border-[color:var(--accent)] bg-[color:var(--accent)]/10 px-7 py-5 font-mono text-[10px] uppercase tracking-[.2em] text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white"
         >
           New project +
         </Link>
       </header>
       <section className="mt-10 grid gap-px bg-white/10 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map(([label, value], index) => (
-          <article key={label} className="bg-[#101011] p-7">
+          <article key={label} className="bg-[color:var(--admin-surface)] p-7">
             <div className="flex justify-between font-mono text-[9px] uppercase tracking-widest text-white/40">
               <span>{label}</span>
-              <span className="text-[#a855f7]">0{index + 1}</span>
+              <span className="text-[color:var(--accent)]">0{index + 1}</span>
             </div>
             <strong className="mt-10 block text-5xl">{value}</strong>
             <div className="mt-6 h-px bg-white/10">
               <div
-                className="h-px bg-[#a855f7]"
+                className="h-px bg-[color:var(--accent)]"
                 style={{ width: `${Math.min(100, Number(value) * 5)}%` }}
               />
             </div>
@@ -64,17 +64,17 @@ export default function DashboardPage() {
         ))}
       </section>
       <div className="mt-10 grid gap-px bg-white/10 xl:grid-cols-[1.6fr_.7fr]">
-        <section className="bg-[#101011] p-7">
+        <section className="bg-[color:var(--admin-surface)] p-7">
           <div className="mb-8 flex items-center justify-between">
             <div>
-              <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
+              <p className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]">
                 Latest entries
               </p>
               <h2 className="mt-2 text-2xl font-bold">Recent projects</h2>
             </div>
             <Link
               href="/admin/projects"
-              className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]"
+              className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]"
             >
               View all ↗
             </Link>
@@ -102,8 +102,8 @@ export default function DashboardPage() {
             </Link>
           ))}
         </section>
-        <aside className="bg-[#101011] p-7">
-          <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
+        <aside className="bg-[color:var(--admin-surface)] p-7">
+          <p className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]">
             System snapshot
           </p>
           {[

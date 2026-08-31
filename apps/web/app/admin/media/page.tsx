@@ -177,7 +177,7 @@ export default function MediaPage() {
   return (
     <>
       <header className="border-b border-white/10 pb-8 md:pb-10">
-        <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
+        <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[color:var(--accent)]">
           Galería de Medios
         </p>
         <h1 className="mt-4 text-4xl font-bold sm:text-5xl md:text-7xl">Medios</h1>
@@ -191,9 +191,9 @@ export default function MediaPage() {
         onSubmit={upload}
         className="my-8 grid gap-4 border-y border-dashed border-white/20 py-6 md:my-10 md:grid-cols-[1fr_auto] md:items-center md:py-8"
       >
-        <label className="flex min-h-24 cursor-pointer flex-col gap-4 border border-white/10 p-5 transition hover:border-[#a855f7] sm:flex-row sm:items-center sm:px-6">
+        <label className="flex min-h-24 cursor-pointer flex-col gap-4 border border-white/10 p-5 transition hover:border-[color:var(--accent)] sm:flex-row sm:items-center sm:px-6">
           <div className="flex items-center gap-3">
-            <ImagePlus className="shrink-0 text-[#a855f7]" size={24} />
+            <ImagePlus className="shrink-0 text-[color:var(--accent)]" size={24} />
             <div>
               <strong className="block text-sm">Seleccionar imagen</strong>
               <span className="mt-0.5 block font-mono text-[9px] uppercase tracking-widest text-white/35">
@@ -211,12 +211,12 @@ export default function MediaPage() {
         </label>
         <button
           disabled={uploading}
-          className="w-full border border-[#a855f7] bg-[#a855f7]/10 px-7 py-4 font-mono text-[10px] uppercase tracking-[.2em] text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white disabled:opacity-40 md:w-auto md:py-5"
+          className="w-full border border-[color:var(--accent)] bg-[color:var(--accent)]/10 px-7 py-4 font-mono text-[10px] uppercase tracking-[.2em] text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white disabled:opacity-40 md:w-auto md:py-5"
         >
           {uploading ? "Subiendo…" : "Subir archivo ↗"}
         </button>
         {message && (
-          <p className="font-mono text-[10px] text-[#a855f7] md:col-span-2">
+          <p className="font-mono text-[10px] text-[color:var(--accent)] md:col-span-2">
             {message}
           </p>
         )}
@@ -228,7 +228,7 @@ export default function MediaPage() {
           <article
             key={item.id}
             onClick={() => setSelectedId(item.id)}
-            className="group relative cursor-pointer overflow-hidden border border-white/10 bg-[#101011] p-3 transition hover:border-[#a855f7]"
+            className="group relative cursor-pointer overflow-hidden border border-white/10 bg-[color:var(--admin-surface)] p-3 transition hover:border-[color:var(--accent)]"
           >
             <div className="aspect-video relative overflow-hidden bg-white/[.02]">
               {item.publicUrl ? (
@@ -242,10 +242,10 @@ export default function MediaPage() {
                   Sin URL
                 </div>
               )}
-              <div className="absolute inset-0 bg-[#a855f7]/10 opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-[color:var(--accent)]/10 opacity-0 transition-opacity group-hover:opacity-100" />
             </div>
             <div className="mt-3 flex items-center justify-between gap-2 px-1">
-              <p className="truncate font-mono text-xs font-medium text-white/80 group-hover:text-[#c084fc]">
+              <p className="truncate font-mono text-xs font-medium text-white/80 group-hover:text-[color:var(--accent-light)]">
                 {item.originalFilename}
               </p>
               <span className="shrink-0 font-mono text-[9px] uppercase text-white/35">
@@ -265,20 +265,20 @@ export default function MediaPage() {
       {/* WordPress Style Modal / Lightbox */}
       {selectedMedia && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-2 sm:p-4 backdrop-blur-sm md:p-6">
-          <div className="relative flex max-h-[95vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[#121214] shadow-2xl lg:h-[85vh] lg:flex-row">
+          <div className="relative flex max-h-[95vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[color:var(--admin-surface-2)] shadow-2xl lg:h-[85vh] lg:flex-row">
             
             {/* Navigation Arrows */}
             <button
               onClick={handlePrev}
               title="Anterior (flecha izquierda)"
-              className="hidden sm:flex absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[#a855f7] hover:text-white"
+              className="hidden sm:flex absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[color:var(--accent)] hover:text-white"
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={handleNext}
               title="Siguiente (flecha derecha)"
-              className="hidden sm:flex absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[#a855f7] hover:text-white lg:right-[420px]"
+              className="hidden sm:flex absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-2.5 text-white/70 transition hover:bg-[color:var(--accent)] hover:text-white lg:right-[420px]"
             >
               <ChevronRight size={20} />
             </button>
@@ -293,7 +293,7 @@ export default function MediaPage() {
             </button>
 
             {/* Left Panel: Preview Area */}
-            <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center overflow-auto bg-[#0a0a0b] p-4 sm:p-6 lg:p-10">
+            <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center overflow-auto bg-[color:var(--admin-bg)] p-4 sm:p-6 lg:p-10">
               <div className="flex h-full w-full items-center justify-center">
                 {selectedMedia.publicUrl ? (
                   <img
@@ -315,9 +315,9 @@ export default function MediaPage() {
             </div>
 
             {/* Right Panel: WordPress Attachment Details Sidebar */}
-            <aside className="w-full overflow-y-auto border-t border-white/10 bg-[#161619] p-4 sm:p-6 lg:w-[400px] lg:border-l lg:border-t-0">
+            <aside className="w-full overflow-y-auto border-t border-white/10 bg-[color:var(--admin-elevated)] p-4 sm:p-6 lg:w-[400px] lg:border-l lg:border-t-0">
               <div className="border-b border-white/10 pb-4">
-                <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
+                <p className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]">
                   Detalles del elemento
                 </p>
                 <h2 className="mt-1 truncate text-base font-bold text-white sm:text-lg">
@@ -332,7 +332,7 @@ export default function MediaPage() {
               <form onSubmit={saveMetadata} className="mt-5 grid gap-4 sm:mt-6 sm:gap-5">
                 <label className="block text-xs font-medium text-white/60">
                   Nombre del archivo
-                  <div className="mt-2 flex items-center border-b border-white/20 focus-within:border-[#a855f7]">
+                  <div className="mt-2 flex items-center border-b border-white/20 focus-within:border-[color:var(--accent)]">
                     <input
                       type="text"
                       value={editBaseName}
@@ -341,7 +341,7 @@ export default function MediaPage() {
                       className="w-full bg-transparent py-2 text-sm text-white outline-none"
                     />
                     {editExt && (
-                      <span title="La extensión se mantiene fija automáticamente" className="ml-2 shrink-0 rounded bg-[#a855f7]/15 px-2 py-0.5 font-mono text-[10px] font-bold text-[#c084fc]">
+                      <span title="La extensión se mantiene fija automáticamente" className="ml-2 shrink-0 rounded bg-[color:var(--accent)]/15 px-2 py-0.5 font-mono text-[10px] font-bold text-[color:var(--accent-light)]">
                         {editExt}
                       </span>
                     )}
@@ -355,7 +355,7 @@ export default function MediaPage() {
                     value={editAltText}
                     onChange={(e) => setEditAltText(e.target.value)}
                     placeholder="Descripción para SEO y accesibilidad…"
-                    className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 text-xs text-white outline-none focus:border-[#a855f7]"
+                    className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 text-xs text-white outline-none focus:border-[color:var(--accent)]"
                   />
                 </label>
 
@@ -366,7 +366,7 @@ export default function MediaPage() {
                     value={editCaption}
                     onChange={(e) => setEditCaption(e.target.value)}
                     placeholder="Información relevante de la imagen…"
-                    className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 text-xs text-white outline-none focus:border-[#a855f7]"
+                    className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 text-xs text-white outline-none focus:border-[color:var(--accent)]"
                   />
                 </label>
 
@@ -375,13 +375,13 @@ export default function MediaPage() {
                   <button
                     disabled={saving}
                     type="submit"
-                    className="flex flex-1 items-center justify-center gap-2 border border-[#a855f7] bg-[#a855f7]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white disabled:opacity-50"
+                    className="flex flex-1 items-center justify-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white disabled:opacity-50"
                   >
                     <Save size={14} /> {saving ? "Guardando…" : "Guardar cambios"}
                   </button>
                 </div>
                 {saveMessage && (
-                  <p className="font-mono text-[10px] text-[#a855f7]">{saveMessage}</p>
+                  <p className="font-mono text-[10px] text-[color:var(--accent)]">{saveMessage}</p>
                 )}
               </form>
 
@@ -401,7 +401,7 @@ export default function MediaPage() {
                     type="button"
                     onClick={copyUrl}
                     title="Copiar URL"
-                    className="flex shrink-0 items-center gap-1.5 border border-white/20 bg-white/5 p-2.5 font-mono text-[10px] uppercase text-white transition hover:border-[#a855f7] hover:bg-[#a855f7]/20"
+                    className="flex shrink-0 items-center gap-1.5 border border-white/20 bg-white/5 p-2.5 font-mono text-[10px] uppercase text-white transition hover:border-[color:var(--accent)] hover:bg-[color:var(--accent)]/20"
                   >
                     {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                   </button>
@@ -415,7 +415,7 @@ export default function MediaPage() {
                     href={selectedMedia.publicUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] hover:underline"
+                    className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] hover:underline"
                   >
                     Ver original <ExternalLink size={12} />
                   </a>

@@ -54,7 +54,7 @@ export function TaxonomyManager({ type }: { type: 'technologies' | 'categories' 
   return (
     <>
       <header className="border-b border-white/10 pb-10">
-        <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
+        <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[color:var(--accent)]">
           Taxonomías
         </p>
         <h1 className="mt-5 text-5xl font-bold md:text-7xl">{label}</h1>
@@ -68,11 +68,11 @@ export function TaxonomyManager({ type }: { type: 'technologies' | 'categories' 
           {items.map((item, index) => (
             <article
               key={item.id}
-              className="group border border-white/10 bg-[#101011] p-5 transition hover:border-[#a855f7]/60"
+              className="group border border-white/10 bg-[color:var(--admin-surface)] p-5 transition hover:border-[color:var(--accent)]/60"
             >
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <span className="font-mono text-[9px] text-[#a855f7]">
+                  <span className="font-mono text-[9px] text-[color:var(--accent)]">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <h2 className="mt-4 text-xl font-bold">{item.name}</h2>
@@ -99,13 +99,13 @@ export function TaxonomyManager({ type }: { type: 'technologies' | 'categories' 
 
         <form
           onSubmit={create}
-          className="h-fit border border-white/10 bg-[#101011] p-7 xl:sticky xl:top-8"
+          className="h-fit border border-white/10 bg-[color:var(--admin-surface)] p-7 xl:sticky xl:top-8"
         >
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="font-mono text-[10px] uppercase tracking-widest text-[#a855f7]">
+            <h2 className="font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent)]">
               Agregar {type === 'technologies' ? 'tecnología' : 'categoría'}
             </h2>
-            <Plus size={16} className="text-[#a855f7]" />
+            <Plus size={16} className="text-[color:var(--accent)]" />
           </div>
           <LineInput
             name="name"
@@ -128,11 +128,11 @@ export function TaxonomyManager({ type }: { type: 'technologies' | 'categories' 
             <textarea
               name="extra"
               rows={4}
-              className="mt-3 w-full border border-white/10 bg-transparent p-4 text-white outline-none focus:border-[#a855f7]"
+              className="mt-3 w-full border border-white/10 bg-transparent p-4 text-white outline-none focus:border-[color:var(--accent)]"
             />
           </label>
           {error && <p className="mt-4 text-xs text-red-400">{error}</p>}
-          <button className="mt-7 w-full border border-[#a855f7] bg-[#a855f7]/10 py-4 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition-colors hover:bg-[#9333ea] hover:text-white">
+          <button className="mt-7 w-full border border-[color:var(--accent)] bg-[color:var(--accent)]/10 py-4 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition-colors hover:bg-[color:var(--accent-strong)] hover:text-white">
             Guardar +
           </button>
         </form>
@@ -165,7 +165,7 @@ function LineInput({
       {label}
       <input
         {...props}
-        className={`mt-2 w-full border-b border-white/15 bg-transparent py-4 text-white outline-none focus:border-[#a855f7] ${
+        className={`mt-2 w-full border-b border-white/15 bg-transparent py-4 text-white outline-none focus:border-[color:var(--accent)] ${
           mono ? 'font-mono text-xs' : ''
         }`}
       />

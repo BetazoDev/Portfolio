@@ -71,7 +71,7 @@ export const Work = () => {
         </span>
       </div>
 
-      <h2 className="text-4xl md:text-5xl lg:text-7xl font-sans font-bold text-[var(--text-primary)] tracking-tight leading-none mb-16">
+      <h2 className="section-title font-sans font-bold text-[var(--text-primary)] mb-16">
         {t('work.title')}
       </h2>
 

@@ -40,11 +40,18 @@ const bootstrapScript = `try{var t=localStorage.getItem('theme');var l=localStor
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-language="en" className="dark" suppressHydrationWarning>
+    // The font variables must live on <html>: Tailwind's @theme resolves --font-sans here,
+    // and a custom property referencing a variable defined on <body> would be invalid at :root.
+    <html
+      lang="en"
+      data-language="en"
+      className={`dark ${sans.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootstrapScript }} />
       </head>
-      <body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>{children}</body>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }

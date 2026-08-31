@@ -196,7 +196,7 @@ export default function SettingsPage() {
   return (
     <>
       <header className="border-b border-white/10 pb-8">
-        <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
+        <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[color:var(--accent)]">
           Platform Configuration
         </p>
         <h1 className="mt-4 text-4xl font-bold sm:text-6xl">Settings</h1>
@@ -209,7 +209,7 @@ export default function SettingsPage() {
         {/* Public Information Panel */}
         <form
           onSubmit={savePublicInfo}
-          className="border border-white/15 bg-[#121214] p-6 shadow-xl"
+          className="border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-xl"
         >
           <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
             <div>
@@ -218,12 +218,12 @@ export default function SettingsPage() {
                 Contact details displayed across Hero, Contact section, and Footer.
               </p>
             </div>
-            <UserCheck size={20} className="text-[#a855f7]" />
+            <UserCheck size={20} className="text-[color:var(--accent)]" />
           </div>
 
           {/* About Photo Picker Preview */}
-          <div className="mb-6 border border-white/10 bg-[#0a0a0b] p-4">
-            <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
+          <div className="mb-6 border border-white/10 bg-[color:var(--admin-bg)] p-4">
+            <p className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]">
               About Me Profile Photo
             </p>
             <div className="mt-3 flex flex-col items-center gap-4 sm:flex-row">
@@ -248,7 +248,7 @@ export default function SettingsPage() {
                     setValues((curr) => ({ ...curr, about_photo_url: e.target.value }))
                   }
                   placeholder="https://supastorage.halonso.digital/..."
-                  className="w-full border-b border-white/20 bg-transparent py-2 font-mono text-xs text-white outline-none focus:border-[#a855f7]"
+                  className="w-full border-b border-white/20 bg-transparent py-2 font-mono text-xs text-white outline-none focus:border-[color:var(--accent)]"
                 />
                 <button
                   type="button"
@@ -256,7 +256,7 @@ export default function SettingsPage() {
                     void loadMedia();
                     setShowMediaModal(true);
                   }}
-                  className="mt-3 flex items-center gap-2 border border-white/15 bg-white/5 px-4 py-2 font-mono text-[9px] uppercase tracking-wider text-white/80 transition hover:border-[#a855f7] hover:bg-[#a855f7]/15 hover:text-white"
+                  className="mt-3 flex items-center gap-2 border border-white/15 bg-white/5 px-4 py-2 font-mono text-[9px] uppercase tracking-wider text-white/80 transition hover:border-[color:var(--accent)] hover:bg-[color:var(--accent)]/15 hover:text-white"
                 >
                   <ImagePlus size={14} /> Select from Media Library
                 </button>
@@ -274,24 +274,24 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setValues((current) => ({ ...current, [key]: e.target.value }))
                   }
-                  className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-sm text-white outline-none focus:border-[#a855f7]"
+                  className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-sm text-white outline-none focus:border-[color:var(--accent)]"
                 />
               </label>
             ))}
 
           <div className="mt-8 flex items-center gap-4 border-t border-white/10 pt-5">
-            <button className="flex items-center gap-2 border border-[#a855f7] bg-[#a855f7]/15 px-7 py-3.5 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white">
+            <button className="flex items-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/15 px-7 py-3.5 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white">
               <Save size={14} /> Save Profile Info
             </button>
             {message && (
-              <span className="font-mono text-xs text-[#a855f7]">{message}</span>
+              <span className="font-mono text-xs text-[color:var(--accent)]">{message}</span>
             )}
           </div>
         </form>
 
         {/* Dynamic Multi-Language Manager */}
         <div className="flex flex-col gap-8">
-          <div className="border border-white/15 bg-[#121214] p-6 shadow-xl">
+          <div className="border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-xl">
             <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
               <div>
                 <h2 className="text-lg font-bold text-white">Multi-Language & i18n</h2>
@@ -299,7 +299,7 @@ export default function SettingsPage() {
                   Add languages and select your Site Default Language.
                 </p>
               </div>
-              <Globe size={20} className="text-[#a855f7]" />
+              <Globe size={20} className="text-[color:var(--accent)]" />
             </div>
 
             {/* Configured Languages List */}
@@ -309,8 +309,8 @@ export default function SettingsPage() {
                   key={lang.code}
                   className={`flex items-center justify-between border p-3.5 transition ${
                     lang.isDefault
-                      ? "border-[#a855f7] bg-[#a855f7]/10"
-                      : "border-white/10 bg-[#0a0a0b]"
+                      ? "border-[color:var(--accent)] bg-[color:var(--accent)]/10"
+                      : "border-white/10 bg-[color:var(--admin-bg)]"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -320,7 +320,7 @@ export default function SettingsPage() {
                       title="Click to set as Site Default Language"
                       className={`grid size-5 place-items-center rounded-full border ${
                         lang.isDefault
-                          ? "border-[#a855f7] bg-[#a855f7] text-white"
+                          ? "border-[color:var(--accent)] bg-[color:var(--accent)] text-white"
                           : "border-white/30 hover:border-white"
                       }`}
                     >
@@ -330,11 +330,11 @@ export default function SettingsPage() {
                       <strong className="text-sm font-semibold text-white">
                         {lang.name}
                       </strong>
-                      <span className="ml-2 font-mono text-[10px] uppercase text-[#c084fc]">
+                      <span className="ml-2 font-mono text-[10px] uppercase text-[color:var(--accent-light)]">
                         ({lang.code})
                       </span>
                       {lang.isDefault && (
-                        <span className="ml-3 rounded bg-[#a855f7] px-2 py-0.5 font-mono text-[9px] font-bold text-white">
+                        <span className="ml-3 rounded bg-[color:var(--accent)] px-2 py-0.5 font-mono text-[9px] font-bold text-white">
                           SITE DEFAULT
                         </span>
                       )}
@@ -371,7 +371,7 @@ export default function SettingsPage() {
               onSubmit={handleAddLanguage}
               className="mt-6 border-t border-white/10 pt-5"
             >
-              <p className="font-mono text-[10px] uppercase tracking-widest text-[#a855f7]">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent)]">
                 Add New Language
               </p>
               <div className="mt-3 grid gap-3 sm:grid-cols-[100px_1fr_auto]">
@@ -382,7 +382,7 @@ export default function SettingsPage() {
                   onChange={(e) => setNewCode(e.target.value)}
                   maxLength={5}
                   required
-                  className="border-b border-white/20 bg-transparent py-2 font-mono text-xs text-white outline-none focus:border-[#a855f7]"
+                  className="border-b border-white/20 bg-transparent py-2 font-mono text-xs text-white outline-none focus:border-[color:var(--accent)]"
                 />
                 <input
                   type="text"
@@ -390,25 +390,25 @@ export default function SettingsPage() {
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   required
-                  className="border-b border-white/20 bg-transparent py-2 text-xs text-white outline-none focus:border-[#a855f7]"
+                  className="border-b border-white/20 bg-transparent py-2 text-xs text-white outline-none focus:border-[color:var(--accent)]"
                 />
                 <button
                   type="submit"
-                  className="flex items-center gap-1.5 border border-[#a855f7] bg-[#a855f7]/10 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] hover:bg-[#9333ea] hover:text-white"
+                  className="flex items-center gap-1.5 border border-[color:var(--accent)] bg-[color:var(--accent)]/10 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] hover:bg-[color:var(--accent-strong)] hover:text-white"
                 >
                   <Plus size={14} /> Add
                 </button>
               </div>
             </form>
             {langMessage && (
-              <p className="mt-4 font-mono text-xs text-[#a855f7]">{langMessage}</p>
+              <p className="mt-4 font-mono text-xs text-[color:var(--accent)]">{langMessage}</p>
             )}
           </div>
 
           {/* Security Credentials */}
           <form
             onSubmit={changePassword}
-            className="border border-white/15 bg-[#121214] p-6 shadow-xl"
+            className="border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-xl"
           >
             <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
               <div>
@@ -417,7 +417,7 @@ export default function SettingsPage() {
                   Update administrative authentication secret.
                 </p>
               </div>
-              <Lock size={20} className="text-[#a855f7]" />
+              <Lock size={20} className="text-[color:var(--accent)]" />
             </div>
 
             <input
@@ -425,7 +425,7 @@ export default function SettingsPage() {
               type="password"
               required
               placeholder="Current password"
-              className="mb-4 w-full border-b border-white/20 bg-transparent py-2.5 text-xs outline-none focus:border-[#a855f7]"
+              className="mb-4 w-full border-b border-white/20 bg-transparent py-2.5 text-xs outline-none focus:border-[color:var(--accent)]"
             />
             <input
               name="newPassword"
@@ -433,7 +433,7 @@ export default function SettingsPage() {
               required
               minLength={12}
               placeholder="New password (min 12 chars)"
-              className="mb-4 w-full border-b border-white/20 bg-transparent py-2.5 text-xs outline-none focus:border-[#a855f7]"
+              className="mb-4 w-full border-b border-white/20 bg-transparent py-2.5 text-xs outline-none focus:border-[color:var(--accent)]"
             />
             <input
               name="confirmation"
@@ -441,10 +441,10 @@ export default function SettingsPage() {
               required
               minLength={12}
               placeholder="Confirm new password"
-              className="mb-6 w-full border-b border-white/20 bg-transparent py-2.5 text-xs outline-none focus:border-[#a855f7]"
+              className="mb-6 w-full border-b border-white/20 bg-transparent py-2.5 text-xs outline-none focus:border-[color:var(--accent)]"
             />
 
-            <button className="flex items-center gap-2 border border-[#a855f7] bg-[#a855f7]/10 px-6 py-3 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white">
+            <button className="flex items-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/10 px-6 py-3 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white">
               Update Security Password
             </button>
             {passwordMessage && (
@@ -457,7 +457,7 @@ export default function SettingsPage() {
       {/* Supabase Media Selection Modal */}
       {showMediaModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
-          <div className="relative flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[#121214] p-6 shadow-2xl">
+          <div className="relative flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <h3 className="text-lg font-bold text-white">Select About Photo</h3>
               <button
@@ -478,7 +478,7 @@ export default function SettingsPage() {
                       setShowMediaModal(false);
                     }
                   }}
-                  className="group relative aspect-square cursor-pointer overflow-hidden border border-white/10 bg-black/40 p-2 hover:border-[#a855f7]"
+                  className="group relative aspect-square cursor-pointer overflow-hidden border border-white/10 bg-black/40 p-2 hover:border-[color:var(--accent)]"
                 >
                   {media.publicUrl ? (
                     <img
@@ -491,7 +491,7 @@ export default function SettingsPage() {
                       No URL
                     </div>
                   )}
-                  <div className="absolute inset-0 flex items-center justify-center bg-[#a855f7]/20 opacity-0 transition group-hover:opacity-100">
+                  <div className="absolute inset-0 flex items-center justify-center bg-[color:var(--accent)]/20 opacity-0 transition group-hover:opacity-100">
                     <span className="rounded bg-black/80 px-2 py-1 font-mono text-[9px] font-bold text-white">
                       Select
                     </span>

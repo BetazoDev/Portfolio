@@ -24,7 +24,7 @@ export const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-sans font-bold text-[var(--text-primary)] tracking-tight leading-none mb-8">
+            <h2 className="section-title font-sans font-bold text-[var(--text-primary)] mb-8">
               {t('about.title')}
             </h2>
             <p className="text-base font-sans leading-relaxed text-[var(--text-primary)]/80 max-w-xl">

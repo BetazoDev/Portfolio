@@ -58,7 +58,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   if (isLogin) return children;
   if (!ready)
     return (
-      <main className="grid min-h-screen place-items-center bg-[#101011] font-mono text-xs uppercase tracking-widest text-white">
+      <main className="grid min-h-screen place-items-center bg-[color:var(--admin-surface)] font-mono text-xs uppercase tracking-widest text-white">
         Validating session…
       </main>
     );
@@ -73,11 +73,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#101011] text-[#f4f1ed] lg:grid lg:grid-cols-[260px_1fr]">
+    <div className="min-h-screen bg-[color:var(--admin-surface)] text-[color:var(--admin-text)] lg:grid lg:grid-cols-[260px_1fr]">
       {/* Mobile Top Header */}
-      <header className="flex items-center justify-between border-b border-white/10 bg-[#151517] p-4 lg:hidden">
+      <header className="flex items-center justify-between border-b border-white/10 bg-[color:var(--admin-elevated)] p-4 lg:hidden">
         <div className="flex items-center gap-3">
-          <div className="grid size-8 place-items-center border border-[#a855f7] bg-[#a855f7]/10 font-mono text-xs text-[#c084fc]">
+          <div className="grid size-8 place-items-center border border-[color:var(--accent)] bg-[color:var(--accent)]/10 font-mono text-xs text-[color:var(--accent-light)]">
             H
           </div>
           <div>
@@ -90,7 +90,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <button
           type="button"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          className="rounded border border-white/15 p-2 text-white/70 hover:border-[#a855f7] hover:text-white"
+          className="rounded border border-white/15 p-2 text-white/70 hover:border-[color:var(--accent)] hover:text-white"
           aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -99,7 +99,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Collapsible Navigation Menu */}
       {mobileMenuOpen && (
-        <div className="border-b border-white/10 bg-[#151517] p-4 lg:hidden">
+        <div className="border-b border-white/10 bg-[color:var(--admin-elevated)] p-4 lg:hidden">
           <nav className="grid gap-1">
             {nav.map((item) => {
               const Icon = item.icon;
@@ -112,7 +112,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                   href={item.href}
                   className={`flex items-center gap-3 border-l-2 px-3 py-2.5 text-sm transition ${
                     active
-                      ? "border-[#a855f7] bg-[#a855f7]/10 font-medium text-white"
+                      ? "border-[color:var(--accent)] bg-[color:var(--accent)]/10 font-medium text-white"
                       : "border-transparent text-white/50 hover:border-white/20 hover:text-white"
                   }`}
                 >
@@ -140,9 +140,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Desktop Sidebar Navigation */}
-      <aside className="hidden border-r border-white/10 bg-[#151517] p-5 lg:flex lg:sticky lg:top-0 lg:h-screen lg:flex-col">
+      <aside className="hidden border-r border-white/10 bg-[color:var(--admin-elevated)] p-5 lg:flex lg:sticky lg:top-0 lg:h-screen lg:flex-col">
         <div className="flex items-center gap-3 border-b border-white/10 pb-5">
-          <div className="grid size-9 place-items-center border border-[#a855f7] bg-[#a855f7]/10 font-mono text-sm text-[#c084fc]">
+          <div className="grid size-9 place-items-center border border-[color:var(--accent)] bg-[color:var(--accent)]/10 font-mono text-sm text-[color:var(--accent-light)]">
             H
           </div>
           <div>
@@ -164,7 +164,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 href={item.href}
                 className={`flex items-center gap-3 border-l-2 px-3 py-3 text-sm transition ${
                   active
-                    ? "border-[#a855f7] bg-[#a855f7]/10 font-medium text-white"
+                    ? "border-[color:var(--accent)] bg-[color:var(--accent)]/10 font-medium text-white"
                     : "border-transparent text-white/50 hover:border-white/20 hover:text-white"
                 }`}
               >

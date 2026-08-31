@@ -39,7 +39,7 @@ export const Solutions = () => {
     <section id="solutions" className="border-b border-[var(--border-color)] py-24">
       <SectionHeader subtitle={language === 'en' ? 'Capabilities' : 'Capacidades'} />
       <div className="mb-16 grid gap-8 lg:grid-cols-12 lg:items-end">
-        <h2 className="text-4xl font-sans font-bold leading-[.92] tracking-tight text-[var(--text-primary)] md:text-6xl lg:col-span-8 lg:text-7xl">
+        <h2 className="section-title font-sans font-bold text-[var(--text-primary)] lg:col-span-8">
           {language === 'en' ? 'Solutions built around business.' : 'Soluciones creadas alrededor del negocio.'}
         </h2>
         <p className="max-w-md text-sm leading-7 text-[var(--text-primary)]/60 lg:col-span-4">

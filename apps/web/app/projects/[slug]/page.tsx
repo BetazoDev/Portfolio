@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProject, getProjects } from "@/lib/api";
+import { getEnglishField, getProject, getProjects } from "@/lib/api";
 import { ProjectDetailsView } from "./project-details-view";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -24,12 +24,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!project) return {};
 
   const title =
-    project.seoTitleEn ?? project.seoTitle ?? project.titleEn ?? project.title;
+    getEnglishField(project, "seoTitle") ||
+    getEnglishField(project, "title") ||
+    project.title;
   const description =
-    project.seoDescriptionEn ??
-    project.seoDescription ??
-    project.shortSummaryEn ??
-    project.shortSummary ??
+    getEnglishField(project, "seoDescription") ||
+    getEnglishField(project, "shortSummary") ||
+    getEnglishField(project, "subtitle") ||
+    project.seoDescription ||
+    project.shortSummary ||
     undefined;
   const image = project.media.find(
     (item) => item.type === "cover" || item.type === "thumbnail",
@@ -38,7 +41,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `/projects/${project.slug}` },
+    alternates: {
+      canonical: `/projects/${project.slug}`,
+      // One URL serves both languages; the visitor's choice only toggles which variant shows.
+      languages: { en: `/projects/${project.slug}`, es: `/projects/${project.slug}` },
+    },
     openGraph: {
       type: "article",
       url: `/projects/${project.slug}`,

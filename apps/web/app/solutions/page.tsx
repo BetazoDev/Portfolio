@@ -39,7 +39,7 @@ export default function SolutionsPage() {
         <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[var(--accent)]">
           <LangText en="Capabilities" es="Capacidades" />
         </p>
-        <h1 className="my-12 max-w-6xl text-6xl font-bold leading-[.92] tracking-tight md:text-8xl">
+        <h1 className="page-title my-12 max-w-6xl font-bold">
           <LangText
             en="Solutions built around business."
             es="Soluciones construidas alrededor del negocio."
@@ -60,7 +60,7 @@ export default function SolutionsPage() {
               <span className="font-mono text-[10px] text-[var(--accent)]">
                 0{index + 1}
               </span>
-              <h2 className="text-3xl font-bold uppercase md:text-5xl">
+              <h2 className="subsection-title font-bold uppercase">
                 {item.title}
               </h2>
               <div>

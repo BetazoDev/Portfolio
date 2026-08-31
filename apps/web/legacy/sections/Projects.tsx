@@ -43,7 +43,7 @@ export const Projects = ({ projects }: { projects: Project[] }) => {
       <SectionHeader subtitle={t('projects.selectedWork')} />
 
       <div className="flex items-end justify-between mb-16 gap-8">
-        <h2 className="text-4xl md:text-5xl lg:text-7xl font-sans font-bold text-[var(--text-primary)] tracking-tight leading-none">
+        <h2 className="section-title font-sans font-bold text-[var(--text-primary)]">
           {t('projects.title')}
         </h2>
         <div className="hidden md:flex flex-col items-end gap-2">

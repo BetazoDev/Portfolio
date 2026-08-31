@@ -258,7 +258,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
 
       <div className="grid gap-8 xl:grid-cols-3">
         {/* 1. MEDIA MANAGER PANEL */}
-        <div className="border border-white/15 bg-[#121214] p-6 shadow-xl">
+        <div className="border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-xl">
           <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
             <div>
               <h2 className="text-base font-bold text-white">Project Media</h2>
@@ -266,7 +266,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 Covers, thumbnails, architecture & gallery images.
               </p>
             </div>
-            <ImageIcon size={20} className="text-[#a855f7]" />
+            <ImageIcon size={20} className="text-[color:var(--accent)]" />
           </div>
 
           <div className="space-y-4">
@@ -276,21 +276,21 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
               <select
                 value={mediaType}
                 onChange={(e) => setMediaType(e.target.value)}
-                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[color:var(--accent)]"
               >
-                <option value="cover" className="bg-[#121214]">
+                <option value="cover" className="bg-[color:var(--admin-surface-2)]">
                   Cover Image (Hero Header)
                 </option>
-                <option value="thumbnail" className="bg-[#121214]">
+                <option value="thumbnail" className="bg-[color:var(--admin-surface-2)]">
                   Thumbnail (Card Grid)
                 </option>
-                <option value="gallery" className="bg-[#121214]">
+                <option value="gallery" className="bg-[color:var(--admin-surface-2)]">
                   Gallery Screenshot
                 </option>
-                <option value="architecture" className="bg-[#121214]">
+                <option value="architecture" className="bg-[color:var(--admin-surface-2)]">
                   Architecture Diagram
                 </option>
-                <option value="workflow" className="bg-[#121214]">
+                <option value="workflow" className="bg-[color:var(--admin-surface-2)]">
                   Workflow / Process Image
                 </option>
               </select>
@@ -313,7 +313,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 type="button"
                 disabled={uploading}
                 onClick={() => fileInputRef.current?.click()}
-                className="flex w-full items-center justify-center gap-2 rounded border border-white/15 bg-white/5 py-3 font-mono text-[10px] uppercase tracking-widest text-white transition hover:border-[#a855f7] hover:bg-[#a855f7]/15 disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded border border-white/15 bg-white/5 py-3 font-mono text-[10px] uppercase tracking-widest text-white transition hover:border-[color:var(--accent)] hover:bg-[color:var(--accent)]/15 disabled:opacity-50"
               >
                 <Upload size={14} /> {uploading ? "Uploading file…" : "Upload New File directly"}
               </button>
@@ -324,7 +324,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
 
             <div className="relative flex items-center py-2">
               <div className="w-full border-t border-white/10" />
-              <span className="shrink-0 bg-[#121214] px-3 font-mono text-[9px] uppercase tracking-widest text-white/40">
+              <span className="shrink-0 bg-[color:var(--admin-surface-2)] px-3 font-mono text-[9px] uppercase tracking-widest text-white/40">
                 OR Select Existing
               </span>
               <div className="w-full border-t border-white/10" />
@@ -335,21 +335,21 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
               <button
                 type="button"
                 onClick={() => setShowMediaModal(true)}
-                className="flex flex-1 items-center justify-between border-b border-white/20 bg-transparent py-2.5 text-xs text-white/80 hover:border-[#a855f7]"
+                className="flex flex-1 items-center justify-between border-b border-white/20 bg-transparent py-2.5 text-xs text-white/80 hover:border-[color:var(--accent)]"
               >
                 <span className="truncate">
                   {selectedMediaObj
                     ? selectedMediaObj.originalFilename
                     : "Choose from Media Library…"}
                 </span>
-                <span className="font-mono text-[9px] text-[#c084fc]">Browse →</span>
+                <span className="font-mono text-[9px] text-[color:var(--accent-light)]">Browse →</span>
               </button>
             </div>
 
             <button
               type="button"
               onClick={handleAttachMedia}
-              className="flex w-full items-center justify-center gap-2 border border-[#a855f7] bg-[#a855f7]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white"
+              className="flex w-full items-center justify-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white"
             >
               <Plus size={14} /> Attach Selected Media
             </button>
@@ -357,14 +357,14 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
 
           {/* Associated Media List */}
           <div className="mt-8 border-t border-white/10 pt-4 space-y-3">
-            <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
+            <p className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]">
               Associated Media ({relations.length})
             </p>
 
             {relations.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between gap-3 border border-white/10 bg-[#0a0a0b] p-2.5"
+                className="flex items-center justify-between gap-3 border border-white/10 bg-[color:var(--admin-bg)] p-2.5"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="size-10 shrink-0 overflow-hidden border border-white/15 bg-white/5">
@@ -381,7 +381,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <span className="rounded bg-[#a855f7]/20 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-[#c084fc]">
+                    <span className="rounded bg-[color:var(--accent)]/20 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-[color:var(--accent-light)]">
                       {item.type}
                     </span>
                     <p className="mt-1 truncate font-mono text-xs text-white/80">
@@ -415,7 +415,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
         </div>
 
         {/* 2. LINKS MANAGER PANEL */}
-        <div className="border border-white/15 bg-[#121214] p-6 shadow-xl">
+        <div className="border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-xl">
           <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
             <div>
               <h2 className="text-base font-bold text-white">Project Links</h2>
@@ -423,7 +423,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 Live demo, GitHub, Figma, documentation, and videos.
               </p>
             </div>
-            <LinkIcon size={20} className="text-[#a855f7]" />
+            <LinkIcon size={20} className="text-[color:var(--accent)]" />
           </div>
 
           <div className="space-y-4">
@@ -434,7 +434,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 value={linkLabel}
                 onChange={(e) => setLinkLabel(e.target.value)}
                 placeholder="e.g. Live Demo, GitHub Source"
-                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[color:var(--accent)]"
               />
             </label>
 
@@ -445,7 +445,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 placeholder="https://..."
-                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[color:var(--accent)]"
               />
             </label>
 
@@ -454,24 +454,24 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
               <select
                 value={linkType}
                 onChange={(e) => setLinkType(e.target.value)}
-                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[color:var(--accent)]"
               >
-                <option value="live" className="bg-[#121214]">
+                <option value="live" className="bg-[color:var(--admin-surface-2)]">
                   Live Production Demo
                 </option>
-                <option value="github" className="bg-[#121214]">
+                <option value="github" className="bg-[color:var(--admin-surface-2)]">
                   GitHub Repository
                 </option>
-                <option value="figma" className="bg-[#121214]">
+                <option value="figma" className="bg-[color:var(--admin-surface-2)]">
                   Figma Design
                 </option>
-                <option value="video" className="bg-[#121214]">
+                <option value="video" className="bg-[color:var(--admin-surface-2)]">
                   Video Walkthrough
                 </option>
-                <option value="docs" className="bg-[#121214]">
+                <option value="docs" className="bg-[color:var(--admin-surface-2)]">
                   Documentation
                 </option>
-                <option value="other" className="bg-[#121214]">
+                <option value="other" className="bg-[color:var(--admin-surface-2)]">
                   Other Reference
                 </option>
               </select>
@@ -480,7 +480,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
             <button
               type="button"
               onClick={handleAddLink}
-              className="flex w-full items-center justify-center gap-2 border border-[#a855f7] bg-[#a855f7]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white"
+              className="flex w-full items-center justify-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white"
             >
               <Plus size={14} /> Add Link +
             </button>
@@ -488,14 +488,14 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
 
           {/* Added Links List */}
           <div className="mt-8 border-t border-white/10 pt-4 space-y-3">
-            <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
+            <p className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]">
               Configured Links ({links.length})
             </p>
 
             {links.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between gap-3 border border-white/10 bg-[#0a0a0b] p-3"
+                className="flex items-center justify-between gap-3 border border-white/10 bg-[color:var(--admin-bg)] p-3"
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
@@ -508,7 +508,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                     href={item.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-1 flex items-center gap-1 truncate font-mono text-[10px] text-[#c084fc] hover:underline"
+                    className="mt-1 flex items-center gap-1 truncate font-mono text-[10px] text-[color:var(--accent-light)] hover:underline"
                   >
                     {item.url} <ExternalLink size={10} />
                   </a>
@@ -538,7 +538,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
         </div>
 
         {/* 3. DYNAMIC SECTIONS MANAGER PANEL */}
-        <div className="border border-white/15 bg-[#121214] p-6 shadow-xl">
+        <div className="border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-xl">
           <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-4">
             <div>
               <h2 className="text-base font-bold text-white">Custom Sections</h2>
@@ -546,7 +546,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 Additional content blocks, quotes, or metric grids.
               </p>
             </div>
-            <Layers size={20} className="text-[#a855f7]" />
+            <Layers size={20} className="text-[color:var(--accent)]" />
           </div>
 
           <div className="space-y-4">
@@ -557,7 +557,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 value={sectionTitle}
                 onChange={(e) => setSectionTitle(e.target.value)}
                 placeholder="e.g. Performance Metrics"
-                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[color:var(--accent)]"
               />
             </label>
 
@@ -566,18 +566,18 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
               <select
                 value={sectionType}
                 onChange={(e) => setSectionType(e.target.value)}
-                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full border-b border-white/20 bg-transparent py-2.5 text-xs text-white outline-none focus:border-[color:var(--accent)]"
               >
-                <option value="text" className="bg-[#121214]">
+                <option value="text" className="bg-[color:var(--admin-surface-2)]">
                   Text Narrative
                 </option>
-                <option value="quote" className="bg-[#121214]">
+                <option value="quote" className="bg-[color:var(--admin-surface-2)]">
                   Testimonial / Quote
                 </option>
-                <option value="metrics" className="bg-[#121214]">
+                <option value="metrics" className="bg-[color:var(--admin-surface-2)]">
                   Key Performance Metrics
                 </option>
-                <option value="architecture" className="bg-[#121214]">
+                <option value="architecture" className="bg-[color:var(--admin-surface-2)]">
                   Architecture Highlight
                 </option>
               </select>
@@ -590,14 +590,14 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                 value={sectionContent}
                 onChange={(e) => setSectionContent(e.target.value)}
                 placeholder="Enter narrative text..."
-                className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 font-mono text-xs text-white outline-none focus:border-[#a855f7]"
+                className="mt-2 w-full resize-none border border-white/15 bg-transparent p-3 font-mono text-xs text-white outline-none focus:border-[color:var(--accent)]"
               />
             </label>
 
             <button
               type="button"
               onClick={handleAddSection}
-              className="flex w-full items-center justify-center gap-2 border border-[#a855f7] bg-[#a855f7]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white"
+              className="flex w-full items-center justify-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/15 py-3 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white"
             >
               <Plus size={14} /> Add Section +
             </button>
@@ -605,18 +605,18 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
 
           {/* Added Sections List */}
           <div className="mt-8 border-t border-white/10 pt-4 space-y-3">
-            <p className="font-mono text-[9px] uppercase tracking-widest text-[#a855f7]">
+            <p className="font-mono text-[9px] uppercase tracking-widest text-[color:var(--accent)]">
               Configured Sections ({sections.length})
             </p>
 
             {sections.map((item, idx) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between gap-3 border border-white/10 bg-[#0a0a0b] p-3"
+                className="flex items-center justify-between gap-3 border border-white/10 bg-[color:var(--admin-bg)] p-3"
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-[#c084fc]">
+                    <span className="font-mono text-xs font-bold text-[color:var(--accent-light)]">
                       0{idx + 1}
                     </span>
                     <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-white/70">
@@ -655,7 +655,7 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
       {/* Media Picker Modal */}
       {showMediaModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
-          <div className="relative flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[#121214] p-6 shadow-2xl">
+          <div className="relative flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <h3 className="text-lg font-bold text-white">Select Media from Library</h3>
               <button
@@ -677,8 +677,8 @@ export function ProjectRelations({ projectId }: { projectId: string }) {
                   }}
                   className={`group relative aspect-square cursor-pointer overflow-hidden border p-2 transition ${
                     selectedMediaId === media.id
-                      ? "border-[#a855f7] bg-[#a855f7]/15"
-                      : "border-white/10 bg-black/40 hover:border-[#a855f7]"
+                      ? "border-[color:var(--accent)] bg-[color:var(--accent)]/15"
+                      : "border-white/10 bg-black/40 hover:border-[color:var(--accent)]"
                   }`}
                 >
                   {media.publicUrl ? (

@@ -27,7 +27,7 @@ export function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-white/15 bg-[#121214] p-6 shadow-2xl">
+      <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-white/15 bg-[color:var(--admin-surface-2)] p-6 shadow-2xl">
         <button
           onClick={onCancel}
           className="absolute right-4 top-4 rounded-full p-1 text-white/40 transition hover:bg-white/10 hover:text-white"
@@ -40,7 +40,7 @@ export function ConfirmModal({
             className={`grid size-10 shrink-0 place-items-center rounded-lg border ${
               isDanger
                 ? "border-red-500/30 bg-red-500/10 text-red-400"
-                : "border-[#a855f7]/30 bg-[#a855f7]/10 text-[#c084fc]"
+                : "border-[color:var(--accent)]/30 bg-[color:var(--accent)]/10 text-[color:var(--accent-light)]"
             }`}
           >
             {isDanger ? <Trash2 size={20} /> : <AlertTriangle size={20} />}
@@ -67,7 +67,7 @@ export function ConfirmModal({
             className={`border px-5 py-3 transition ${
               isDanger
                 ? "border-red-500/50 bg-red-500/15 text-red-300 hover:bg-red-500 hover:text-white"
-                : "border-[#a855f7] bg-[#a855f7]/15 text-[#c084fc] hover:bg-[#9333ea] hover:text-white"
+                : "border-[color:var(--accent)] bg-[color:var(--accent)]/15 text-[color:var(--accent-light)] hover:bg-[color:var(--accent-strong)] hover:text-white"
             }`}
           >
             {confirmLabel}

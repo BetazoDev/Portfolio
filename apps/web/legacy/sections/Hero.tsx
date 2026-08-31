@@ -51,7 +51,7 @@ export const Hero = () => {
       />
 
       {/* Staggered title */}
-      <h1 className="text-[clamp(2.5rem,6.5vw,7.5rem)] font-sans font-bold leading-[0.88] tracking-tight text-[var(--text-primary)] mb-16 overflow-hidden">
+      <h1 className="display-title font-sans font-bold text-[var(--text-primary)] mb-16 overflow-hidden">
         {words.map((word, i) => (
           <span key={i} className="block overflow-hidden" style={{ paddingBottom: '0.07em' }}>
             <motion.span

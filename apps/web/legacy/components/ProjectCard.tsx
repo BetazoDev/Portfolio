@@ -21,20 +21,21 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       className="w-[85vw] md:w-[45vw] lg:w-[30vw] h-[480px] shrink-0 border border-[var(--border-color)] bg-[var(--bg-primary)] overflow-hidden group rounded-none snap-start relative"
     >
       {/* Card Content - Background Image Layer */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 group-hover:opacity-20 transition-opacity duration-500">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {displayImage ? (
           <Image
             src={displayImage}
             alt={project.title}
             fill
             sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 85vw"
-            className="object-cover group-hover:scale-110 transition-transform duration-700"
+            className="object-cover opacity-70 group-hover:opacity-30 group-hover:scale-110 transition duration-700"
           />
         ) : (
           <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_72%_34%,var(--accent),transparent_2%,transparent_12%,var(--border-color)_12.2%,transparent_12.5%)] opacity-30">
             {[18, 28, 40, 54, 70].map((size) => <span key={size} className="absolute left-[72%] top-[34%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--border-color)]" style={{ width: `${size}%`, aspectRatio: '1' }} />)}
           </div>
         )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[color:var(--bg-primary)]/60 to-transparent" />
       </div>
 
       {/* Main Info Layer (Always Visible) */}

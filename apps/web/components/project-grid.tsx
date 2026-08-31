@@ -30,7 +30,7 @@ export function ProjectGrid({ projects, filters = false }: { projects: PublicPro
   return (
     <>
       {filters && (
-        <div className="mb-12 flex gap-3 overflow-x-auto pb-2">
+        <div className="mb-12 flex flex-wrap gap-3">
           <Filter active={active === 'all'} click={() => setActive('all')}>
             <LangText en="All" es="Todos" />
           </Filter>
@@ -70,18 +70,19 @@ function ProjectCard({ project, index }: { project: PublicProject; index: number
       href={`/projects/${project.slug}`}
       className="group relative h-[480px] overflow-hidden border border-[var(--border-color)] bg-[var(--bg-primary)]"
     >
-      <div className="absolute inset-0 opacity-40 transition duration-500 group-hover:opacity-20">
+      <div className="absolute inset-0">
         {image?.publicUrl ? (
           <Image
             src={image.publicUrl}
             alt={image.altText ?? title}
             fill
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-            className="object-cover transition duration-700 group-hover:scale-110"
+            className="object-cover opacity-70 transition duration-700 group-hover:scale-110 group-hover:opacity-30"
           />
         ) : (
           <div className="h-full w-full bg-[linear-gradient(135deg,transparent_45%,var(--border-color)_46%,transparent_47%)]" />
         )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[color:var(--bg-primary)]/60 to-transparent" />
       </div>
       <div className="relative z-10 flex h-full flex-col p-6 transition duration-500 group-hover:opacity-20 md:p-8">
         <div className="flex justify-between font-mono text-xs uppercase tracking-[.3em]">

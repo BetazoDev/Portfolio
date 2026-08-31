@@ -69,7 +69,7 @@ function ProjectContent({ project }: { project: PublicProject }) {
         <p className="eyebrow">
           {isEs ? "Caso de Estudio" : "Case Study"} · {projectType || (isEs ? "Producto Digital" : "Digital Product")}
         </p>
-        <h1 className="my-8 max-w-[1400px] text-5xl font-bold leading-[.95] tracking-tight md:text-7xl lg:text-9xl">
+        <h1 className="display-title my-8 max-w-[1400px] font-bold">
           {title}
         </h1>
         {subtitle && (
@@ -275,7 +275,7 @@ function ProjectContent({ project }: { project: PublicProject }) {
               <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[var(--accent)]">
                 {isEs ? "Explorar Proyecto" : "Explore Project"}
               </p>
-              <h2 className="mt-6 text-4xl font-bold uppercase tracking-tight md:text-6xl lg:text-7xl">
+              <h2 className="section-title mt-6 font-bold uppercase">
                 {isEs ? "Ver Trabajo en Vivo." : "Experience Live Work."}
               </h2>
             </div>
@@ -375,7 +375,7 @@ function DynamicSection({
     <article className="border-t border-[var(--border-color)] py-14">
       <p className="eyebrow">{section.type}</p>
       {section.title && (
-        <h2 className="mt-4 text-3xl font-semibold uppercase md:text-5xl">
+        <h2 className="subsection-title mt-4 font-semibold uppercase">
           {section.title}
         </h2>
       )}

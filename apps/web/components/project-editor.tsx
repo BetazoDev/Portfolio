@@ -252,7 +252,7 @@ export function ProjectEditor({ id }: { id?: string }) {
     <form onSubmit={save}>
       <header className="flex flex-wrap items-end justify-between gap-5">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
+          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[color:var(--accent)]">
             {id ? "Edit project" : "New project"}
           </p>
           <input
@@ -279,14 +279,14 @@ export function ProjectEditor({ id }: { id?: string }) {
               href={`/projects/${project.slug}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 border border-white/15 px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-white/70 hover:border-[#a855f7] hover:text-white"
+              className="flex items-center gap-2 border border-white/15 px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-white/70 hover:border-[color:var(--accent)] hover:text-white"
             >
               Preview <ExternalLink size={14} />
             </a>
           )}
           <button
             disabled={saving}
-            className="flex items-center gap-2 border border-[#a855f7] bg-[#a855f7]/10 px-6 py-3 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition hover:bg-[#9333ea] hover:text-white disabled:opacity-50"
+            className="flex items-center gap-2 border border-[color:var(--accent)] bg-[color:var(--accent)]/10 px-6 py-3 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition hover:bg-[color:var(--accent-strong)] hover:text-white disabled:opacity-50"
           >
             <Save size={14} /> {saving ? "Saving…" : "Save changes"}
           </button>
@@ -301,7 +301,7 @@ export function ProjectEditor({ id }: { id?: string }) {
               ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
               : message.type === "error"
               ? "border-red-500/40 bg-red-500/10 text-red-300"
-              : "border-[#a855f7]/40 bg-[#a855f7]/10 text-[#c084fc]"
+              : "border-[color:var(--accent)]/40 bg-[color:var(--accent)]/10 text-[color:var(--accent-light)]"
           }`}
         >
           {message.type === "success" ? (
@@ -322,7 +322,7 @@ export function ProjectEditor({ id }: { id?: string }) {
             onClick={() => setEditorLang(lang.code)}
             className={`border-b-2 pb-1 transition-colors ${
               editorLang === lang.code
-                ? "border-[#a855f7] text-[#c084fc]"
+                ? "border-[color:var(--accent)] text-[color:var(--accent-light)]"
                 : "border-transparent text-white/40 hover:text-white"
             }`}
           >
@@ -339,7 +339,7 @@ export function ProjectEditor({ id }: { id?: string }) {
             onClick={() => setTab(value)}
             className={`shrink-0 border-b px-4 py-3 font-mono text-[9px] uppercase tracking-widest ${
               tab === value
-                ? "border-[#a855f7] text-[#c084fc]"
+                ? "border-[color:var(--accent)] text-[color:var(--accent-light)]"
                 : "border-transparent text-white/40 hover:text-white"
             }`}
           >
@@ -351,7 +351,7 @@ export function ProjectEditor({ id }: { id?: string }) {
       <section className="border-y border-white/10 py-8">
         <div className="mb-9 flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[.25em] text-[#a855f7]">
+            <p className="font-mono text-[9px] uppercase tracking-[.25em] text-[color:var(--accent)]">
               {tab} · Editing in{" "}
               {languages.find((l) => l.code === editorLang)?.name ?? editorLang.toUpperCase()}
             </p>
@@ -538,7 +538,7 @@ export function ProjectEditor({ id }: { id?: string }) {
               <select
                 value={project.status}
                 onChange={(e) => update("status", e.target.value)}
-                className="mt-3 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#a855f7]"
+                className="mt-3 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[color:var(--accent)]"
               >
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
@@ -592,7 +592,7 @@ function Field({
         type={type}
         value={String(value ?? "")}
         onChange={(e) => change(e.target.value)}
-        className="mt-2 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#a855f7]"
+        className="mt-2 w-full border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[color:var(--accent)]"
       />
     </label>
   );
@@ -616,7 +616,7 @@ function Text({
         rows={rows}
         value={String(value ?? "")}
         onChange={(e) => change(e.target.value)}
-        className="mt-2 w-full resize-y border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[#a855f7]"
+        className="mt-2 w-full resize-y border-x-0 border-b border-t-0 border-white/15 bg-transparent px-0 py-4 text-white outline-none focus:border-[color:var(--accent)]"
       />
     </label>
   );
@@ -644,7 +644,7 @@ function Tax({
             onClick={() => toggle(item)}
             className={`border px-4 py-3 font-mono text-[9px] uppercase tracking-widest ${
               selected.includes(item.id)
-                ? "border-[#a855f7] bg-[#a855f7]/10 text-[#c084fc]"
+                ? "border-[color:var(--accent)] bg-[color:var(--accent)]/10 text-[color:var(--accent-light)]"
                 : "border-white/10 text-white/50"
             }`}
           >

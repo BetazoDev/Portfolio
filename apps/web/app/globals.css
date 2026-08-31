@@ -86,19 +86,32 @@
   }
 }
 
-/* Typography scale */
+/* Typography scale.
+   Four steps, each fluid, so headings keep their relationship at every width. Before this the
+   site had three different "page title" sizes and three different "section title" sizes, each
+   spelled out as a different stack of text-* breakpoints in whichever component needed one. */
 .display-title {
-  font-size: clamp(3.5rem, 9vw, 9rem);
-  line-height: 0.84;
-  letter-spacing: -0.065em;
-  text-transform: uppercase;
+  font-size: clamp(2.5rem, 6.5vw, 7.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+}
+
+.page-title {
+  font-size: clamp(2.75rem, 6vw, 6rem);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
 }
 
 .section-title {
-  font-size: clamp(2.5rem, 6vw, 6.5rem);
-  line-height: 0.9;
-  letter-spacing: -0.055em;
-  text-transform: uppercase;
+  font-size: clamp(2.25rem, 5vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.subsection-title {
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 
 .eyebrow {
@@ -109,22 +122,28 @@
   color: var(--accent);
 }
 
-.surface {
-  background: var(--surface);
-}
-
 .muted {
   color: var(--text-muted);
 }
 
-.text-neon {
-  color: var(--accent);
-  text-shadow: 0 0 10px rgba(var(--accent-glow), 0.5), 0 0 20px rgba(var(--accent-glow), 0.3);
-}
+/* Admin panel scope.
+   The panel is deliberately always dark, so it pins its own palette instead of following the
+   site theme. Going through tokens means the accent lives in one place rather than in ~200
+   hardcoded hex literals spread across the admin components. */
+.admin-root {
+  --accent: #a855f7;
+  --accent-strong: #9333ea;
+  --accent-light: #c084fc;
+  --admin-bg: #0a0a0b;
+  --admin-surface: #101011;
+  --admin-surface-2: #121214;
+  --admin-elevated: #151517;
+  --admin-text: #f4f1ed;
+  --admin-border: rgba(255, 255, 255, 0.15);
 
-.border-neon {
-  border-color: var(--accent);
-  box-shadow: 0 0 10px rgba(var(--accent-glow), 0.2);
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  color-scheme: dark;
 }
 
 /* Language switching: only one variant is visible at a time. */
@@ -144,16 +163,30 @@
   display: block;
 }
 
-/* Scrollbar */
+/* Scrollbar. `width` alone only styles the vertical one, so horizontal scroll areas kept the
+   default 15px bar with a near-black thumb — very visible on the light theme. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
 ::-webkit-scrollbar {
   width: 2px;
+  height: 2px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: var(--border-color);
 }
+
+/* Keyboard focus */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 
 ::selection {
   background: var(--text-primary);

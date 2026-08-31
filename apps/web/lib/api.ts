@@ -73,6 +73,20 @@ export function getProjectField(project: PublicProject, field: string, lang: str
   return '';
 }
 
+/**
+ * English-only lookup for metadata. `getProjectField` deliberately falls back across languages
+ * so a page never renders blank, but that made <title> come out in Spanish on a document
+ * declaring lang="en" whenever the English column was empty. Metadata prefers a real English
+ * value and only then falls back, rather than silently mixing languages.
+ */
+export function getEnglishField(project: PublicProject, field: string): string {
+  const translated = project.translations?.en?.[field];
+  if (translated && translated.trim() !== '') return translated;
+  const english = (project as unknown as Record<string, unknown>)[`${field}En`];
+  if (english && String(english).trim() !== '') return String(english);
+  return '';
+}
+
 async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(`${SERVER_API_URL}${path}`, { next: { revalidate: CONTENT_REVALIDATE } });
   if (!response.ok) throw new Error(`API ${path} responded ${response.status}`);

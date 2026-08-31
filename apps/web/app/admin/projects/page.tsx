@@ -102,7 +102,7 @@ export default function AdminProjectsPage() {
     <>
       <header className="flex flex-wrap items-end justify-between gap-6 border-b border-white/10 pb-10">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[#a855f7]">
+          <p className="font-mono text-[10px] uppercase tracking-[.3em] text-[color:var(--accent)]">
             Content library
           </p>
           <h1 className="mt-5 text-5xl font-bold md:text-7xl">Proyectos</h1>
@@ -112,13 +112,13 @@ export default function AdminProjectsPage() {
         </div>
         <div className="flex items-center gap-4">
           {savingOrder && (
-            <span className="font-mono text-xs text-[#a855f7]">
+            <span className="font-mono text-xs text-[color:var(--accent)]">
               Guardando orden…
             </span>
           )}
           <Link
             href="/admin/projects/new"
-            className="border border-[#a855f7] bg-[#a855f7]/10 px-6 py-4 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition-colors hover:bg-[#9333ea] hover:text-white"
+            className="border border-[color:var(--accent)] bg-[color:var(--accent)]/10 px-6 py-4 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition-colors hover:bg-[color:var(--accent-strong)] hover:text-white"
           >
             Nuevo proyecto +
           </Link>
@@ -126,7 +126,7 @@ export default function AdminProjectsPage() {
       </header>
 
       <div className="my-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <label className="flex flex-1 items-center gap-4 border-b border-white/15 py-3 focus-within:border-[#a855f7]">
+        <label className="flex flex-1 items-center gap-4 border-b border-white/15 py-3 focus-within:border-[color:var(--accent)]">
           <Search size={16} className="text-white/35" />
           <input
             value={query}
@@ -165,8 +165,8 @@ export default function AdminProjectsPage() {
                 setDraggedIndex(null);
               }}
               onDragEnd={() => setDraggedIndex(null)}
-              className={`group relative min-h-72 overflow-hidden border border-white/10 bg-[#101011] p-6 transition ${
-                draggedIndex === originalIndex ? 'opacity-40 border-[#a855f7]' : 'hover:border-[#a855f7]/70'
+              className={`group relative min-h-72 overflow-hidden border border-white/10 bg-[color:var(--admin-surface)] p-6 transition ${
+                draggedIndex === originalIndex ? 'opacity-40 border-[color:var(--accent)]' : 'hover:border-[color:var(--accent)]/70'
               }`}
             >
               <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_80%_20%,rgba(168,85,247,.35),transparent_38%)]" />
@@ -176,12 +176,12 @@ export default function AdminProjectsPage() {
                     {!isSearching && (
                       <span
                         title="Arrastra para reordenar"
-                        className="cursor-grab text-white/30 hover:text-[#c084fc] active:cursor-grabbing"
+                        className="cursor-grab text-white/30 hover:text-[color:var(--accent-light)] active:cursor-grabbing"
                       >
                         <GripVertical size={14} />
                       </span>
                     )}
-                    <span className="font-bold text-[#c084fc]">
+                    <span className="font-bold text-[color:var(--accent-light)]">
                       {String(originalIndex + 1).padStart(2, '0')}
                     </span>
                   </div>
@@ -221,7 +221,7 @@ export default function AdminProjectsPage() {
                 </div>
 
                 <div className="mt-auto pt-6">
-                  <p className="font-mono text-[9px] text-[#a855f7]">
+                  <p className="font-mono text-[9px] text-[color:var(--accent)]">
                     /{item.slug}
                   </p>
                   <h2 className="mt-2 text-2xl font-bold leading-tight">
@@ -235,7 +235,7 @@ export default function AdminProjectsPage() {
                 <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
                   <Link
                     href={`/admin/projects/${item.id}`}
-                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#c084fc] transition-colors hover:text-white"
+                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[color:var(--accent-light)] transition-colors hover:text-white"
                   >
                     Editar <ArrowUpRight size={13} />
                   </Link>
@@ -255,7 +255,7 @@ export default function AdminProjectsPage() {
                       }
                       className={
                         item.showOnHomepage
-                          ? 'text-[#c084fc] hover:text-white'
+                          ? 'text-[color:var(--accent-light)] hover:text-white'
                           : 'text-white/30 hover:text-white'
                       }
                     >
