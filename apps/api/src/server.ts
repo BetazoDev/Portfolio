@@ -85,10 +85,12 @@ app.use('/api/admin', adminLimiter);
 
 app.get('/api/auth/me', requireAuth, async (req: AuthRequest, res) => { const user = await prisma.user.findUnique({ where: { id: req.userId }, select: { id: true, name: true, email: true, role: true } }); if (!user) return res.status(404).json({ error: 'User not found' }); res.json({ user }); });
 app.put('/api/auth/password', requireAuth, async (req: AuthRequest, res) => { const data = z.object({ currentPassword: z.string().min(8), newPassword: z.string().min(12).max(128) }).parse(req.body); const user = await prisma.user.findUnique({ where: { id: req.userId } }); if (!user || !(await bcrypt.compare(data.currentPassword, user.passwordHash))) return res.status(401).json({ error: 'Current password is incorrect' }); await prisma.$transaction([prisma.user.update({ where: { id: user.id }, data: { passwordHash: await bcrypt.hash(data.newPassword, 12) } }), prisma.refreshToken.updateMany({ where: { userId: user.id, revokedAt: null }, data: { revokedAt: new Date() } })]); res.clearCookie(refreshCookie, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', domain: process.env.COOKIE_DOMAIN || undefined }); res.status(204).send(); });
-const projectInclude = { technologies: { include: { technology: true } }, categories: { include: { category: true } }, media: { include: { media: true }, orderBy: { sortOrder: 'asc' as const } }, links: { orderBy: { sortOrder: 'asc' as const } }, sections: { orderBy: { sortOrder: 'asc' as const } } };
-app.get('/api/projects', async (_req, res) => res.json(await prisma.project.findMany({ where: { status: ProjectStatus.published, showOnHomepage: true }, orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: projectInclude })));
-app.get('/api/projects/home', async (_req, res) => res.json(await prisma.project.findMany({ where: { status: ProjectStatus.published, showOnHomepage: true }, orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: projectInclude })));
-app.get('/api/projects/:slug', async (req, res) => { const project = await prisma.project.findFirst({ where: { slug: req.params.slug, status: ProjectStatus.published, showOnHomepage: true }, include: projectInclude }); if (!project) return res.status(404).json({ error: 'Project not found' }); res.json(project); });
+const projectListInclude = { technologies: { include: { technology: true } }, categories: { include: { category: true } }, media: { include: { media: true }, orderBy: { sortOrder: 'asc' as const } }, links: { orderBy: { sortOrder: 'asc' as const } } };
+const projectInclude = { ...projectListInclude, sections: { orderBy: { sortOrder: 'asc' as const } } };
+const publishedOrder = [{ sortOrder: 'asc' as const }, { createdAt: 'asc' as const }];
+app.get('/api/projects', async (_req, res) => res.json(await prisma.project.findMany({ where: { status: ProjectStatus.published }, orderBy: publishedOrder, include: projectListInclude })));
+app.get('/api/projects/home', async (_req, res) => res.json(await prisma.project.findMany({ where: { status: ProjectStatus.published, showOnHomepage: true }, orderBy: publishedOrder, include: projectListInclude })));
+app.get('/api/projects/:slug', async (req, res) => { const project = await prisma.project.findFirst({ where: { slug: req.params.slug, status: ProjectStatus.published }, include: projectInclude }); if (!project) return res.status(404).json({ error: 'Project not found' }); res.json(project); });
 app.get('/api/admin/projects', requireAuth, async (_req, res) => res.json(await prisma.project.findMany({ orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }] })));
 app.put('/api/admin/projects/reorder', requireAuth, async (req, res) => { const data = z.object({ items: z.array(z.object({ id: z.string(), sortOrder: z.number().int() })) }).parse(req.body); await prisma.$transaction(data.items.map((item) => prisma.project.update({ where: { id: item.id }, data: { sortOrder: item.sortOrder } }))); res.status(204).send(); });
 app.get('/api/admin/projects/:id', requireAuth, async (req, res) => { const project = await prisma.project.findUnique({ where: { id: String(req.params.id) }, include: projectInclude }); if (!project) return res.status(404).json({ error: 'Project not found' }); res.json(project); });
@@ -172,53 +174,6 @@ app.get('/api/settings', async (_req, res) => res.json(await prisma.setting.find
 app.get('/api/admin/settings', requireAuth, async (_req, res) => res.json(await prisma.setting.findMany()));
 app.put('/api/admin/settings/:key', requireAuth, async (req, res) => { const value = z.object({ value: z.unknown() }).parse(req.body).value; res.json(await prisma.setting.upsert({ where: { key: String(req.params.key) }, update: { value: value as any }, create: { key: String(req.params.key), value: value as any } })); });
 
-async function ensureDefaultExperience() {
-  try {
-    const count = await prisma.workExperience.count();
-    if (count === 0) {
-      await prisma.workExperience.createMany({
-        data: [
-          {
-            company: 'Reputation Defense Network',
-            role: 'Web Designer & WordPress Developer',
-            timeframe: '2025 - Present',
-            description: 'Led end-to-end development of high-performance WordPress sites from Figma prototypes. Solved performance bottlenecks by optimizing load speeds and stability.',
-            sortOrder: 0,
-            translations: {
-              en: { role: 'Web Designer & WordPress Developer', timeframe: '2025 - Present', description: 'Led end-to-end development of high-performance WordPress sites from Figma prototypes. Solved performance bottlenecks by optimizing load speeds and stability.' },
-              es: { role: 'Diseñador Web & Desarrollador WordPress', timeframe: '2025 - Presente', description: 'Lideró el desarrollo integral de sitios WordPress de alto rendimiento desde prototipos en Figma.' }
-            }
-          },
-          {
-            company: 'Agency4RealEstate',
-            role: 'WordPress Developer',
-            timeframe: '2023 - 2024',
-            description: 'Architected real estate platforms and customized complex WooCommerce stores. Solved major UX friction by optimizing Core Web Vitals.',
-            sortOrder: 1,
-            translations: {
-              en: { role: 'WordPress Developer', timeframe: '2023 - 2024', description: 'Architected real estate platforms and customized complex WooCommerce stores.' },
-              es: { role: 'Desarrollador WordPress', timeframe: '2023 - 2024', description: 'Arquitectura de plataformas inmobiliarias y personalización de tiendas WooCommerce complejas.' }
-            }
-          },
-          {
-            company: 'Bloom / DUDE Agency',
-            role: 'WordPress Developer',
-            timeframe: '2022 - 2023',
-            description: 'Engineered responsive web solutions across CMS platforms including WordPress, Duda, and HubSpot. Accelerated project delivery by resolving core bugs.',
-            sortOrder: 2,
-            translations: {
-              en: { role: 'WordPress Developer', timeframe: '2022 - 2023', description: 'Engineered responsive web solutions across CMS platforms including WordPress, Duda, and HubSpot.' },
-              es: { role: 'Desarrollador WordPress', timeframe: '2022 - 2023', description: 'Desarrollo de soluciones web responsivas en plataformas CMS como WordPress, Duda y HubSpot.' }
-            }
-          }
-        ]
-      });
-    }
-  } catch (e) {
-    console.error('Failed to seed default experience:', e);
-  }
-}
-
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => { console.error(err); if (err instanceof z.ZodError) return res.status(400).json({ error: 'Validation failed', issues: err.issues }); const code = typeof err === 'object' && err && 'code' in err ? String((err as { code: unknown }).code) : ''; if (code === 'P2002') return res.status(409).json({ error: 'A record with that unique value already exists' }); if (code === 'P2025') return res.status(404).json({ error: 'Record not found' }); res.status(500).json({ error: 'Internal server error' }); });
 async function ensureStorageBucket() {
   if (!supabase) return;
@@ -229,17 +184,4 @@ async function ensureStorageBucket() {
     if (created.error) console.error('Supabase bucket creation failed:', created.error.message);
   }
 }
-async function fixMediaUrls() {
-  try {
-    const targetUrl = process.env.SUPABASE_URL ?? 'https://supastorage.halonso.digital';
-    const oldPrefix = 'http://portfolio-supabase-e5f1bd-93-188-167-69.traefik.me';
-    if (targetUrl) {
-      await prisma.$executeRawUnsafe(
-        `UPDATE "media" SET "public_url" = REPLACE("public_url", '${oldPrefix}', '${targetUrl}') WHERE "public_url" LIKE '${oldPrefix}%';`
-      );
-    }
-  } catch (e) {
-    console.error('Failed to migrate media URLs:', e);
-  }
-}
-app.listen(port, '0.0.0.0', () => { console.log(`Portfolio API listening on ${port}`); void ensureStorageBucket(); void fixMediaUrls(); void ensureDefaultExperience(); });
+app.listen(port, '0.0.0.0', () => { console.log(`Portfolio API listening on ${port}`); void ensureStorageBucket(); });

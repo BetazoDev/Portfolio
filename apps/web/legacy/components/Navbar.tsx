@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useAppContext } from '../context/AppContext';
 
 export const Navbar = () => {
@@ -20,14 +21,14 @@ export const Navbar = () => {
       className="py-7 flex items-center justify-between border-b border-[var(--border-color)]"
     >
       {/* Name — left */}
-      <a href="/" className="flex flex-col leading-tight group">
+      <Link href="/" className="flex flex-col leading-tight group">
         <span className="text-[10px] font-mono uppercase tracking-[0.34em] text-accent group-hover:text-accent-light transition-colors duration-300">
           Humberto Guadalupe
         </span>
         <span className="text-[11px] font-mono text-[var(--text-primary)] uppercase tracking-[0.25em] font-bold group-hover:text-accent transition-colors duration-300">
           Alonso López
         </span>
-      </a>
+      </Link>
 
       <div className="flex items-center gap-8">
         {/* Links — right */}

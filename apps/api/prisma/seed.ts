@@ -69,4 +69,58 @@ async function main() {
   const settings = { contact_email: 'hello@halonso.digital', linkedin_url: 'https://www.linkedin.com/', github_url: 'https://github.com/BetazoDev', upwork_url: 'https://www.upwork.com/', resume_url: '/Humberto Alonso Lopez CV 2026.pdf' };
   for (const [key, value] of Object.entries(settings)) await prisma.setting.upsert({ where: { key }, update: {}, create: { key, value } });
 }
-main().finally(() => prisma.$disconnect());
+
+async function seedDefaultExperience() {
+  try {
+    const count = await prisma.workExperience.count();
+    if (count === 0) {
+      await prisma.workExperience.createMany({
+        data: [
+          {
+            company: 'Reputation Defense Network',
+            role: 'Web Designer & WordPress Developer',
+            timeframe: '2025 - Present',
+            description: 'Led end-to-end development of high-performance WordPress sites from Figma prototypes. Solved performance bottlenecks by optimizing load speeds and stability.',
+            sortOrder: 0,
+            translations: {
+              en: { role: 'Web Designer & WordPress Developer', timeframe: '2025 - Present', description: 'Led end-to-end development of high-performance WordPress sites from Figma prototypes. Solved performance bottlenecks by optimizing load speeds and stability.' },
+              es: { role: 'Diseñador Web & Desarrollador WordPress', timeframe: '2025 - Presente', description: 'Lideró el desarrollo integral de sitios WordPress de alto rendimiento desde prototipos en Figma.' }
+            }
+          },
+          {
+            company: 'Agency4RealEstate',
+            role: 'WordPress Developer',
+            timeframe: '2023 - 2024',
+            description: 'Architected real estate platforms and customized complex WooCommerce stores. Solved major UX friction by optimizing Core Web Vitals.',
+            sortOrder: 1,
+            translations: {
+              en: { role: 'WordPress Developer', timeframe: '2023 - 2024', description: 'Architected real estate platforms and customized complex WooCommerce stores.' },
+              es: { role: 'Desarrollador WordPress', timeframe: '2023 - 2024', description: 'Arquitectura de plataformas inmobiliarias y personalización de tiendas WooCommerce complejas.' }
+            }
+          },
+          {
+            company: 'Bloom / DUDE Agency',
+            role: 'WordPress Developer',
+            timeframe: '2022 - 2023',
+            description: 'Engineered responsive web solutions across CMS platforms including WordPress, Duda, and HubSpot. Accelerated project delivery by resolving core bugs.',
+            sortOrder: 2,
+            translations: {
+              en: { role: 'WordPress Developer', timeframe: '2022 - 2023', description: 'Engineered responsive web solutions across CMS platforms including WordPress, Duda, and HubSpot.' },
+              es: { role: 'Desarrollador WordPress', timeframe: '2022 - 2023', description: 'Desarrollo de soluciones web responsivas en plataformas CMS como WordPress, Duda y HubSpot.' }
+            }
+          }
+        ]
+      });
+    }
+  } catch (e) {
+    console.error('Failed to seed default experience:', e);
+  }
+}
+
+main()
+  .then(seedDefaultExperience)
+  .catch((error) => {
+    console.error('Seed failed:', error);
+    process.exitCode = 1;
+  })
+  .finally(() => prisma.$disconnect());

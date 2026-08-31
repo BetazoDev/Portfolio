@@ -1,6 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { PublicProject } from '@/lib/api';
 import { getProjectField } from '@/lib/api';
 import { useAppContext } from '@/legacy/context/AppContext';
@@ -71,10 +72,12 @@ function ProjectCard({ project, index }: { project: PublicProject; index: number
     >
       <div className="absolute inset-0 opacity-40 transition duration-500 group-hover:opacity-20">
         {image?.publicUrl ? (
-          <img
+          <Image
             src={image.publicUrl}
             alt={image.altText ?? title}
-            className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+            fill
+            sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover transition duration-700 group-hover:scale-110"
           />
         ) : (
           <div className="h-full w-full bg-[linear-gradient(135deg,transparent_45%,var(--border-color)_46%,transparent_47%)]" />

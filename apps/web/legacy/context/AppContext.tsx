@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Theme } from '../types';
 import en from '../locales/en.json';
 import es from '../locales/es.json';
-import { API_URL } from '@/lib/api';
+import { BROWSER_API_URL } from '@/lib/api';
 
 const defaultTranslations: Record<string, any> = { en, es };
 
@@ -33,7 +33,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     // Load Settings & Languages from API
-    fetch(`${API_URL}/api/settings`)
+    fetch(`${BROWSER_API_URL}/api/settings`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data: { key: string; value: unknown }[]) => {
         const map = Object.fromEntries(data.map((item) => [item.key, String(item.value ?? '')]));
@@ -41,7 +41,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       })
       .catch(() => {});
 
-    fetch(`${API_URL}/api/languages`)
+    fetch(`${BROWSER_API_URL}/api/languages`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.languages) {

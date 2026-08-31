@@ -13,7 +13,7 @@ export interface Project {
   stack: string[];
   link: string;
   github: string;
-  image?: string | { light: string; dark: string };
+  image?: string;
 }
 
 export interface SkillGroup {

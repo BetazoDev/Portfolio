@@ -1,24 +1,19 @@
-import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useRef, useState, type MouseEvent } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { ProjectCard } from '../components/ProjectCard';
 import { SectionHeader } from '../components/ui/SectionHeader';
-import { fetchPublishedProjects } from '../lib/cms';
 import type { Project } from '../types';
 
-export const Projects = () => {
+export const Projects = ({ projects }: { projects: Project[] }) => {
   const { t } = useAppContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [projects, setProjects] = useState<Project[]>([]);
 
-  useEffect(() => {
-    void fetchPublishedProjects().then((cmsProjects) => { if (cmsProjects) setProjects(cmsProjects); });
-  }, []);
-
-  // Duplicating projects for infinite horizontal scroll effect
-  const duplicatedProjects = [...projects, ...projects, ...projects];
+  // A short list is repeated so the horizontal rail still feels continuous; a long one is not,
+  // because duplicating it only multiplies DOM nodes and image requests.
+  const rail = projects.length && projects.length < 5 ? [...projects, ...projects, ...projects] : projects;
 
   const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -73,7 +68,7 @@ export const Projects = () => {
         onMouseMove={handleMouseMove}
       >
         <div className="flex gap-6">
-          {duplicatedProjects.map((project, index) => (
+          {rail.map((project, index) => (
             <ProjectCard 
               key={`${project.id}-${index}`} 
               project={project} 

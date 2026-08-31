@@ -1,19 +1,50 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk, Space_Mono } from 'next/font/google';
 import './globals.css';
-import './portfolio.css';
 
-const sans = Space_Grotesk({ subsets: ['latin'], variable: '--font-sans' });
-const mono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-mono' });
+const sans = Space_Grotesk({ subsets: ['latin'], display: 'swap', variable: '--font-space-grotesk' });
+const mono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], display: 'swap', variable: '--font-space-mono' });
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://halonso.digital';
+const title = 'Humberto Alonso — Full-stack developer';
+const description = 'Platforms, CMS, automation and digital products built around business outcomes.';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://halonso.digital'),
-  title: { default: 'Humberto Alonso — Full-stack developer', template: '%s — Humberto Alonso' },
-  description: 'Desarrollo plataformas, CMS, automatizaciones y productos digitales orientados a resultados.',
-  openGraph: { type: 'website', siteName: 'Humberto Alonso', locale: 'es_MX' },
+  metadataBase: new URL(siteUrl),
+  title: { default: title, template: '%s — Humberto Alonso' },
+  description,
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: 'Humberto Alonso',
+    locale: 'en_US',
+    alternateLocale: ['es_MX'],
+    url: siteUrl,
+    title,
+    description,
+  },
+  twitter: { card: 'summary_large_image', title, description },
+  icons: { icon: '/favicon.svg' },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f8f8f8' },
+    { media: '(prefers-color-scheme: dark)', color: '#050505' },
+  ],
+};
+
+// Applies the stored theme and language before first paint so the page never flashes
+// the wrong palette or the wrong language variant.
+const bootstrapScript = `try{var t=localStorage.getItem('theme');var l=localStorage.getItem('language');document.documentElement.classList.add(t==='light'?'light':'dark');var lang=l==='es'?'es':'en';document.documentElement.dataset.language=lang;document.documentElement.lang=lang}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.language='en'}`;
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const themeScript = `try{var t=localStorage.getItem('theme');var l=localStorage.getItem('language');document.documentElement.classList.add(t==='light'?'light':'dark');document.documentElement.dataset.language=l==='es'?'es':'en';document.documentElement.lang=l==='es'?'es':'en'}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.language='en'}`;
-  return <html lang="es" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head><body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>{children}</body></html>;
+  return (
+    <html lang="en" data-language="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: bootstrapScript }} />
+      </head>
+      <body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>{children}</body>
+    </html>
+  );
 }

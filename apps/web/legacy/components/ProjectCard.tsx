@@ -1,5 +1,7 @@
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Image from 'next/image';
 import type { Project } from '../types';
 import { useAppContext } from '../context/AppContext';
 
@@ -9,9 +11,9 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project, index }: ProjectCardProps) => {
-  const { t, language, theme } = useAppContext();
+  const { t, language } = useAppContext();
   const description = (project.description as Record<string, string>)[language] || project.description.en;
-  const displayImage = typeof project.image === 'object' ? project.image[theme] : project.image;
+  const displayImage = project.image;
 
   return (
     <motion.div
@@ -21,10 +23,12 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       {/* Card Content - Background Image Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 group-hover:opacity-20 transition-opacity duration-500">
         {displayImage ? (
-          <img
+          <Image
             src={displayImage}
             alt={project.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            fill
+            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 85vw"
+            className="object-cover group-hover:scale-110 transition-transform duration-700"
           />
         ) : (
           <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_72%_34%,var(--accent),transparent_2%,transparent_12%,var(--border-color)_12.2%,transparent_12.5%)] opacity-30">
@@ -68,17 +72,15 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         </div>
 
         <div className="flex gap-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-          <a
+          <Link
             href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-3 border border-accent bg-accent/10 text-[11px] font-mono uppercase tracking-[0.3em] px-8 py-4 hover:bg-accent hover:text-white transition-all duration-300"
           >
             {t('projects.viewProject')}
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-          </a>
+          </Link>
           {project.github && (
             <a
               href={project.github}

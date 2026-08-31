@@ -103,6 +103,7 @@ function ProjectContent({ project }: { project: PublicProject }) {
             src={cover.publicUrl}
             alt={cover.altText ?? title}
             className="min-h-[48vh] max-h-[86vh] w-full rounded border border-[var(--border-color)] object-cover"
+            decoding="async"
           />
         </section>
       )}
@@ -241,6 +242,8 @@ function ProjectContent({ project }: { project: PublicProject }) {
                   src={item.media.publicUrl!}
                   alt={item.media.altText ?? item.title ?? title}
                   className="max-h-[850px] w-full rounded border border-[var(--border-color)] object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 {(item.caption || item.title) && (
                   <figcaption className="mt-3 font-mono text-[9px] uppercase tracking-widest muted">
