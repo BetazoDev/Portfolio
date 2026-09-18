@@ -17,12 +17,10 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
   poweredByHeader: false,
   images: {
-    // Only hosts we actually serve media from. A `**` wildcard here would turn the image
-    // optimizer into an open proxy for arbitrary remote images.
-    remotePatterns: [
-      { protocol: 'https', hostname: storageHost },
-      { protocol: 'https', hostname: 'cdn.diabolicalservices.tech' },
-    ],
+    // Supabase Storage is the only place project media lives, so it is the only host the
+    // optimizer accepts. Anything else — including the CDN this site used to borrow from —
+    // is refused here rather than failing later at render time.
+    remotePatterns: [{ protocol: 'https', hostname: storageHost }],
     formats: ['image/avif', 'image/webp'],
   },
   async headers() {

@@ -7,9 +7,11 @@ import { skillsData } from '../data/skills';
 export const About = () => {
   const { t, language, settings } = useAppContext();
 
-  const photoUrl =
-    settings.about_photo_url ||
-    'https://cdn.diabolicalservices.tech/humberto-personal-projects/general/original/humberto-alonso-profile-picture.webp';
+  // Uploaded media lives in Supabase Storage and reaches this component through the
+  // `about_photo_url` setting. The fallback is the portfolio's own asset, never a remote host:
+  // this photo used to point at an unrelated project's CDN and broke whenever that project
+  // was down.
+  const photoUrl = settings.about_photo_url || '/me_optimized.webp';
 
   return (
     <section id="about" className="py-24 border-b border-[var(--border-color)]">

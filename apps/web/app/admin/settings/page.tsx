@@ -93,16 +93,46 @@ export default function SettingsPage() {
   async function savePublicInfo(event: FormEvent) {
     event.preventDefault();
     setMessage("Saving settings…");
-    await Promise.all(
-      Object.entries(values).map(([key, value]) =>
-        adminFetch(`/api/admin/settings/${key}`, {
-          method: "PUT",
-          body: JSON.stringify({ value }),
-        }),
-      ),
+
+    // Only the fields this form owns. `values` also holds internal flags loaded from the API,
+    // and writing those back turned booleans into strings.
+    const editable = settingKeys
+      .map(([key]) => key)
+      .filter((key) => values[key] !== undefined);
+
+    const results = await Promise.all(
+      editable.map(async (key) => {
+        try {
+          const response = await adminFetch(`/api/admin/settings/${key}`, {
+            method: "PUT",
+            body: JSON.stringify({ value: values[key] ?? "" }),
+          });
+          return { key, ok: response.ok, status: response.status };
+        } catch {
+          return { key, ok: false, status: 0 };
+        }
+      }),
     );
-    setMessage("Settings saved successfully.");
-    setTimeout(() => setMessage(""), 3000);
+
+    // fetch only rejects on a network failure, so an unchecked Promise.all reported success
+    // for 401s and 500s alike. Every response is inspected now.
+    const failed = results.filter((result) => !result.ok);
+    if (!failed.length) {
+      setMessage("Settings saved successfully.");
+      await loadSettings();
+      setTimeout(() => setMessage(""), 3000);
+      return;
+    }
+
+    if (failed.some((result) => result.status === 401)) {
+      setMessage("Session expired — nothing was saved. Sign in again and retry.");
+      return;
+    }
+    setMessage(
+      `Could not save ${failed.length} setting(s): ${failed
+        .map((result) => `${result.key} (${result.status || "network error"})`)
+        .join(", ")}`,
+    );
   }
 
   async function saveLanguages(updatedLangs: LanguageItem[], updatedDefault: string) {
