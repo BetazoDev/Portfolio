@@ -1,0 +1,310 @@
+{
+  "contact": {
+    "name": "Humberto Alonso López",
+    "phone": "+52 449 124 5952",
+    "email": "alonso.humberto0401@gmail.com",
+    "linkedin": "linkedin.com/in/halonso-l",
+    "github": "github.com/BetazoDev",
+    "site": "halonso.digital"
+  },
+  "en": {
+    "lang": "en",
+    "file": "Humberto-Alonso-Lopez-AI-Engineer-CV-EN",
+    "title": "AI Engineer | Full-Stack TypeScript · LLM Agents · Claude API · Automation",
+    "location": "Aguascalientes, Mexico (UTC−6) · Open to remote",
+    "h": {
+      "summary": "Summary",
+      "skills": "Technical Skills",
+      "experience": "Professional Experience",
+      "projects": "Selected Projects",
+      "education": "Education",
+      "languages": "Languages"
+    },
+    "summary": "AI Engineer and full-stack developer with 5+ years building production web software for international agencies and remote teams. Co-founder of Hemeron, a custom AI software studio, where I design and ship LLM-powered products end to end: autonomous multi-agent pipelines on the Claude Agent SDK, a WhatsApp sales agent on the Claude API (tool use, structured outputs, prompt caching, model routing), and the TypeScript, Next.js and PostgreSQL systems around them. I treat LLM features as production software, with evals on real conversations, deterministic guardrails, cost controls and automated tests.",
+    "skills": [
+      [
+        "AI & LLMs",
+        "LLM application development, AI agents, multi-agent orchestration, Claude API (Anthropic), Claude Agent SDK, Claude Code, OpenAI API, Gemini API, Vercel AI SDK, tool use / function calling, MCP (Model Context Protocol), RAG, embeddings, prompt engineering, prompt caching, structured outputs (JSON Schema), LLM evals, LLM-as-judge, guardrails, model routing, cost optimization, multimodal (vision), speech-to-text (Whisper)"
+      ],
+      [
+        "Languages",
+        "TypeScript, JavaScript, Go, SQL, PHP, HTML5, CSS3"
+      ],
+      [
+        "Frameworks",
+        "Next.js, React, Node.js, Express, Astro, Tailwind CSS, Vite, TanStack Query, Flutter, WordPress, WooCommerce"
+      ],
+      [
+        "Data",
+        "PostgreSQL, Prisma, Drizzle ORM, sqlc, PGlite"
+      ],
+      [
+        "Automation & APIs",
+        "n8n, REST APIs, webhooks, Apify, WhatsApp, Google Calendar API, OAuth 2.0, Stripe, Mercado Pago"
+      ],
+      [
+        "DevOps & QA",
+        "Docker, Dokploy, Traefik, CI/CD (GitHub Actions), Git, Linux VPS, Playwright, Vitest, Lighthouse"
+      ],
+      [
+        "Web",
+        "Core Web Vitals, technical SEO, GEO (llms.txt), accessibility (WCAG), responsive design"
+      ]
+    ],
+    "experience": [
+      {
+        "role": "Co-Founder & AI Engineer",
+        "company": "Hemeron (hemeron.com)",
+        "where": "Aguascalientes, Mexico · Hybrid",
+        "dates": "Aug 2026 – Present",
+        "bullets": [
+          "Built Hemeron Prospector, an AI sales pipeline (Next.js, TypeScript, PostgreSQL, Prisma, Claude API) that takes a lead from Google Maps and Instagram scraping to quote, payment and delivery: 78 API routes, 26 data models, ~49k lines of TypeScript and 318 automated tests, shipped in 161 commits over 6 weeks.",
+          "Designed an autonomous multi-agent worker on the Claude Agent SDK that researches each business (Maps, social media, directories, Wayback), builds a branded multi-page Astro website, reviews it with an art-director agent and fixes it with up to 4 parallel agents; 429 websites generated from 496 researched businesses.",
+          "Shipped a WhatsApp sales agent on the Claude API with tool use, JSON Schema structured outputs, vision and prompt caching; it routes each message across Haiku, Sonnet and Opus by intent and complexity at about US$0.002 per reply, with daily spend caps and per-lead cost tracking.",
+          "Chose models and prompts by replaying 41 real conversations as an eval set, and wrapped the LLM in deterministic guardrails: prices checked against the catalog, refusals that stop every follow-up, duplicate-send and rate limits, and a daily lessons job that learns from chats but cannot touch prices or payment rules.",
+          "Built Playwright visual-QA tooling that captures every page at 3 viewports and flags overlapping text, overflow, broken images and console errors; with the parallel fix crew, a review round dropped from 26 to 19.5 minutes and automated issues from 8 to 0.",
+          "Built Agenda Hemeron (schedule.hemeron.com), a Calendly-style scheduler with Google Calendar and Meet, round-robin teams, Postgres advisory locks against double booking and AES-256-GCM token encryption, exposed through an API the sales agent uses to book calls.",
+          "Built Hemenú, a multi-tenant restaurant SaaS (Go, PostgreSQL row-level security, Astro, React) with an MCP server for AI agents and a Claude vision importer that turns menu photos and PDFs into structured data.",
+          "Built an AI spreadsheet importer with multi-step LLM tool use for a client's field-promoter tracking platform (Go, React, Flutter). Everything runs on Docker, Dokploy and Traefik with payment webhooks, job queues with leases and Postgres backups."
+        ]
+      },
+      {
+        "role": "Full-Stack & AI Automation Developer",
+        "company": "Independent projects",
+        "where": "Remote",
+        "dates": "Jan 2026 – Aug 2026",
+        "bullets": [
+          "Built Retrato, an autonomous AI publishing platform (headless WordPress, Next.js, Gemini API, n8n, Dokploy) that writes SEO-ready articles, generates featured images, categorizes and publishes posts and sends newsletter notifications.",
+          "Built an AI editorial workflow for a WordPress site with native PHP templates: drafts sent from Telegram are processed by n8n and Gemini and published to WordPress.",
+          "Built a multi-tenant CRM with AI agents for WhatsApp and a social media intelligence dashboard that compares competitors' engagement and generates growth reports."
+        ]
+      },
+      {
+        "role": "Web Developer (WordPress)",
+        "company": "Reputation Defense Network",
+        "where": "Remote · Contract",
+        "dates": "Jan 2025 – Present",
+        "bullets": [
+          "Build custom, responsive WordPress websites from scratch with Elementor, HTML and CSS, owning each project from concept to launch and post-launch improvements.",
+          "Optimize speed and stability through image optimization, caching and Core Web Vitals work, with cross-browser QA.",
+          "Introduced reusable components and structured processes that reduced manual work and sped up delivery."
+        ]
+      },
+      {
+        "role": "WordPress Developer",
+        "company": "Agency4RealEstate",
+        "where": "Remote",
+        "dates": "Oct 2023 – Dec 2024",
+        "bullets": [
+          "Developed and maintained WordPress websites for real estate agencies with Elementor, Divi and WPBakery, including core, theme and plugin updates, backups and security hardening.",
+          "Built and customized WooCommerce stores: products, variations and payment gateways.",
+          "Improved load times and Core Web Vitals with PageSpeed Insights and WP Rocket; implemented SEO that improved search visibility."
+        ]
+      },
+      {
+        "role": "Web Developer",
+        "company": "Bloom (formerly DUDE Agency)",
+        "where": "Remote",
+        "dates": "Mar 2022 – Sep 2023",
+        "bullets": [
+          "Built responsive websites on WordPress, Duda and HubSpot from creative designs, following visual and UX guidelines.",
+          "Provided CMS support and urgent content updates; worked with design and project management teams to deliver on time."
+        ]
+      },
+      {
+        "role": "Freelance Web Developer",
+        "company": "Fundación Acuerdo UVTC",
+        "where": "Hybrid",
+        "dates": "Jan 2021 – Feb 2022",
+        "bullets": [
+          "Built and maintained complete websites with responsive interfaces, managing every phase from planning to delivery."
+        ]
+      }
+    ],
+    "projects": [
+      [
+        "Hemeron Prospector",
+        "AI sales pipeline with autonomous agents (internal tool; case study at halonso.digital)"
+      ],
+      [
+        "Agenda Hemeron",
+        "Scheduling platform with Google Calendar and Meet · schedule.hemeron.com"
+      ],
+      [
+        "Hemenú",
+        "Multi-tenant restaurant SaaS with an MCP server · hemenu.halonso.digital"
+      ],
+      [
+        "Stenia",
+        "AI fitness PWA on the Vercel AI SDK (Claude, Gemini, OpenAI) · stenia.halonso.digital"
+      ],
+      [
+        "AI-built client website",
+        "29 pages, Lighthouse 100 in SEO, accessibility and best practices, llms.txt · demos.hemeron.com/ababogadosmty"
+      ]
+    ],
+    "education": [
+      [
+        "B.Eng. in Software Development and Management",
+        "Universidad Tecnológica El Retoño",
+        "2022 – 2023"
+      ],
+      [
+        "Associate Degree (TSU) in Multiplatform Software Development",
+        "Universidad Tecnológica El Retoño",
+        "2018 – 2021"
+      ]
+    ],
+    "languages": "Spanish: Native. English: B2 (professional working proficiency)."
+  },
+  "es": {
+    "lang": "es",
+    "file": "Humberto-Alonso-Lopez-AI-Engineer-CV-ES",
+    "title": "AI Engineer (Ingeniero de IA) | Full-Stack TypeScript · Agentes LLM · Claude API · Automatización",
+    "location": "Aguascalientes, México (UTC−6) · Disponible para remoto",
+    "h": {
+      "summary": "Perfil",
+      "skills": "Habilidades técnicas",
+      "experience": "Experiencia profesional",
+      "projects": "Proyectos destacados",
+      "education": "Educación",
+      "languages": "Idiomas"
+    },
+    "summary": "AI Engineer y desarrollador full-stack con más de 5 años construyendo software web en producción para agencias internacionales y equipos remotos. Cofundador de Hemeron, estudio de software a la medida con IA, donde diseño y entrego productos con LLMs de punta a punta: pipelines autónomos multiagente con el Claude Agent SDK, un agente de ventas en WhatsApp sobre la Claude API (tool use, salidas estructuradas, prompt caching, ruteo de modelos) y los sistemas en TypeScript, Next.js y PostgreSQL que los sostienen. Trato las funciones con LLM como software de producción: evals con conversaciones reales, guardrails deterministas, control de costos y pruebas automatizadas.",
+    "skills": [
+      [
+        "IA y LLMs",
+        "Desarrollo de aplicaciones con LLMs, agentes de IA, orquestación multiagente, Claude API (Anthropic), Claude Agent SDK, Claude Code, OpenAI API, Gemini API, Vercel AI SDK, tool use / function calling, MCP (Model Context Protocol), RAG, embeddings, prompt engineering, prompt caching, salidas estructuradas (JSON Schema), evals de LLMs, LLM-as-judge, guardrails, ruteo de modelos, optimización de costos, multimodal (visión), voz a texto (Whisper)"
+      ],
+      [
+        "Lenguajes",
+        "TypeScript, JavaScript, Go, SQL, PHP, HTML5, CSS3"
+      ],
+      [
+        "Frameworks",
+        "Next.js, React, Node.js, Express, Astro, Tailwind CSS, Vite, TanStack Query, Flutter, WordPress, WooCommerce"
+      ],
+      [
+        "Datos",
+        "PostgreSQL, Prisma, Drizzle ORM, sqlc, PGlite"
+      ],
+      [
+        "Automatización y APIs",
+        "n8n, APIs REST, webhooks, Apify, WhatsApp, Google Calendar API, OAuth 2.0, Stripe, Mercado Pago"
+      ],
+      [
+        "DevOps y QA",
+        "Docker, Dokploy, Traefik, CI/CD (GitHub Actions), Git, VPS Linux, Playwright, Vitest, Lighthouse"
+      ],
+      [
+        "Web",
+        "Core Web Vitals, SEO técnico, GEO (llms.txt), accesibilidad (WCAG), diseño responsivo"
+      ]
+    ],
+    "experience": [
+      {
+        "role": "Cofundador y AI Engineer",
+        "company": "Hemeron (hemeron.com)",
+        "where": "Aguascalientes, México · Híbrido",
+        "dates": "ago 2026 – actualidad",
+        "bullets": [
+          "Construí Hemeron Prospector, un pipeline de ventas con IA (Next.js, TypeScript, PostgreSQL, Prisma, Claude API) que lleva un prospecto desde la extracción en Google Maps e Instagram hasta la cotización, el pago y la entrega: 78 rutas de API, 26 modelos de datos, ~49 mil líneas de TypeScript y 318 pruebas automatizadas en 161 commits en 6 semanas.",
+          "Diseñé un worker autónomo multiagente con el Claude Agent SDK que investiga cada negocio (Maps, redes sociales, directorios, Wayback), construye un sitio multipágina en Astro con su marca, lo revisa con un agente director de arte y lo corrige con hasta 4 agentes en paralelo: 429 sitios generados a partir de 496 negocios investigados.",
+          "Puse en producción un agente de ventas en WhatsApp sobre la Claude API con tool use, salidas estructuradas con JSON Schema, visión y prompt caching; enruta cada mensaje entre Haiku, Sonnet y Opus según intención y complejidad a cerca de US$0.002 por respuesta, con tope de gasto diario y costo por prospecto.",
+          "Elegí modelos y prompts repitiendo 41 conversaciones reales como set de evaluación, y rodeé al LLM de guardrails deterministas: precios validados contra el catálogo, un «no» que detiene todo seguimiento, límites de envíos duplicados y de frecuencia, y lecciones diarias aprendidas de los chats sin poder tocar precios ni pagos.",
+          "Construí QA visual con Playwright que captura cada página en 3 tamaños de pantalla y detecta texto encimado, desbordes, imágenes rotas y errores de consola; con el equipo de corrección en paralelo, una ronda bajó de 26 a 19.5 minutos y los problemas automáticos de 8 a 0.",
+          "Construí Agenda Hemeron (schedule.hemeron.com), un agendador tipo Calendly con Google Calendar y Meet, eventos de equipo con round-robin, advisory locks de Postgres contra reservas dobles y tokens cifrados con AES-256-GCM, con una API que el agente de ventas usa para agendar llamadas.",
+          "Construí Hemenú, un SaaS multi-tenant para restaurantes (Go, PostgreSQL con row-level security, Astro, React) con un servidor MCP para agentes de IA y un importador con visión de Claude que convierte fotos y PDFs del menú en datos estructurados.",
+          "Construí para un cliente un importador de hojas de cálculo con IA y tool use en varios pasos, dentro de una plataforma de seguimiento de promotores (Go, React, Flutter). Todo corre en Docker, Dokploy y Traefik con webhooks de pago, colas de trabajos y respaldos de Postgres."
+        ]
+      },
+      {
+        "role": "Desarrollador Full-Stack y de Automatización con IA",
+        "company": "Proyectos independientes",
+        "where": "Remoto",
+        "dates": "ene 2026 – ago 2026",
+        "bullets": [
+          "Construí Retrato, una plataforma autónoma de publicación con IA (WordPress headless, Next.js, Gemini API, n8n, Dokploy) que redacta artículos listos para SEO, genera imágenes destacadas, publica y envía avisos por newsletter.",
+          "Construí un flujo editorial con IA para un sitio WordPress con plantillas PHP nativas: los borradores enviados desde Telegram pasan por n8n y Gemini y se publican en WordPress.",
+          "Construí un CRM multi-tenant con agentes de IA para WhatsApp y un tablero de inteligencia de redes sociales que compara el engagement de competidores y genera reportes de crecimiento."
+        ]
+      },
+      {
+        "role": "Desarrollador Web (WordPress)",
+        "company": "Reputation Defense Network",
+        "where": "Remoto · Contrato",
+        "dates": "ene 2025 – actualidad",
+        "bullets": [
+          "Desarrollo sitios WordPress a la medida y responsivos desde cero con Elementor, HTML y CSS, a cargo de cada proyecto del concepto al lanzamiento y las mejoras posteriores.",
+          "Optimizo velocidad y estabilidad (imágenes, caché, Core Web Vitals) con QA entre navegadores.",
+          "Introduje componentes reutilizables y procesos estructurados que redujeron el trabajo manual y aceleraron las entregas."
+        ]
+      },
+      {
+        "role": "Desarrollador WordPress",
+        "company": "Agency4RealEstate",
+        "where": "Remoto",
+        "dates": "oct 2023 – dic 2024",
+        "bullets": [
+          "Desarrollé y mantuve sitios WordPress para agencias inmobiliarias con Elementor, Divi y WPBakery, incluidas actualizaciones de núcleo, temas y plugins, respaldos y seguridad.",
+          "Construí y personalicé tiendas WooCommerce: productos, variaciones y pasarelas de pago.",
+          "Mejoré tiempos de carga y Core Web Vitals con PageSpeed Insights y WP Rocket; implementé SEO que mejoró la visibilidad en buscadores."
+        ]
+      },
+      {
+        "role": "Desarrollador Web",
+        "company": "Bloom (antes DUDE Agency)",
+        "where": "Remoto",
+        "dates": "mar 2022 – sep 2023",
+        "bullets": [
+          "Construí sitios responsivos en WordPress, Duda y HubSpot a partir de diseños creativos y lineamientos de UX.",
+          "Di soporte de CMS y actualizaciones urgentes; coordiné con diseño y gestión de proyectos para entregar a tiempo."
+        ]
+      },
+      {
+        "role": "Desarrollador Web Freelance",
+        "company": "Fundación Acuerdo UVTC",
+        "where": "Híbrido",
+        "dates": "ene 2021 – feb 2022",
+        "bullets": [
+          "Construí y mantuve sitios web completos y responsivos, de la planeación a la entrega."
+        ]
+      }
+    ],
+    "projects": [
+      [
+        "Hemeron Prospector",
+        "Pipeline de ventas con agentes autónomos de IA (interno; caso de estudio en halonso.digital)"
+      ],
+      [
+        "Agenda Hemeron",
+        "Plataforma de agendamiento con Google Calendar y Meet · schedule.hemeron.com"
+      ],
+      [
+        "Hemenú",
+        "SaaS multi-tenant para restaurantes con servidor MCP · hemenu.halonso.digital"
+      ],
+      [
+        "Stenia",
+        "PWA de entrenamiento con IA sobre el Vercel AI SDK (Claude, Gemini, OpenAI) · stenia.halonso.digital"
+      ],
+      [
+        "Sitio de cliente hecho con IA",
+        "29 páginas, Lighthouse 100 en SEO, accesibilidad y buenas prácticas, llms.txt · demos.hemeron.com/ababogadosmty"
+      ]
+    ],
+    "education": [
+      [
+        "Ingeniería en Desarrollo y Gestión de Software",
+        "Universidad Tecnológica El Retoño",
+        "2022 – 2023"
+      ],
+      [
+        "TSU en Desarrollo de Software Multiplataforma",
+        "Universidad Tecnológica El Retoño",
+        "2018 – 2021"
+      ]
+    ],
+    "languages": "Español: nativo. Inglés: B2 (competencia profesional)."
+  }
+}

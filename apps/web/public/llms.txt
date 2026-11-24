@@ -1,0 +1,21 @@
+# Humberto Alonso López
+
+> AI Engineer and full-stack developer based in Aguascalientes, Mexico (UTC-6), open to remote work. Co-founder of Hemeron (hemeron.com). Builds LLM agents that run in production with the Claude API and the Claude Agent SDK, plus the TypeScript, Next.js and PostgreSQL systems around them.
+
+## Profile
+- Role: AI Engineer, full-stack (TypeScript, Next.js, Node.js, Go, PostgreSQL)
+- AI: Claude API, Claude Agent SDK, Claude Code, OpenAI, Gemini, Vercel AI SDK, tool use, MCP, RAG, embeddings, evals, prompt caching, structured outputs
+- Languages: Spanish (native), English (B2)
+- Contact: alonso.humberto0401@gmail.com
+- LinkedIn: https://www.linkedin.com/in/halonso-l/
+- GitHub: https://github.com/BetazoDev
+
+## Work
+- [Hemeron Prospector case study](https://halonso.digital/work/prospector/): AI sales pipeline. Multi-agent website builds on the Claude Agent SDK, a WhatsApp sales agent on the Claude API with model routing, evals on 41 real chats and deterministic guardrails. 429 sites built from 496 researched businesses; 318 automated tests.
+- [Agenda Hemeron](https://schedule.hemeron.com): self-hosted scheduling with Google Calendar and Meet.
+- [Hemenú](https://hemenu.halonso.digital/cafe-jardin): multi-tenant restaurant SaaS in Go with an MCP server and a Claude vision menu importer.
+- [Stenia](https://github.com/BetazoDev/stenia): AI training PWA on the Vercel AI SDK.
+
+## CV
+- [CV in English (PDF)](https://halonso.digital/cv/Humberto-Alonso-Lopez-AI-Engineer-CV-EN.pdf)
+- [CV en español (PDF)](https://halonso.digital/cv/Humberto-Alonso-Lopez-AI-Engineer-CV-ES.pdf)

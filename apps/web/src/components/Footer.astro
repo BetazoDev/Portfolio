@@ -1,0 +1,16 @@
+---
+import { t, type Lang } from "../lib/content";
+interface Props { lang: Lang }
+const c = t[Astro.props.lang];
+---
+<footer class="footer">
+  <div class="wrap row">
+    <p>© 2026 Humberto Alonso López</p>
+    <p>{c.footer}</p>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 1px solid var(--line); }
+  .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 28px; font-size: 0.88rem; color: var(--muted); }
+</style>

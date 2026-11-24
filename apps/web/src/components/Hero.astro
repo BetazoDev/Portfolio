@@ -1,0 +1,159 @@
+---
+import Icon from "./Icon.astro";
+import { t, site, type Lang } from "../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = t[lang].hero;
+const cv = site.cv[lang].pdf;
+---
+<section class="hero wrap" aria-labelledby="hero-title">
+  <div class="copy">
+    <p class="eyebrow">{c.eyebrow}</p>
+    <h1 id="hero-title" class="title">{c.title}</h1>
+    <p class="sub">{c.sub}</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#work">{c.primary}<Icon name="arrowRight" /></a>
+      <a class="btn btn-ghost" href={cv} download>{c.secondary}<Icon name="download" /></a>
+    </div>
+  </div>
+
+  <figure class="field" data-field>
+    <canvas aria-hidden="true"></canvas>
+    <figcaption>
+      <div class="counts">
+        <p><strong>496</strong><span>{c.researched}</span></p>
+        <p class="built"><strong data-count>429</strong><span>{c.built}</span></p>
+      </div>
+      <p class="caption">{c.fieldCaption}</p>
+    </figcaption>
+  </figure>
+</section>
+
+<script>
+  // 496 businesses researched by the agents, 429 of them got a site built (real counts from
+  // ~/Claude/prospector-demos). Dots light up in a random order, like the queue draining.
+  const COLS = 31, ROWS = 16, TOTAL = COLS * ROWS, BUILT = 429;
+
+  function rng(seed: number) {
+    return () => {
+      seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+      let x = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+      return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-field]").forEach((fig) => {
+    const canvas = fig.querySelector("canvas")!;
+    const counter = fig.querySelector<HTMLElement>("[data-count]")!;
+    const ctx = canvas.getContext("2d")!;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const rand = rng(496429);
+    const order = Array.from({ length: TOTAL }, (_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    const builtAt = new Float32Array(TOTAL).fill(-1); // 0..1 moment each built dot turns crimson
+    order.slice(0, BUILT).forEach((idx, n) => { builtAt[idx] = (n / BUILT) * 0.92 + rand() * 0.08; });
+
+    let w = 0, h = 0, step = 0, r = 0, progress = reduce ? 1 : 0, started = reduce;
+    let colors = { dot: "#c9cacb", accent: "#ce0037" };
+
+    const readColors = () => {
+      const s = getComputedStyle(document.documentElement);
+      colors = { dot: s.getPropertyValue("--dot").trim(), accent: s.getPropertyValue("--accent").trim() };
+    };
+
+    const size = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth; step = w / COLS; h = step * ROWS;
+      canvas.style.height = `${h}px`;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      r = Math.max(1.6, step * 0.27);
+      draw();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      let lit = 0;
+      for (let i = 0; i < TOTAL; i++) {
+        const x = (i % COLS) * step + step / 2;
+        const y = Math.floor(i / COLS) * step + step / 2;
+        const at = builtAt[i];
+        const on = at >= 0 && progress >= at;
+        let rad = r;
+        if (on) {
+          lit++;
+          const age = Math.min(1, (progress - at) / 0.04);
+          rad = r * (1 + 0.45 * Math.sin(age * Math.PI) * (reduce ? 0 : 1));
+        }
+        ctx.beginPath();
+        ctx.arc(x, y, rad, 0, Math.PI * 2);
+        ctx.fillStyle = on ? colors.accent : colors.dot;
+        ctx.fill();
+      }
+      counter.textContent = String(started ? lit : BUILT);
+    };
+
+    const run = () => {
+      if (started) return;
+      started = true;
+      const t0 = performance.now(), dur = 2600;
+      const tick = (now: number) => {
+        const k = Math.min(1, (now - t0) / dur);
+        progress = 1 - Math.pow(1 - k, 2.2);
+        draw();
+        if (k < 1) requestAnimationFrame(tick); else { progress = 1.2; draw(); }
+      };
+      requestAnimationFrame(tick);
+    };
+
+    readColors();
+    new ResizeObserver(size).observe(canvas);
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { readColors(); draw(); });
+    if (!reduce) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { io.disconnect(); setTimeout(run, 350); }
+      }, { threshold: 0.3 });
+      io.observe(canvas);
+    }
+  });
+</script>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: clamp(40px, 6vw, 64px);
+    padding-top: clamp(48px, 8vw, 88px);
+    padding-bottom: clamp(56px, 8vw, 96px);
+  }
+  .copy { grid-column: 1 / span 9; }
+  .eyebrow { margin-bottom: 20px; }
+  .title { font-size: clamp(2.5rem, 5.6vw, 4.75rem); max-width: 16ch; }
+  :global(html[lang="es"]) .title { font-size: clamp(2.3rem, 5vw, 4.25rem); max-width: 19ch; }
+  .sub { margin-top: 24px; font-size: clamp(1.08rem, 1.5vw, 1.25rem); color: var(--muted); max-width: 52ch; }
+  .actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .field { grid-column: 1 / -1; margin: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; }
+  canvas { grid-column: 4 / -1; grid-row: 1; width: 100%; display: block; }
+  figcaption { grid-column: 1 / span 3; grid-row: 1; display: grid; gap: 20px; padding-bottom: 4px; }
+  .counts { display: grid; gap: 14px; }
+  .counts p { display: grid; }
+  .counts strong { font: 600 clamp(2.2rem, 3.6vw, 3rem)/1 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .counts .built strong { color: var(--accent); }
+  .counts span { font-size: 0.92rem; color: var(--muted); }
+  .caption { font-size: 0.92rem; color: var(--muted); max-width: 30ch; }
+
+  @media (max-width: 1023px) {
+    .copy { grid-column: 1 / -1; }
+    canvas { grid-column: 1 / -1; grid-row: 1; }
+    figcaption { grid-column: 1 / -1; grid-row: 2; margin-top: 20px; grid-template-columns: auto 1fr; align-items: end; gap: 24px; }
+    .counts { grid-template-columns: auto auto; gap: 28px; }
+  }
+  @media (max-width: 560px) {
+    figcaption { grid-template-columns: 1fr; }
+    .actions .btn { flex: 1 1 auto; justify-content: center; }
+  }
+</style>

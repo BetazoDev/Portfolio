@@ -1,77 +1,37 @@
-# Portfolio CMS
+# halonso.digital
 
-Portafolio personal de Humberto Alonso sobre una plataforma CMS propia. Sitio público, casos de
-estudio y panel de administración privado.
+Portafolio de Humberto Alonso López, AI Engineer. Sitio estático en inglés (`/`) y español (`/es/`)
+con el caso de estudio de Hemeron Prospector y el CV descargable.
 
-**Producción:** [halonso.digital](https://halonso.digital) · API en `back.halonso.digital`
+**Producción:** [halonso.digital](https://halonso.digital)
 
-## Arquitectura
+## Estructura
 
 | Pieza | Stack | Ubicación |
 | --- | --- | --- |
-| Sitio público + panel | Next.js 16 App Router, React 19, Tailwind 4 | `apps/web` |
-| API REST | Express 5, Prisma 6, JWT | `apps/api` |
-| Base de datos | PostgreSQL (servicio `pdatabase` en Dokploy) | — |
-| Medios | Supabase Storage (compose `supabase`, `supastorage.halonso.digital`) | — |
+| Sitio público | Astro 7 estático, Motion, CSS propio con la paleta de Hemeron | `apps/web` |
+| CV (PDF y DOCX, EN y ES) | `apps/web/cv-src/cv.json` → HTML → Chrome headless; DOCX con python-docx | `apps/web/public/cv` |
+| API del CMS anterior | Express 5, Prisma 6 (ya no la usa el sitio) | `apps/api` |
 
-`apps/web/legacy` contiene los componentes y secciones heredados del portafolio Vite original.
-Siguen en uso: son la fuente visual del sitio, no código muerto.
+Los textos del sitio viven en `apps/web/src/lib/content.ts`. Cada cifra sale de los proyectos reales
+(historial de git, pruebas, bitácoras del worker): no agregues números que no se puedan rastrear.
 
-## Flujo de datos
-
-- El **home** y `/projects` se renderizan en el servidor con ISR (`revalidate = 60`). Los datos
-  vienen del CMS; no existe fallback estático de proyectos.
-- Las páginas de caso de estudio se prerrenderizan con `generateStaticParams` y revalidan cada
-  60 s. Un slug nuevo se sirve bajo demanda.
-- El navegador **no** llama a la API directamente: pega contra `/api/*` del mismo origen y el
-  rewrite de `next.config.ts` lo reenvía a `API_INTERNAL_URL`. Evita CORS y un salto TLS extra.
-
-## Endpoints públicos relevantes
-
-| Ruta | Devuelve |
-| --- | --- |
-| `GET /api/projects` | Todos los proyectos publicados (alimenta `/projects`) |
-| `GET /api/projects/home` | Solo los marcados con `showOnHomepage` (alimenta el home) |
-| `GET /api/projects/:slug` | Detalle de cualquier proyecto publicado |
-| `GET /api/settings`, `GET /api/languages`, `GET /api/experience` | Contenido editable del sitio |
-
-## Desarrollo local
+## Desarrollo
 
 ```bash
-cp apps/api/.env.example apps/api/.env      # completar credenciales
-cp apps/web/.env.example apps/web/.env.local
+cd apps/web && npm install && npm run dev      # http://localhost:4321
+npm run build && npm start                     # sirve dist/ en :3000 con server.mjs
 ```
+
+Para regenerar el CV después de editar `cv-src/cv.json`:
 
 ```bash
-cd apps/api && npm install && npm run prisma:migrate && npm run prisma:seed && npm run dev
+cd apps/web && npm run cv                      # PDFs
+python3 cv-src/build-docx.py                   # DOCX (requiere python-docx)
 ```
-
-```bash
-cd apps/web && npm install && npm run dev
-```
-
-Web `http://localhost:3000` · API `http://localhost:4000` · Admin `http://localhost:3000/admin/login`
 
 ## Producción (Dokploy)
 
-Repositorio `BetazoDev/Portfolio`, rama `main`, despliegue automático por push.
-
-| Servicio | Build path | Puerto | Watch paths |
-| --- | --- | --- | --- |
-| `Portfolio-front` | `/apps/web` | 3000 | `apps/web/**` |
-| `portfolio-api` | `/apps/api` | 4000 | `apps/api/**` |
-
-### Migraciones
-
-El arranque ejecuta `node scripts/deploy.mjs`, que:
-
-1. Detecta si la base ya tiene esquema pero no tabla `_prisma_migrations` — el caso de una base
-   creada históricamente con `prisma db push`. Si es así, la **baselinea** marcando cada
-   migración como aplicada.
-2. Ejecuta `prisma migrate deploy`.
-
-Después corre el seed idempotente y arranca el servidor. Nunca se usa `db push` ni
-`--accept-data-loss` en producción.
-
-`prisma/migrations/20260901000000_baseline` contiene el DDL completo del esquema actual y es la
-migración de partida para cualquier base nueva.
+Repositorio `BetazoDev/Portfolio`, rama `main`, despliegue automático por push. El servicio
+`Portfolio-front` construye `/apps/web` con su `Dockerfile` (Node 22, `astro build`) y sirve el
+resultado en el puerto 3000 con `server.mjs`, sin dependencias.

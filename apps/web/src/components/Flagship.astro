@@ -1,0 +1,84 @@
+---
+import { Picture } from "astro:assets";
+import Icon from "./Icon.astro";
+import Pipeline from "./Pipeline.astro";
+import { t, path, type Lang } from "../lib/content";
+import ab from "../assets/shots/demo-ababogadosmty-d.jpg";
+import nebula from "../assets/shots/demo-nebulastudio-d.jpg";
+import creative from "../assets/shots/demo-creativeartmedia-d.jpg";
+import medrano from "../assets/shots/demo-medrano-d.jpg";
+import mkt from "../assets/shots/demo-marketing2020-d.jpg";
+import vidriera from "../assets/shots/demo-vidrieraroman-d.jpg";
+import mirage from "../assets/shots/demo-persianasmirage-d.jpg";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = t[lang].flagship;
+const shots = [
+  { src: nebula, alt: "Nebula Studio" },
+  { src: ab, alt: "AB Abogados" },
+  { src: creative, alt: "Creative Art Media" },
+  { src: mirage, alt: "Mirage Persianas" },
+  { src: medrano, alt: "Medrano Agency" },
+  { src: vidriera, alt: "Vidriera Román" },
+  { src: mkt, alt: "Marketing 20/20" },
+];
+---
+<section id="work" class="flagship" aria-labelledby="flagship-title">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow" data-reveal>{c.kicker}</p>
+      <h2 id="flagship-title" class="h2" data-reveal>{c.title}</h2>
+      <p class="lead" data-reveal>{c.lead}</p>
+      <a class="btn btn-primary" href={path(lang, "/work/prospector/")} data-reveal>{c.cta}<Icon name="arrowRight" /></a>
+    </div>
+    <div class="track">
+      <Pipeline lang={lang} tone="panel" />
+    </div>
+  </div>
+
+  <div class="gallery" aria-labelledby="gallery-title">
+    <div class="wrap gallery-head">
+      <h3 id="gallery-title">{c.galleryTitle}</h3>
+      <p>{c.galleryNote}</p>
+    </div>
+    <div class="marquee" tabindex="0" aria-label={c.galleryTitle}>
+      <ul class="belt">
+        {[...shots, ...shots].map((s, i) => (
+          <li aria-hidden={i >= shots.length ? "true" : undefined}>
+            <Picture src={s.src} alt={i >= shots.length ? "" : s.alt} widths={[480, 720]} sizes="(max-width: 640px) 78vw, 480px" formats={["avif", "webp"]} loading="lazy" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .flagship { background: var(--panel); color: var(--panel-ink); padding-top: clamp(72px, 10vw, 120px); padding-bottom: clamp(56px, 8vw, 96px); }
+  .flagship .eyebrow { color: var(--panel-muted); }
+  .head { display: grid; gap: 20px; justify-items: start; max-width: 760px; }
+  .head .lead { color: var(--panel-muted); }
+  .head .btn { margin-top: 8px; }
+  .track { margin-top: clamp(56px, 7vw, 88px); }
+
+  .gallery { margin-top: clamp(64px, 8vw, 104px); }
+  .gallery-head { display: grid; gap: 6px; margin-bottom: 24px; }
+  .gallery-head h3 { font-size: 1.35rem; }
+  .gallery-head p { color: var(--panel-muted); font-size: 0.95rem; }
+
+  .marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .belt { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; width: max-content; }
+  .belt li { width: clamp(260px, 34vw, 480px); aspect-ratio: 16 / 10; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--panel-line); background: #1b1b1b; flex: none; }
+  .belt :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .belt { animation: belt 60s linear infinite; }
+    .marquee:hover .belt, .marquee:focus-within .belt { animation-play-state: paused; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { overflow-x: auto; mask-image: none; padding-inline: var(--gutter); }
+    .belt li[aria-hidden="true"] { display: none; }
+  }
+  @keyframes belt { to { transform: translateX(calc(-50% - 10px)); } }
+</style>

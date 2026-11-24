@@ -1,0 +1,27 @@
+---
+import { t, type Lang } from "../lib/content";
+interface Props { lang: Lang }
+const c = t[Astro.props.lang].stack;
+---
+<section class="stack section" aria-labelledby="stack-title">
+  <div class="wrap">
+    <h2 id="stack-title" class="h2" data-reveal>{c.title}</h2>
+    <div class="groups">
+      {c.groups.map((g, i) => (
+        <div class:list={["group", { ai: i === 0 }]} data-reveal data-reveal-delay={String(i * 0.05)}>
+          <h3>{g.name}</h3>
+          <ul class="tags">{g.items.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .groups { margin-top: clamp(32px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); gap: 32px; }
+  h3 { font-size: 1.05rem; margin-bottom: 14px; }
+  .tags li { font-size: 0.9rem; padding: 6px 12px; color: var(--ink); }
+  .ai .tags li { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+  @media (max-width: 1023px) { .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .groups { grid-template-columns: 1fr; } }
+</style>

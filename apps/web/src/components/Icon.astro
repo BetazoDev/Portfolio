@@ -1,0 +1,16 @@
+---
+// Phosphor icons (regular weight), inlined so they inherit currentColor.
+import arrowUpRight from "@phosphor-icons/core/assets/regular/arrow-up-right.svg?raw";
+import arrowRight from "@phosphor-icons/core/assets/regular/arrow-right.svg?raw";
+import arrowLeft from "@phosphor-icons/core/assets/regular/arrow-left.svg?raw";
+import download from "@phosphor-icons/core/assets/regular/download-simple.svg?raw";
+import github from "@phosphor-icons/core/assets/regular/github-logo.svg?raw";
+import linkedin from "@phosphor-icons/core/assets/regular/linkedin-logo.svg?raw";
+import envelope from "@phosphor-icons/core/assets/regular/envelope-simple.svg?raw";
+
+const icons = { arrowUpRight, arrowRight, arrowLeft, download, github, linkedin, envelope };
+interface Props { name: keyof typeof icons; label?: string }
+const { name, label } = Astro.props;
+const svg = icons[name].replace("<svg", `<svg aria-hidden="true" focusable="false"`);
+---
+<span class="icon" role={label ? "img" : undefined} aria-label={label}><Fragment set:html={svg} /></span>

@@ -1,0 +1,43 @@
+---
+import { t, path, type Lang } from "../lib/content";
+interface Props { lang: Lang; alt: string } // alt: same page in the other language
+const { lang, alt } = Astro.props;
+const c = t[lang].nav;
+const home = path(lang, "/");
+---
+<header class="nav">
+  <div class="wrap nav-row">
+    <a class="brand" href={home} aria-label="Humberto Alonso López">
+      Humberto Alonso<span class="brand-dot" aria-hidden="true">.</span>
+    </a>
+    <nav aria-label={lang === "es" ? "Principal" : "Main"}>
+      <ul>
+        <li class="hide-sm"><a href={`${home}#work`}>{c.work}</a></li>
+        <li class="hide-sm"><a href={`${home}#approach`}>{c.approach}</a></li>
+        <li class="hide-sm"><a href={`${home}#experience`}>{c.experience}</a></li>
+        <li><a href={`${home}#contact`}>{c.contact}</a></li>
+        <li><a class="lang" href={alt} hreflang={c.otherLang} lang={c.otherLang}>{c.other}</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .brand { font: 600 1.15rem/1 var(--display); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; }
+  .brand-dot { color: var(--accent); }
+  ul { display: flex; align-items: center; gap: clamp(12px, 2.4vw, 28px); list-style: none; margin: 0; padding: 0; }
+  a { text-decoration: none; font-size: 0.95rem; }
+  nav a:not(.lang) { color: var(--muted); transition: color 0.2s var(--ease); }
+  nav a:not(.lang):hover { color: var(--ink); }
+  .lang { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-weight: 500; }
+  .lang:hover { border-color: var(--ink); }
+  @media (max-width: 767px) { .hide-sm { display: none; } }
+</style>

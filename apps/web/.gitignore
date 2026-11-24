@@ -1,0 +1,5 @@
+node_modules
+dist
+.astro
+cv-src/out
+.DS_Store
