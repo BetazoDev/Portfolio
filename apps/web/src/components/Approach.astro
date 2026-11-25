@@ -1,16 +1,26 @@
 ---
+// "How I work": four principles in columns split by hairlines, each with a glowing icon tile.
+import Icon from "./Icon.astro";
 import { t, type Lang } from "../lib/content";
-interface Props { lang: Lang }
-const c = t[Astro.props.lang].approach;
+interface Props { lang: Lang; withHead?: boolean }
+const { lang, withHead = true } = Astro.props;
+const c = t.home[lang];
 ---
-<section id="approach" class="approach section" aria-labelledby="approach-title">
-  <div class="wrap layout">
-    <h2 id="approach-title" class="h2" data-reveal>{c.title}</h2>
+<section class="band approach section" aria-labelledby="approach-title">
+  <div class="wrap">
+    {withHead && (
+      <div class="head">
+        <p class="eyebrow" data-reveal>{c.process.eyebrow}</p>
+        <h2 id="approach-title" class="h2" data-reveal>{c.process.a} <em>{c.process.em}</em></h2>
+      </div>
+    )}
     <div class="grid">
-      {c.items.map((it, i) => (
-        <article data-reveal data-reveal-delay={String((i % 2) * 0.06)}>
-          <h3>{it.name}</h3>
-          <p>{it.text}</p>
+      {c.approach.map((a, i) => (
+        <article data-reveal data-reveal-delay={String(i * 0.07)}>
+          <span class="tile"><Icon name={a.icon} /></span>
+          <p class="n">0{i + 1}</p>
+          <h3>{a.name}</h3>
+          <p class="txt">{a.text}</p>
         </article>
       ))}
     </div>
@@ -18,16 +28,25 @@ const c = t[Astro.props.lang].approach;
 </section>
 
 <style>
-  .approach { background: var(--bg-2); }
-  .layout { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
-  .layout > h2 { position: sticky; top: 104px; max-width: 12ch; }
-  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(32px, 4vw, 48px) clamp(24px, 3vw, 40px); }
-  article { border-top: 2px solid var(--accent); padding-top: 20px; }
-  h3 { font-size: 1.35rem; }
-  p { margin-top: 10px; color: var(--muted); }
-  @media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; }
-    .layout > h2 { position: static; max-width: none; }
+  .head { display: grid; gap: 18px; justify-items: start; margin-bottom: clamp(48px, 6vw, 80px); }
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  article { padding: 8px clamp(18px, 2.2vw, 30px) 8px; border-left: 1px solid var(--line); display: grid; align-content: start; gap: 12px; }
+  article:first-child { border-left: 0; padding-left: 0; }
+  .tile { position: relative; width: 96px; height: 96px; border-radius: 26px; display: grid; place-items: center; margin-bottom: 26px; color: #fff; font-size: 38px;
+    background: radial-gradient(circle at 30% 25%, rgba(255, 42, 85, 0.55), rgba(206, 0, 55, 0.18) 55%, rgba(206, 0, 55, 0.04)); border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 24px 60px -18px rgba(206, 0, 55, 0.55); }
+  .n { font: 400 var(--mono-xs)/1 var(--mono); letter-spacing: 0.08em; color: var(--faint); }
+  h3 { font-size: 1.45rem; letter-spacing: -0.03em; line-height: 1.15; }
+  .txt { color: var(--muted); font-size: 0.96rem; max-width: 34ch; }
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
+    article:nth-child(3) { border-left: 0; padding-left: 0; }
   }
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; row-gap: 0; }
+    article { border-left: 0; padding: 32px 0; }
+    article + article { border-top: 1px solid var(--line); }
+    article:first-child { padding-top: 0; }
+    .tile { width: 80px; height: 80px; font-size: 32px; border-radius: 22px; margin-bottom: 16px; }
+  }
 </style>

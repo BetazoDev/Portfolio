@@ -1,6 +1,6 @@
 # Humberto Alonso López
 
-> AI Engineer and full-stack developer based in Aguascalientes, Mexico (UTC-6), open to remote work. Co-founder of Hemeron (hemeron.com). Builds LLM agents that run in production with the Claude API and the Claude Agent SDK, plus the TypeScript, Next.js and PostgreSQL systems around them.
+> AI Engineer and full-stack developer based in Aguascalientes, Mexico (UTC-6), open to remote work. Co-founder of Hemeron (hemeron.com). Builds LLM agents that run in production with the Claude API and the Claude Agent SDK, plus the TypeScript, Next.js, Go and PostgreSQL systems around them.
 
 ## Profile
 - Role: AI Engineer, full-stack (TypeScript, Next.js, Node.js, Go, PostgreSQL)
@@ -11,10 +11,16 @@
 - GitHub: https://github.com/BetazoDev
 
 ## Work
-- [Hemeron Prospector case study](https://halonso.digital/work/prospector/): AI sales pipeline. Multi-agent website builds on the Claude Agent SDK, a WhatsApp sales agent on the Claude API with model routing, evals on 41 real chats and deterministic guardrails. 429 sites built from 496 researched businesses; 318 automated tests.
-- [Agenda Hemeron](https://schedule.hemeron.com): self-hosted scheduling with Google Calendar and Meet.
-- [Hemenú](https://hemenu.halonso.digital/cafe-jardin): multi-tenant restaurant SaaS in Go with an MCP server and a Claude vision menu importer.
-- [Stenia](https://github.com/BetazoDev/stenia): AI training PWA on the Vercel AI SDK.
+- [Hemeron Prospector](https://halonso.digital/work/prospector/): AI sales pipeline. Multi-agent website builds on the Claude Agent SDK, a WhatsApp sales agent on the Claude API with model routing (about US$0.002 per Haiku reply), evals on 41 real chats, deterministic guardrails, 318 automated tests.
+- [Agenda Hemeron](https://halonso.digital/work/agenda/): self-hosted scheduling with Google Calendar and Meet, round-robin teams, Postgres advisory locks, and an API used by AI agents.
+- [Hemenú](https://halonso.digital/work/hemenu/): multi-tenant restaurant SaaS in Go with Postgres row-level security, an MCP server and a Claude vision menu importer.
+- [Stenia](https://halonso.digital/work/stenia/): offline-capable training PWA that writes routines with Claude, Gemini or OpenAI through the Vercel AI SDK.
+- [AB Abogados](https://halonso.digital/work/ab-abogados/): first paying client of the pipeline; 29-page law firm site with local SEO, JSON-LD and llms.txt.
+
+## Pages
+- [About](https://halonso.digital/about/)
+- [Contact](https://halonso.digital/contact/)
+- Spanish versions live under https://halonso.digital/es/
 
 ## CV
 - [CV in English (PDF)](https://halonso.digital/cv/Humberto-Alonso-Lopez-AI-Engineer-CV-EN.pdf)

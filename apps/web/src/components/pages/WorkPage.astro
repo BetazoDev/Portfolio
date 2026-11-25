@@ -1,0 +1,15 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHead from "../PageHead.astro";
+import Showcase from "../Showcase.astro";
+import { t, type Lang } from "../../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = t.work[lang];
+---
+<Base lang={lang} title={c.title} description={c.description} path="/work/" current="work">
+  <div class="frame">
+    <PageHead eyebrow={c.eyebrow} title={t.home[lang].slider.a} em={t.home[lang].slider.em} lead={c.intro} />
+    <Showcase lang={lang} />
+  </div>
+</Base>

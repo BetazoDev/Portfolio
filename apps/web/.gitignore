@@ -3,3 +3,4 @@ dist
 .astro
 cv-src/out
 .DS_Store
+_old

@@ -1,0 +1,21 @@
+---
+// Inner-page header: crimson label, big title with one italic word, optional lead.
+interface Props { eyebrow: string; title: string; em?: string; muted?: string; lead?: string; id?: string }
+const { eyebrow, title, em, muted, lead, id = "page-title" } = Astro.props;
+---
+<section class="band head" aria-labelledby={id}>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="inner">
+    <p class="eyebrow" data-reveal>{eyebrow}</p>
+    <h1 id={id} class="display" data-reveal>{title}{em && <> <em>{em}</em></>}{muted && <span class="muted-line">{muted}</span>}</h1>
+    {lead && <p class="lead" data-reveal>{lead}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .head { padding-block: clamp(72px, 10vw, 140px) clamp(48px, 6vw, 88px); }
+  .glow { position: absolute; top: -40%; right: -10%; width: min(70vw, 900px); aspect-ratio: 1.6; background: radial-gradient(closest-side, rgba(206, 0, 55, 0.32), transparent); filter: blur(40px); pointer-events: none; }
+  .inner { position: relative; display: grid; gap: 26px; justify-items: start; }
+  .display { max-width: 16ch; }
+</style>

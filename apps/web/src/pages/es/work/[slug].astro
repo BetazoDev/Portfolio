@@ -1,0 +1,9 @@
+---
+import CasePage from "../../../components/pages/CasePage.astro";
+import { t } from "../../../lib/content";
+export function getStaticPaths() {
+  return t.projects.es.map((p) => ({ params: { slug: p.slug } }));
+}
+const { slug } = Astro.params;
+---
+<CasePage lang="es" slug={slug!} />

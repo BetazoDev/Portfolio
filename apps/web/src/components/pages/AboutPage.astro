@@ -1,0 +1,139 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHead from "../PageHead.astro";
+import Approach from "../Approach.astro";
+import { Picture } from "astro:assets";
+import me from "../../assets/me.jpg";
+import Icon from "../Icon.astro";
+import { t, site, type Lang } from "../../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = t.about[lang];
+const k = t.contact[lang];
+const files = [
+  { label: `CV · ${k.en}`, kind: "PDF", url: site.cv.en.pdf, icon: "file-pdf" },
+  { label: `CV · ${k.en}`, kind: "DOCX", url: site.cv.en.docx, icon: "file-doc" },
+  { label: `CV · ${k.es}`, kind: "PDF", url: site.cv.es.pdf, icon: "file-pdf" },
+  { label: `CV · ${k.es}`, kind: "DOCX", url: site.cv.es.docx, icon: "file-doc" },
+];
+---
+<Base lang={lang} title={c.title} description={c.description} path="/about/" current="about">
+  <div class="frame">
+    <PageHead eyebrow={c.eyebrow} title={c.h1} muted={c.h1muted}>
+      <div class="split">
+        <div class="bio">{c.bio.map((p) => <p data-reveal>{p}</p>)}</div>
+        <figure class="photo" data-reveal><Picture src={me} alt={site.name} widths={[400, 600, 800]} sizes="(max-width: 900px) 70vw, 380px" formats={["avif", "webp"]} loading="eager" /></figure>
+      </div>
+    </PageHead>
+    <section class="band facts" aria-label={c.eyebrow}>
+      {c.facts.map((f, i) => (
+        <div class="fact" data-reveal data-reveal-delay={String(i * 0.05)}><p class="k">{f.k}</p><p class="v">{f.v}</p></div>
+      ))}
+    </section>
+  </div>
+  <Approach lang={lang} />
+  <div class="frame">
+
+    <section class="band plus block" aria-labelledby="stack-title">
+      <div class="inner chap">
+        <h2 id="stack-title" class="h3" data-reveal>{c.stackTitle}</h2>
+        <div class="groups">
+          {c.stack.map((g) => (
+            <div data-reveal>
+              <p class="gname">{g.name}</p>
+              <ul class="tags">{g.items.map((x) => <li class="tag">{x}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="band plus block" aria-labelledby="exp-title">
+      <div class="inner chap">
+        <h2 id="exp-title" class="h3" data-reveal>{c.expTitle}</h2>
+        <ol class="exp">
+          {c.experience.map((e, i) => (
+            <li data-reveal>
+              <p class="dates">{e.dates}</p>
+              <div>
+                <h3>{e.role}{i === 0 && <span class="now" aria-hidden="true"></span>}</h3>
+                <p class="org">{e.org}</p>
+                <p class="text">{e.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="band plus block" aria-labelledby="cv-title">
+      <div class="inner chap">
+        <div>
+          <h2 id="cv-title" class="h3" data-reveal>{c.cvTitle}</h2>
+          <p class="note" data-reveal>{c.cvText}</p>
+        </div>
+        <div class="files" data-reveal>
+          {files.map((f) => (
+            <a href={f.url} download data-astro-reload>
+              <span class="iconbox"><Icon name={f.icon} /></span>
+              <span class="fl">{f.label}<span class="kind">{f.kind}</span></span>
+              <span class="round"><Icon name="download-simple" /></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: end; width: 100%; margin-top: 10px; }
+  .photo { margin: 0; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 5; max-width: 380px; justify-self: end; width: 100%; }
+  .photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.08); }
+  .photo { border: 1px solid var(--line-2); }
+  .bio { display: grid; gap: 18px; max-width: 64ch; }
+  .bio p { font-size: clamp(1.05rem, 1.4vw, 1.2rem); color: var(--muted); }
+  .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--line); }
+  .fact { padding: 26px var(--pad) 30px clamp(18px, 2vw, 28px); border-left: 1px solid var(--line); }
+  .fact:first-child { border-left: 0; padding-left: var(--pad); }
+  .k { font: 400 var(--mono-xs)/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+  .v { margin-top: 10px; font-size: 1.02rem; }
+
+  .block { padding-block: clamp(56px, 7vw, 96px); border-top: 1px solid var(--line); }
+  .chap { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 28px clamp(24px, 4vw, 64px); align-items: start; }
+  .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+  .gname { font-size: 1.05rem; margin-bottom: 12px; letter-spacing: -0.01em; }
+
+  .exp { list-style: none; margin: 0; padding: 0; display: grid; }
+  .exp li { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 20px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .exp li:first-child { border-top: 0; padding-top: 0; }
+  .dates { font: 400 var(--mono-s)/1.6 var(--mono); letter-spacing: 0.06em; color: var(--faint); padding-top: 4px; }
+  .exp h3 { font-size: 1.3rem; letter-spacing: -0.025em; display: flex; align-items: center; gap: 10px; }
+  .now { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-text); box-shadow: 0 0 0 4px rgba(206, 0, 55, 0.25); }
+  .org { margin-top: 2px; }
+  .text { margin-top: 6px; color: var(--muted); font-size: 0.95rem; }
+
+  .note { margin-top: 12px; color: var(--muted); max-width: 34ch; font-size: 0.95rem; }
+  .files { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .files a { display: flex; align-items: center; gap: 14px; padding: 12px 12px 12px 12px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); text-decoration: none; transition: border-color 0.3s var(--ease); }
+  .files a:hover { border-color: var(--ink); }
+  .files a:hover .round { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .files a { border-color: var(--line-2); }
+  .fl { display: grid; gap: 4px; margin-right: auto; }
+  .kind { font: 400 var(--mono-xs)/1 var(--mono); letter-spacing: 0.08em; color: var(--faint); }
+
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+    .photo { justify-self: start; max-width: 300px; }
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fact:nth-child(3) { border-left: 0; padding-left: var(--pad); }
+    .fact:nth-child(n + 3) { border-top: 1px solid var(--line); }
+    .chap { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .facts, .groups, .files { grid-template-columns: 1fr; }
+    .fact { border-left: 0; padding-left: var(--pad); }
+    .fact + .fact { border-top: 1px solid var(--line); }
+    .exp li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

@@ -1,23 +1,33 @@
 ---
+import "@fontsource-variable/host-grotesk";
+import "@fontsource-variable/host-grotesk/wght-italic.css";
+import "@fontsource-variable/martian-mono";
 import "../styles/global.css";
-import { site, type Lang } from "../lib/content";
+import { ClientRouter } from "astro:transitions";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { t, site, type Lang } from "../lib/content";
 
 interface Props {
   lang: Lang;
   title: string;
   description: string;
-  path: string; // path without the /es prefix, e.g. "/" or "/work/prospector/"
+  path: string; // path without the /es prefix, e.g. "/" or "/work/agenda/"
+  current?: "home" | "work" | "about" | "contact" | "none";
+  image?: string; // absolute path of a share image
+  footerContact?: boolean; // the big "Let's talk" block above the footer
 }
-const { lang, title, description, path } = Astro.props;
+const { lang, title, description, path, current = "none", image = "/og.png", footerContact = true } = Astro.props;
 const enUrl = new URL(path, site.url).href;
 const esUrl = new URL(`/es${path}`, site.url).href;
 const canonical = lang === "es" ? esUrl : enUrl;
+const alt = lang === "es" ? path : `/es${path}`;
 
 const person = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: site.name,
-  alternateName: "Humberto Alonso",
+  alternateName: site.short,
   jobTitle: "AI Engineer",
   url: site.url,
   email: `mailto:${site.email}`,
@@ -25,9 +35,21 @@ const person = {
   address: { "@type": "PostalAddress", addressLocality: "Aguascalientes", addressCountry: "MX" },
   worksFor: { "@type": "Organization", name: "Hemeron", url: "https://hemeron.com" },
   alumniOf: { "@type": "CollegeOrUniversity", name: "Universidad Tecnológica El Retoño" },
-  knowsAbout: ["Large language models", "AI agents", "Claude API", "Claude Agent SDK", "Model Context Protocol", "Retrieval-augmented generation", "LLM evaluation", "TypeScript", "Next.js", "PostgreSQL"],
+  knowsAbout: ["Large language models", "AI agents", "Claude API", "Claude Agent SDK", "Model Context Protocol", "Retrieval-augmented generation", "LLM evaluation", "TypeScript", "Next.js", "PostgreSQL", "Go"],
   knowsLanguage: ["es", "en"],
   sameAs: [site.linkedin, site.github],
+};
+
+// Page change: the old page lifts away, the new one rises in.
+const page = {
+  forwards: {
+    old: { name: "vt-out", duration: "0.28s", easing: "cubic-bezier(0.4, 0, 1, 1)", fillMode: "both" },
+    new: { name: "vt-in", duration: "0.6s", easing: "cubic-bezier(0.16, 1, 0.3, 1)", delay: "0.06s", fillMode: "both" },
+  },
+  backwards: {
+    old: { name: "vt-out", duration: "0.28s", easing: "cubic-bezier(0.4, 0, 1, 1)", fillMode: "both" },
+    new: { name: "vt-in", duration: "0.6s", easing: "cubic-bezier(0.16, 1, 0.3, 1)", delay: "0.06s", fillMode: "both" },
+  },
 };
 ---
 <!doctype html>
@@ -41,39 +63,51 @@ const person = {
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="es" href={esUrl} />
     <link rel="alternate" hreflang="x-default" href={enUrl} />
-    <meta name="theme-color" content="#f6f6f5" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0e0e0e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0b0a0a" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="/fonts/clash-grotesk-600.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/switzer-400.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL("/og.png", site.url).href} />
+    <meta property="og:image" content={new URL(image, site.url).href} />
     <meta property="og:locale" content={lang === "es" ? "es_MX" : "en_US"} />
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
-    <script is:inline>document.documentElement.classList.add("js");setTimeout(function(){if(!window.__reveal)document.documentElement.classList.remove("js")},3000);</script>
+    <script is:inline>
+      document.documentElement.classList.add("js");
+      setTimeout(function () { if (!window.__site) document.documentElement.classList.remove("js", "intro"); }, 3000);
+      // First visit in this tab: crimson columns lift away before the page shows (skipped with reduced motion).
+      try {
+        if (!sessionStorage.getItem("seen") && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("intro");
+        sessionStorage.setItem("seen", "1");
+      } catch (e) {}
+    </script>
+    <ClientRouter />
   </head>
   <body>
-    <a class="skip" href="#main">{lang === "es" ? "Saltar al contenido" : "Skip to content"}</a>
-    <slot />
+    <div class="preloader" aria-hidden="true">{[0, 1, 2, 3, 4].map((i) => <span style={`--i:${i}`}></span>)}</div>
+    <a class="skip" href="#main">{t.ui[lang].skip}</a>
+    <Header lang={lang} alt={alt} current={current} />
+    <main id="main" transition:animate={page}>
+      <slot />
+    </main>
+    <Footer lang={lang} alt={alt} contact={footerContact} />
     <script>
-      import { animate, inView } from "motion";
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      (window as unknown as { __reveal: boolean }).__reveal = true;
-      document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => {
-        if (reduce) return;
-        inView(el, () => {
-          const delay = Number(el.dataset.revealDelay ?? 0);
-          animate(el, { opacity: [0, 1], transform: ["translateY(18px)", "translateY(0px)"] }, { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] });
-        }, { amount: 0.2 });
-      });
+      import { boot } from "../scripts/site";
+      boot();
     </script>
-    <style>
-      .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--accent); color: var(--accent-ink); padding: 10px 14px; border-radius: 999px; text-decoration: none; }
+    <style is:global>
+      .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: #fff; color: #141211; padding: 10px 14px; border-radius: 999px; text-decoration: none; }
       .skip:focus { top: 12px; }
+      .preloader { display: none; }
+      html.intro .preloader { display: grid; position: fixed; inset: 0; z-index: 100; grid-template-columns: repeat(5, 1fr); pointer-events: none; }
+      html.intro .preloader span { background: #ce0037; border-left: 1px solid rgba(255, 255, 255, 0.14); animation: lift 0.9s cubic-bezier(0.76, 0, 0.24, 1) calc(0.25s + var(--i) * 0.07s) forwards; }
+      @keyframes lift { to { transform: translateY(-101%); } }
+      @keyframes vt-out { to { opacity: 0; transform: translateY(-14px); } }
+      @keyframes vt-in { from { opacity: 0; transform: translateY(26px); } }
+      @media (prefers-reduced-motion: reduce) {
+        ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+      }
     </style>
   </body>
 </html>

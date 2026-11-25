@@ -1,0 +1,29 @@
+---
+import Base from "../../layouts/Base.astro";
+import Hero from "../home/Hero.astro";
+import Me from "../home/Me.astro";
+import Build from "../home/Build.astro";
+import WorkSlider from "../home/WorkSlider.astro";
+import Reach from "../home/Reach.astro";
+import Past from "../home/Past.astro";
+import Hire from "../home/Hire.astro";
+import Approach from "../Approach.astro";
+import Faq from "../home/Faq.astro";
+import Marquee from "../Marquee.astro";
+import { t, type Lang } from "../../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = t.home[lang];
+---
+<Base lang={lang} title={c.title} description={c.description} path="/" current="home">
+  <Hero lang={lang} />
+  <Me lang={lang} />
+  <Build lang={lang} />
+  <WorkSlider lang={lang} />
+  <Reach lang={lang} />
+  <Past lang={lang} />
+  <Hire lang={lang} />
+  <Approach lang={lang} />
+  <Faq lang={lang} />
+  <Marquee lang={lang} />
+</Base>

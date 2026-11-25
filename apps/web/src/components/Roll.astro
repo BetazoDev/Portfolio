@@ -1,0 +1,10 @@
+---
+// A label that rolls letter by letter on hover (styles in global.css → .roll).
+// Each letter is in the DOM once, so crawlers and copy-paste read the plain word; the link around it
+// carries the label as aria-label (the letters are aria-hidden), and
+// the copy that slides in from below is a CSS pseudo-element.
+interface Props { text: string }
+const { text } = Astro.props;
+const chars = [...text];
+---
+<span class="roll" aria-hidden="true">{chars.map((ch, i) => <span class="c" data-c={ch} style={`--i:${i}`}>{ch}</span>)}</span>

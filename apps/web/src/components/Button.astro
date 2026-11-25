@@ -1,0 +1,23 @@
+---
+import Icon from "./Icon.astro";
+import Roll from "./Roll.astro";
+interface Props {
+  href: string;
+  label: string;
+  variant?: "accent" | "light" | "line" | "ghost";
+  icon?: string | false;
+  download?: boolean;
+  external?: boolean;
+  class?: string;
+}
+const { href, label, variant = "accent", icon = "arrow-up-right", download, external, class: cls } = Astro.props;
+---
+<a
+  class:list={["btn", `btn-${variant}`, { dl: download }, cls]}
+  href={href}
+  download={download ? "" : undefined}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener" : undefined}
+  data-astro-reload={download ? "" : undefined}
+  aria-label={label}
+><Roll text={label} />{icon && <Icon name={icon} />}</a>

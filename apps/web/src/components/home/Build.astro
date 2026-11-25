@@ -1,0 +1,60 @@
+---
+// "What I build": big rows with one italic word that turns crimson on hover; the detail sits beside each title.
+import Button from "../Button.astro";
+import { t, href, type Lang } from "../../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const b = t.home[lang].build;
+---
+<section class="build section" aria-labelledby="build-title">
+  <div class="wrap">
+    <div class="top">
+      <div class="head">
+        <p class="eyebrow" data-reveal>{b.eyebrow}</p>
+        <h2 id="build-title" class="h2" data-reveal>{b.a} <em>{b.em}</em></h2>
+        <p class="lead" data-reveal>{b.lead}</p>
+      </div>
+      <div data-reveal><Button href={href(lang, "/contact/")} label={b.cta} variant="ghost" /></div>
+    </div>
+    <ol class="rows">
+      {b.items.map((it, i) => (
+        <li class="row" data-reveal>
+          <span class="n">0{i + 1}</span>
+          <h3 class="title">{it.a} <em>{it.em}</em></h3>
+          <div class="detail">
+            <p>{it.text}</p>
+            <ul class="tags">{it.tags.map((x) => <li class="tag">{x}</li>)}</ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 28px; margin-bottom: clamp(48px, 6vw, 80px); }
+  .head { display: grid; gap: 20px; justify-items: start; }
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .row { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px clamp(20px, 3.4vw, 56px); align-items: center; padding: clamp(26px, 3vw, 40px) 0; border-bottom: 1px solid var(--line); }
+  .row::before { content: ""; position: absolute; inset: 0 calc(-1 * var(--pad)); background: radial-gradient(60% 120% at 20% 50%, rgba(206, 0, 55, 0.14), transparent 70%); opacity: 0; transition: opacity 0.5s var(--ease); pointer-events: none; }
+  .row:hover::before { opacity: 1; }
+  .n { font: 400 var(--mono-xs)/1 var(--mono); letter-spacing: 0.08em; color: var(--faint); align-self: start; padding-top: 0.9em; transition: color 0.4s var(--ease); }
+  .title { position: relative; font-size: clamp(1.9rem, 3.6vw, 3.1rem); line-height: 1.08; letter-spacing: -0.04em; color: var(--ink-2); transition: transform 0.6s var(--ease); }
+  .title em { font-style: italic; font-weight: 460; color: #fff; transition: color 0.4s var(--ease); }
+  .detail { position: relative; display: grid; gap: 14px; color: var(--muted); transition: color 0.4s var(--ease); }
+  .detail p { max-width: 46ch; }
+  @media (hover: hover) {
+    .row:hover .title { transform: translateX(10px); }
+    .row:hover .title em, .row:hover .n { color: var(--accent-text); }
+    .row:hover .detail { color: var(--ink-2); }
+  }
+  @media (max-width: 860px) {
+    .row { grid-template-columns: 40px minmax(0, 1fr); }
+    .detail { grid-column: 2; }
+  }
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; gap: 12px; }
+    .n { padding-top: 0; }
+    .detail { grid-column: 1; }
+  }
+</style>

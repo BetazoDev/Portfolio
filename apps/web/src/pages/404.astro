@@ -1,12 +1,20 @@
 ---
 import Base from "../layouts/Base.astro";
-import Nav from "../components/Nav.astro";
+import Button from "../components/Button.astro";
 ---
 <Base lang="en" title="Not found | Humberto Alonso López" description="This page does not exist." path="/404/">
-  <Nav lang="en" alt="/es/" />
-  <main id="main" class="wrap" style="padding-block: 120px; display: grid; gap: 20px; justify-items: start;">
-    <h1 style="font-size: clamp(2.4rem, 6vw, 4.5rem);">This page does not exist.</h1>
-    <p class="lead">Esta página no existe.</p>
-    <a class="btn btn-primary" href="/">halonso.digital</a>
-  </main>
+  <div class="frame">
+    <section class="band no-rule nf">
+      <div class="inner">
+        <p class="eyebrow">404</p>
+        <h1 class="display">This page does not exist.<span class="muted-line">Esta página no existe.</span></h1>
+        <div class="b"><Button href="/" label="halonso.digital" variant="light" icon="arrow-right" /><Button href="/es/" label="Español" variant="line" icon="arrow-right" /></div>
+      </div>
+    </section>
+  </div>
 </Base>
+<style>
+  .nf { padding-block: clamp(96px, 14vw, 180px); }
+  .nf .inner { display: grid; gap: 26px; justify-items: start; }
+  .b { display: flex; flex-wrap: wrap; gap: 12px; }
+</style>

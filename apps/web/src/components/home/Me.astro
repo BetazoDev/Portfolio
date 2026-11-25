@@ -1,0 +1,59 @@
+---
+// "About me": a small crimson-toned portrait, one statement, three figures that count up (site.ts → counters).
+// The figures are the same ones the case studies prove: years on the web, the eval set, the test suite.
+import { Picture } from "astro:assets";
+import Button from "../Button.astro";
+import me from "../../assets/me.jpg";
+import { t, href, site, type Lang } from "../../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const m = t.home[lang].me;
+---
+<section class="me section" aria-labelledby="me-title">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal>{m.eyebrow}</p>
+    <div class="grid">
+      <figure class="pic" data-reveal>
+        <Picture src={me} alt={site.name} widths={[260, 400, 520]} sizes="(max-width: 700px) 60vw, 260px" formats={["avif", "webp"]} loading="lazy" />
+      </figure>
+      <div class="body">
+        <h2 id="me-title" class="h2 statement" data-reveal>{m.a} <em>{m.em}</em></h2>
+        <ul class="stats">
+          {m.stats.map((s, i) => (
+            <li data-reveal data-reveal-delay={String(i * 0.08)}>
+              <p class="num"><span data-count-to={s.to}>{s.to}</span>{s.suffix && <span class="suf">{s.suffix}</span>}</p>
+              <p class="lbl">{s.label}</p>
+            </li>
+          ))}
+        </ul>
+        <div data-reveal><Button href={href(lang, "/about/")} label={m.more} variant="ghost" /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .me { padding-top: clamp(72px, 9vw, 140px); }
+  .grid { margin-top: 28px; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 32px clamp(32px, 5vw, 80px); align-items: start; }
+  .pic { position: relative; margin: 0; width: min(100%, 260px); aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; background: #2a0010; }
+  .pic :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.12); }
+  .pic::after { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, #ff2a55, #ce0037 45%, #5c0019); mix-blend-mode: multiply; }
+  .pic::before { content: ""; position: absolute; inset: 0; z-index: 1; background: radial-gradient(circle at 70% 20%, rgba(255, 170, 150, 0.35), transparent 55%); mix-blend-mode: screen; }
+  .statement { font-size: clamp(2.1rem, 4vw, 3.7rem); line-height: 1.12; max-width: 22ch; }
+  .stats { list-style: none; margin: clamp(48px, 6vw, 80px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stats li { padding: 4px clamp(16px, 3vw, 48px); border-left: 1px solid var(--line); }
+  .stats li:first-child { padding-left: 0; border-left: 0; }
+  .num { font-size: clamp(3rem, 5.4vw, 4.8rem); line-height: 1; letter-spacing: -0.05em; color: #fff; font-variant-numeric: tabular-nums; }
+  .suf { color: var(--accent-text); font-weight: 300; margin-left: 0.04em; }
+  .lbl { margin-top: 16px; color: var(--muted); max-width: 22ch; }
+  .body > div:last-child { margin-top: 40px; }
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    .pic { width: min(60vw, 240px); }
+  }
+  @media (max-width: 600px) {
+    .stats { grid-template-columns: 1fr; }
+    .stats li { padding: 22px 0; border-left: 0; border-top: 1px solid var(--line); }
+    .stats li:first-child { padding-top: 0; border-top: 0; }
+  }
+</style>

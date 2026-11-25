@@ -1,16 +1,17 @@
 ---
-// Phosphor icons (regular weight), inlined so they inherit currentColor.
-import arrowUpRight from "@phosphor-icons/core/assets/regular/arrow-up-right.svg?raw";
-import arrowRight from "@phosphor-icons/core/assets/regular/arrow-right.svg?raw";
-import arrowLeft from "@phosphor-icons/core/assets/regular/arrow-left.svg?raw";
-import download from "@phosphor-icons/core/assets/regular/download-simple.svg?raw";
-import github from "@phosphor-icons/core/assets/regular/github-logo.svg?raw";
-import linkedin from "@phosphor-icons/core/assets/regular/linkedin-logo.svg?raw";
-import envelope from "@phosphor-icons/core/assets/regular/envelope-simple.svg?raw";
+// Phosphor icons (regular), inlined so they take currentColor.
+// Regular weight by name ("arrow-right"); the filled set by its own name ("check-circle-fill").
+const files = {
+  ...import.meta.glob("../../node_modules/@phosphor-icons/core/assets/regular/*.svg", { query: "?raw", import: "default", eager: true }),
+  ...import.meta.glob("../../node_modules/@phosphor-icons/core/assets/fill/{check-circle-fill,star-four-fill}.svg", { query: "?raw", import: "default", eager: true }),
+} as Record<string, string>;
+const byName: Record<string, string> = {};
+for (const [p, svg] of Object.entries(files)) byName[p.split("/").pop()!.replace(".svg", "")] = svg;
 
-const icons = { arrowUpRight, arrowRight, arrowLeft, download, github, linkedin, envelope };
-interface Props { name: keyof typeof icons; label?: string }
-const { name, label } = Astro.props;
-const svg = icons[name].replace("<svg", `<svg aria-hidden="true" focusable="false"`);
+interface Props { name: string; label?: string; class?: string }
+const { name, label, class: cls } = Astro.props;
+const raw = byName[name];
+if (!raw) throw new Error(`Unknown icon: ${name}`);
+const svg = raw.replace("<svg", `<svg aria-hidden="true" focusable="false"`);
 ---
-<span class="icon" role={label ? "img" : undefined} aria-label={label}><Fragment set:html={svg} /></span>
+<span class:list={["icon", cls]} role={label ? "img" : undefined} aria-label={label}><Fragment set:html={svg} /></span>

@@ -1,0 +1,33 @@
+---
+// Huge scrolling line between the last section and the footer. Decorative, so readers get one plain copy.
+import { t, type Lang } from "../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const m = t.home[lang].marquee;
+---
+<section class="marquee" aria-label={`${m.a} ${m.em}`}>
+  <div class="track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <div class="group">
+        {[0, 1, 2].map(() => <span class="item">{m.a} <em>{m.em}</em><span class="star"></span></span>)}
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .marquee { overflow: hidden; padding-block: clamp(48px, 6vw, 88px); border-top: 1px solid var(--line); }
+  .track { display: flex; width: max-content; }
+  .group { display: flex; flex: none; }
+  .item { display: inline-flex; align-items: center; gap: 0.32em; padding-right: 0.32em; font-size: clamp(3.6rem, 9.4vw, 9rem); line-height: 1.12; letter-spacing: -0.05em; white-space: nowrap; color: #fff; }
+  .item em { font-style: italic; font-weight: 460; color: #4a4340; padding-right: 0.06em; }
+  .star { width: 0.42em; height: 0.42em; border-radius: 50%; border: 0.045em solid rgba(255, 255, 255, 0.7); display: inline-grid; place-items: center; position: relative; }
+  .star::after { content: ""; width: 0.2em; height: 0.2em; background: var(--accent-text);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M240,128a15.79,15.79,0,0,1-10.5,15l-63.44,23.07L143,229.5a16,16,0,0,1-30,0L89.94,166.06,26.5,143a16,16,0,0,1,0-30L89.94,89.94,113,26.5a16,16,0,0,1,30,0l23.07,63.44L229.5,113A15.79,15.79,0,0,1,240,128Z'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M240,128a15.79,15.79,0,0,1-10.5,15l-63.44,23.07L143,229.5a16,16,0,0,1-30,0L89.94,166.06,26.5,143a16,16,0,0,1,0-30L89.94,89.94,113,26.5a16,16,0,0,1,30,0l23.07,63.44L229.5,113A15.79,15.79,0,0,1,240,128Z'/%3E%3C/svg%3E") center / contain no-repeat; }
+  @media (prefers-reduced-motion: no-preference) {
+    .track { animation: slide 38s linear infinite; }
+    .marquee:hover .track { animation-play-state: paused; }
+  }
+  @keyframes slide { to { transform: translateX(-50%); } }
+</style>

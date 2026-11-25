@@ -1,0 +1,81 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHead from "../PageHead.astro";
+import Icon from "../Icon.astro";
+import { t, site, type Lang } from "../../lib/content";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = t.contact[lang];
+const channels = [
+  { icon: "linkedin-logo", name: "LinkedIn", detail: "linkedin.com/in/halonso-l", url: site.linkedin },
+  { icon: "github-logo", name: "GitHub", detail: "github.com/BetazoDev", url: site.github },
+  { icon: "whatsapp-logo", name: "WhatsApp", detail: site.phone, url: `https://wa.me/${site.phone.replace(/\D/g, "")}` },
+];
+const files = [
+  { label: `${c.en}`, kind: "PDF", url: site.cv.en.pdf },
+  { label: `${c.en}`, kind: "DOCX", url: site.cv.en.docx },
+  { label: `${c.es}`, kind: "PDF", url: site.cv.es.pdf },
+  { label: `${c.es}`, kind: "DOCX", url: site.cv.es.docx },
+];
+---
+<Base lang={lang} title={c.title} description={c.description} path="/contact/" current="contact" footerContact={false}>
+  <div class="frame">
+    <PageHead eyebrow={c.eyebrow} title={c.h1} muted={c.h1muted} lead={c.text}>
+      <a class="mail" href={`mailto:${site.email}`} data-reveal><span>{site.email}</span><span class="round"><Icon name="arrow-up-right" /></span></a>
+    </PageHead>
+
+    <section class="band plus" aria-label={c.channels}>
+      <p class="inner label eyebrow">{c.channels}</p>
+      <div class="rows">
+        {channels.map((ch) => (
+          <a class="row" href={ch.url} target="_blank" rel="noopener" data-reveal>
+            <span class="iconbox"><Icon name={ch.icon} /></span>
+            <span class="h3">{ch.name}</span>
+            <span class="detail">{ch.detail}</span>
+            <span class="round"><Icon name="arrow-up-right" /></span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="band plus files-band" aria-label={c.files}>
+      <p class="inner label eyebrow">{c.files}</p>
+      <div class="inner files" data-reveal>
+        {files.map((f) => (
+          <a href={f.url} download data-astro-reload>
+            <span><span class="fname">CV</span> {f.label}</span>
+            <span class="kind">{f.kind}</span>
+            <span class="round"><Icon name="download-simple" /></span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .mail { margin-top: 18px; display: inline-flex; align-items: center; gap: 18px; font-size: clamp(1.4rem, 3.6vw, 3rem); letter-spacing: -0.04em; text-decoration: none; overflow-wrap: anywhere; }
+  .mail span:first-child { background: linear-gradient(var(--accent), var(--accent)) left bottom / 0% 2px no-repeat; transition: background-size 0.5s var(--ease); padding-bottom: 4px; }
+  .mail:hover span:first-child { background-size: 100% 2px; }
+  .mail:hover .round { background: var(--accent); border-color: var(--accent); color: #fff; transform: rotate(45deg); }
+  .label { padding-block: 26px 18px; }
+  .rows { border-top: 1px solid var(--line); }
+  .files-band, section.plus { border-top: 1px solid var(--line); }
+  .row { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr) auto; gap: 22px; align-items: center; padding: 22px var(--pad); border-bottom: 1px solid var(--line); text-decoration: none; transition: background-color 0.3s var(--ease); }
+  .row:hover { background: color-mix(in srgb, var(--card) 70%, transparent); }
+  .row:hover .round { background: var(--accent); border-color: var(--accent); color: #fff; transform: rotate(45deg); }
+  .detail { color: var(--muted); font: 400 var(--mono-s)/1.4 var(--mono); letter-spacing: 0.04em; overflow-wrap: anywhere; }
+  .files-band { padding-bottom: clamp(72px, 9vw, 120px); }
+  .files { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .files a { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 18px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--card); text-decoration: none; transition: border-color 0.3s var(--ease); }
+  .files a:hover { border-color: var(--ink); }
+  .fname { font-weight: 500; }
+  .kind { margin-left: auto; font: 400 var(--mono-xs)/1 var(--mono); letter-spacing: 0.08em; color: var(--faint); }
+  .files .round { width: 36px; height: 36px; }
+  @media (max-width: 900px) { .files { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) {
+    .row { grid-template-columns: auto minmax(0, 1fr) auto; }
+    .detail { grid-column: 2; grid-row: 2; }
+    .files { grid-template-columns: 1fr; }
+  }
+</style>

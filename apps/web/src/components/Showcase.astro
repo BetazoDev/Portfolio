@@ -1,0 +1,69 @@
+---
+// The work, shown big: one full-width piece, then staggered pairs. Images drift with scroll
+// (site.ts → parallax) and a "View case study" pill follows the pointer over each image.
+import { Picture } from "astro:assets";
+import Icon from "./Icon.astro";
+import { covers } from "../lib/images";
+import { t, href, type Lang } from "../lib/content";
+interface Props { lang: Lang; eyebrow?: string }
+const { lang, eyebrow } = Astro.props;
+const projects = t.projects[lang];
+const view = t.home[lang].view;
+const layout = ["full", "left", "right low", "narrow", "wide low"];
+---
+<section class="band showcase" aria-label={eyebrow ?? t.home[lang].selected}>
+  {eyebrow && <p class="inner label eyebrow" data-reveal>{eyebrow}</p>}
+  <div class="inner pieces">
+    {projects.map((p, i) => (
+      <a class:list={["piece", layout[i] ?? "left"]} href={href(lang, `/work/${p.slug}/`)}>
+        <span class="media" data-parallax data-view transition:name={`cover-${p.slug}`}>
+          <Picture src={covers[p.slug]} alt={p.name} widths={i === 0 ? [900, 1400, 1800] : [600, 900, 1200]} sizes={i === 0 ? "(max-width: 900px) 94vw, 1280px" : "(max-width: 900px) 94vw, 700px"} formats={["avif", "webp"]} loading={i === 0 ? "eager" : "lazy"} />
+          <span class="pill" aria-hidden="true" data-pill>{view}<Icon name="arrow-up-right" /></span>
+        </span>
+        <span class="caption" data-reveal>
+          <span class="h3 title" transition:name={`title-${p.slug}`}>{p.name}</span>
+          <span class="info">{p.year} / {p.tags[0]}</span>
+          <span class="tagline">{p.tagline}</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .showcase { padding-block: clamp(40px, 5vw, 72px) clamp(72px, 9vw, 128px); }
+  .label { padding-bottom: 28px; }
+  .pieces { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(56px, 7vw, 104px) 24px; }
+  .piece { display: grid; gap: 20px; text-decoration: none; color: inherit; align-content: start; }
+  .full { grid-column: 1 / -1; }
+  .left { grid-column: 1 / span 6; }
+  .right { grid-column: 7 / span 6; }
+  .narrow { grid-column: 1 / span 5; }
+  .wide { grid-column: 6 / span 7; }
+  .low { margin-top: clamp(0px, 9vw, 140px); }
+
+  .media { position: relative; display: block; overflow: hidden; border-radius: var(--radius); background: var(--dark); aspect-ratio: 16 / 10.5; isolation: isolate; }
+  .full .media { aspect-ratio: 16 / 8.2; }
+  .narrow .media { aspect-ratio: 4 / 4.6; }
+  .media :global(picture) { position: absolute; inset: -8% 0; display: block; }
+  .media :global(img) { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 1.2s var(--ease), filter 0.6s var(--ease); will-change: transform; }
+  .piece:hover .media :global(img) { filter: brightness(1.06); }
+
+  .pill { position: absolute; top: 0; left: 0; z-index: 2; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px 10px 16px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 0.9rem; font-weight: 500; white-space: nowrap; pointer-events: none; opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  .pill :global(svg) { width: 15px; height: 15px; }
+
+  .caption { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 24px; align-items: baseline; }
+  .title { position: relative; width: fit-content; }
+  .title::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.5s var(--ease); }
+  .piece:hover .title::after { transform: scaleX(1); }
+  .full .title { font-size: clamp(2rem, 4vw, 3.4rem); }
+  .info { font: 400 var(--mono-xs)/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
+  .tagline { grid-column: 1 / -1; color: var(--muted); max-width: 58ch; }
+
+  @media (max-width: 900px) {
+    .left, .right, .wide, .narrow { grid-column: 1 / -1; }
+    .low { margin-top: 0; }
+    .narrow .media, .full .media { aspect-ratio: 16 / 10.5; }
+    .caption { grid-template-columns: 1fr; }
+  }
+</style>
