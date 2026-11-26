@@ -17,7 +17,7 @@ const L = lang === "es"
   : { role: "Role", year: "Year", stack: "Stack", links: "Links", how: "How it works", built: "Built with", internal: "Internal tool" };
 const home = t.home[lang];
 ---
-<Base lang={lang} title={`${p.name} | Humberto Alonso López`} description={p.summary} path={`/work/${p.slug}/`} current="work">
+<Base lang={lang} title={`${p.name} | Humberto Alonso López`} description={p.summary} path={`/work/${p.slug}/`} current="work" image={`/og/${p.slug}${lang === "es" ? "-es" : ""}.png`}>
   <div class="progress" aria-hidden="true"></div>
   <div class="frame">
     <section class="band no-rule top" aria-labelledby="case-title">

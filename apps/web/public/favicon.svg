@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#ce0037"/><circle cx="32" cy="32" r="19" fill="#fff"/><text x="32" y="41" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif" font-weight="600" font-size="26" fill="#ce0037">h</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs><radialGradient id="g" cx="0.12" cy="1.12" r="1"><stop offset="0" stop-color="#ce0037"/><stop offset="0.42" stop-color="#ce0037" stop-opacity="0.38"/><stop offset="0.78" stop-color="#ce0037" stop-opacity="0"/></radialGradient></defs>
+  <rect width="64" height="64" rx="15" fill="#0b0a0a"/>
+  <rect width="64" height="64" rx="15" fill="url(#g)"/>
+  <path transform="translate(12 18) scale(0.0486)" fill="#fff" d="M0.0 700.0L98.8 0.0L228.8 0.0L130.0 700.0ZM155.6 395.3L169.7 290.1L522.1 290.1L507.3 395.3ZM442.1 700.0L541.0 0.0L670.1 0.0L572.1 700.0Z"/>
+  <path transform="translate(44.5 5.5) scale(0.0527)" fill="#ff2a55" d="M240,128a15.79,15.79,0,0,1-10.5,15l-63.44,23.07L143,229.5a16,16,0,0,1-30,0L89.94,166.06,26.5,143a16,16,0,0,1,0-30L89.94,89.94,113,26.5a16,16,0,0,1,30,0l23.07,63.44L229.5,113A15.79,15.79,0,0,1,240,128Z"/>
+</svg>

@@ -11,7 +11,7 @@ const types = {
   ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8",
   ".json": "application/json", ".xml": "application/xml; charset=utf-8", ".txt": "text/plain; charset=utf-8",
   ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".avif": "image/avif",
-  ".woff2": "font/woff2", ".ico": "image/x-icon", ".pdf": "application/pdf",
+  ".woff2": "font/woff2", ".ico": "image/x-icon", ".pdf": "application/pdf", ".webmanifest": "application/manifest+json",
   ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 };
 const security = {
