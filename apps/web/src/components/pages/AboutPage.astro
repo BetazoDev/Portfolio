@@ -3,7 +3,7 @@ import Base from "../../layouts/Base.astro";
 import PageHead from "../PageHead.astro";
 import Approach from "../Approach.astro";
 import { Picture } from "astro:assets";
-import me from "../../assets/me.jpg";
+import me from "../../assets/me-tall.jpg";
 import Icon from "../Icon.astro";
 import { t, site, type Lang } from "../../lib/content";
 interface Props { lang: Lang }
@@ -22,7 +22,7 @@ const files = [
     <PageHead eyebrow={c.eyebrow} title={c.h1} muted={c.h1muted}>
       <div class="split">
         <div class="bio">{c.bio.map((p) => <p data-reveal>{p}</p>)}</div>
-        <figure class="photo" data-reveal><Picture src={me} alt={site.name} widths={[400, 600, 800]} sizes="(max-width: 900px) 70vw, 380px" formats={["avif", "webp"]} loading="eager" /></figure>
+        <figure class="photo" data-reveal><Picture src={me} alt={site.name} widths={[400, 600, 800, 960]} sizes="(max-width: 900px) 70vw, 380px" formats={["avif", "webp"]} loading="eager" /></figure>
       </div>
     </PageHead>
     <section class="band facts" aria-label={c.eyebrow}>
@@ -89,7 +89,7 @@ const files = [
 <style>
   .split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: end; width: 100%; margin-top: 10px; }
   .photo { margin: 0; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 5; max-width: 380px; justify-self: end; width: 100%; }
-  .photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.08); }
+  .photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; filter: grayscale(1) contrast(1.08); }
   .photo { border: 1px solid var(--line-2); }
   .bio { display: grid; gap: 18px; max-width: 64ch; }
   .bio p { font-size: clamp(1.05rem, 1.4vw, 1.2rem); color: var(--muted); }

@@ -3,7 +3,7 @@
 // site.ts → hero() raises the lines out of their masks, fades the rest in and brings up the portrait.
 import { Picture } from "astro:assets";
 import Button from "../Button.astro";
-import meCut from "../../assets/me-cut.png";
+import meCut from "../../assets/me-cut.webp";
 import { t, site, type Lang } from "../../lib/content";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -31,7 +31,7 @@ const h = c.hero;
   <div class="pwrap" data-portrait>
     <span class="halo" aria-hidden="true"></span>
     <figure class="portrait">
-      <Picture src={meCut} alt={site.name} widths={[420, 640, 900, 1092]} sizes="(max-width: 1000px) 86vw, 680px" formats={["avif", "webp"]} loading="eager" fetchpriority="high" />
+      <Picture src={meCut} alt={site.name} widths={[480, 720, 960, 1200, 1400]} sizes="(max-width: 1000px) 78vw, 580px" formats={["avif", "webp"]} fallbackFormat="webp" loading="eager" fetchpriority="high" />
     </figure>
   </div>
 </section>
@@ -67,10 +67,10 @@ const h = c.hero;
   @media (prefers-reduced-motion: no-preference) { .pulse { animation: pulse 2.4s ease-out infinite; } }
   @keyframes pulse { 70% { box-shadow: 0 0 0 9px rgba(61, 220, 132, 0); } 100% { box-shadow: 0 0 0 0 rgba(61, 220, 132, 0); } }
 
-  /* Portrait: square cut-out, bottom-aligned, bleeding past the column on wide screens */
-  .pwrap { --p: min(700px, 78svh, 50vw); position: absolute; z-index: 1; bottom: 0; right: max(-40px, calc(50vw - 730px)); width: var(--p); height: var(--p); }
-  .halo { position: absolute; left: 12%; right: 12%; top: 4%; height: 70%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 42, 85, 0.5), rgba(206, 0, 55, 0.22) 55%, transparent); filter: blur(30px); }
-  .portrait { position: relative; margin: 0; width: 100%; height: 100%; -webkit-mask-image: linear-gradient(#000 78%, transparent 99%); mask-image: linear-gradient(#000 78%, transparent 99%); }
+  /* Portrait: tall cut-out (head to crossed hands), bottom-aligned, the hands fading into the dark */
+  .pwrap { position: absolute; z-index: 1; bottom: 0; right: max(0px, calc(50vw - 660px)); height: min(820px, 90svh, 72vw); aspect-ratio: 1400 / 1982; }
+  .halo { position: absolute; left: 6%; right: 6%; top: 2%; height: 58%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 42, 85, 0.5), rgba(206, 0, 55, 0.22) 55%, transparent); filter: blur(30px); }
+  .portrait { position: relative; margin: 0; width: 100%; height: 100%; -webkit-mask-image: linear-gradient(#000 76%, transparent 99%); mask-image: linear-gradient(#000 76%, transparent 99%); }
   .portrait :global(img) { width: 100%; height: 100%; object-fit: contain; object-position: bottom; filter: grayscale(1) contrast(1.06) brightness(1.02); }
 
   /* Initial states for the intro (only with JS and motion) */
@@ -83,7 +83,7 @@ const h = c.hero;
 
   @media (max-width: 1000px) {
     .hero { min-height: 0; padding-bottom: 0; align-items: start; }
-    .pwrap { position: relative; right: auto; bottom: auto; --p: min(86vw, 560px); margin: 40px auto 0; }
+    .pwrap { position: relative; right: auto; bottom: auto; height: auto; width: min(78vw, 440px); margin: 40px auto 0; }
     .flame { inset: 10% -30% -10%; width: 160%; height: 100%; }
     .flame.a { opacity: 0.5; }
     .flame.b { opacity: 0.4; }
